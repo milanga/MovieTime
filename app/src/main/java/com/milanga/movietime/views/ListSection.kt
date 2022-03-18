@@ -43,7 +43,8 @@ fun ListSection(
         Text(
             text = title,
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(top = 16.dp, start = 16.dp)
+            modifier = Modifier.padding(top = 16.dp, start = 16.dp),
+            color = MaterialTheme.colorScheme.onSurface
         )
         when(moviesContent){
             is UIContentState.Loading -> LoadingList()
