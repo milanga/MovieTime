@@ -107,8 +107,8 @@ fun Home() {
                     navArgument(MainDestinations.DETAIL.PARAM_MOVIE_ID) { type = NavType.IntType }
                 ),
                 enterTransition = { slideInHorizontally(tween(500)) { it } },
-                exitTransition = { slideOutHorizontally(tween(500)) { it } },
-                popEnterTransition = { slideInHorizontally(tween(500)) { it }},
+                exitTransition = { slideOutHorizontally(tween(500)) { -it } },
+                popEnterTransition = { slideInHorizontally(tween(500)) { -it }},
                 popExitTransition = { slideOutHorizontally(tween(500)) { it } }
 
             ) { backStackEntry: NavBackStackEntry ->
