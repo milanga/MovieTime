@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MovieTime</string>
+    <string name="movies">Movies</string>
+    <string name="series">Series</string>
+    <string name="search">Search</string>
+    <string name="top_rated_title">Top Rated</string>
+    <string name="upcoming_title">Upcoming</string>
+</resources>
