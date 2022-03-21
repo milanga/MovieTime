@@ -31,6 +31,7 @@ import com.milanga.movietime.views.PosterItem
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
+import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.milanga.movietime.views.SectionTitle
@@ -119,35 +120,29 @@ private fun Content(
 @Composable
 private fun HighlightedSection(popularMoviesContent: UIContentState<List<MoviePreview>>, onMovieSelected: (id: Int) -> Unit, onScrollThresholdReached: () -> Unit){
     when(popularMoviesContent){
-        is UIContentState.Loading -> LoadingHighLighted()
+        is UIContentState.Loading -> Highlighted(loading = true)
         is UIContentState.ContentState -> Highlighted(popularMoviesContent.content, onMovieSelected, onScrollThresholdReached)
     }
-}
-
-@Composable
-private fun LoadingHighLighted(){
-    Surface(
-        tonalElevation = 3.dp,
-        shadowElevation = 3.dp,
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1.5f)
-    ){}
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Highlighted(
-    popularMovies: List<MoviePreview>,
-    onMovieSelected: (id: Int) -> Unit,
-    onScrollThresholdReached: () -> Unit,
-    threshold: Int = 5
+    popularMovies: List<MoviePreview> = listOf(),
+    onMovieSelected: (id: Int) -> Unit = {},
+    onScrollThresholdReached: () -> Unit = {},
+    threshold: Int = 5,
+    loading: Boolean = false
 ) {
     HorizontalPager(
         count = popularMovies.size,
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1.5f)
+            .placeholder(
+                loading,
+                MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+            )
     ) { page ->
         if (popularMovies.size - page < threshold){
             onScrollThresholdReached.invoke()
@@ -203,7 +198,6 @@ private fun BackdropItem(
     Surface(
         onClick = onClick,
         tonalElevation = 3.dp,
-        shadowElevation = 3.dp,
         modifier = modifier
     ) {
         Box(
