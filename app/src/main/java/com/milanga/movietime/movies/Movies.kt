@@ -33,6 +33,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.milanga.movietime.views.SectionTitle
 import kotlin.math.absoluteValue
 
 @Composable
@@ -70,17 +71,47 @@ private fun Content(
     onUpcomingMoviesThresholdReached: () -> Unit,
     onPopularMoviesThresholdReached: () -> Unit
 ){
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface)
+    ) {
         item {
-            HighlightedSection(content.popularMovies, onMovieSelected, onPopularMoviesThresholdReached)
+            HighlightedSection(
+                content.popularMovies,
+                onMovieSelected,
+                onPopularMoviesThresholdReached
+            )
         }
 
         item {
-            ListSection(content.topRatedMovies, stringResource(R.string.top_rated_title), onMovieSelected, onTopRatedMoviesThresholdReached)
+            SectionTitle(
+                stringResource(R.string.top_rated_title),
+                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+            )
         }
 
         item {
-            ListSection(content.upcomingMovies, stringResource(R.string.upcoming_title), onMovieSelected, onUpcomingMoviesThresholdReached)
+            ListSection(
+                content.topRatedMovies,
+                onMovieSelected,
+                onScrollThresholdReached = onTopRatedMoviesThresholdReached
+            )
+        }
+
+        item {
+            SectionTitle(
+                stringResource(R.string.upcoming_title),
+                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+            )
+        }
+
+        item {
+            ListSection(
+                content.upcomingMovies,
+                onMovieSelected,
+                onScrollThresholdReached = onUpcomingMoviesThresholdReached
+            )
         }
     }
 }
@@ -152,7 +183,7 @@ private fun Highlighted(
                 .fillMaxHeight(),
             title = popularMovies[page].title,
             overview = popularMovies[page].overview,
-            rating = popularMovies[page].rating,
+            rating = popularMovies[page].getRating(),
             onClick = { onMovieSelected(popularMovies[page].id) }
         )
     }

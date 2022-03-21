@@ -2,6 +2,8 @@ package com.milanga.movietime.movies
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.util.*
 
 @JsonIgnoreProperties("media_type")
@@ -12,7 +14,7 @@ data class MoviePreview(
     @JsonProperty("id") val id: Int,
     @JsonProperty("poster_path") private val posterPath: String?,
     @JsonProperty("backdrop_path") private val backdropPath: String?,
-    @JsonProperty("vote_average") val rating: Float,
+    @JsonProperty("vote_average") private val rating: Float,
     @JsonProperty("vote_count") val voteCount: String,
     @JsonProperty("popularity") val popularity: String,
     @JsonProperty("overview") val overview: String,
@@ -32,6 +34,13 @@ data class MoviePreview(
 
     fun getBackdropUrl(): String {
         return "$BACKDROP_BASE_PATH$backdropPath"
+    }
+
+    fun getRating(): Float {
+        val df = DecimalFormat("#.#")
+        df.roundingMode = RoundingMode.HALF_EVEN
+
+        return df.format(rating).toFloat()
     }
 
 }

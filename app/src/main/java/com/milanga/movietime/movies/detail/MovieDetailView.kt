@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,12 +31,14 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.milanga.compose.black25Opacity
+import com.milanga.movietime.R
 import com.milanga.movietime.core.UIContentState
 import com.milanga.movietime.movies.detail.MovieDetail
 import com.milanga.movietime.movies.detail.MovieDetailViewModel
 import com.milanga.movietime.movies.detail.Video
 import com.milanga.movietime.views.ListSection
 import com.milanga.movietime.views.LoadingList
+import com.milanga.movietime.views.SectionTitle
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -102,14 +105,27 @@ private fun DetailContent(
             }
 
             item {
+                SectionTitle(
+                    stringResource(R.string.recommendations),
+                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                )
+            }
+
+            item {
                 when (content.movieRecommendations) {
                     is UIContentState.Loading<*> -> LoadingList()
                     is UIContentState.ContentState -> {
                         ListSection(
                             content.movieRecommendations,
-                            "Recommendations",
                             onMovieSelected,
-                            onRecommendationsThresholdReached
+                            Modifier.padding(
+                                rememberInsetsPaddingValues(
+                                    LocalWindowInsets.current.systemBars,
+                                    applyTop = false,
+                                    additionalBottom = 16.dp
+                                )
+                            ),
+                            onRecommendationsThresholdReached,
                         )
                     }
                 }
@@ -121,7 +137,7 @@ private fun DetailContent(
                 .padding(
                     rememberInsetsPaddingValues(
                         LocalWindowInsets.current.systemBars,
-                        applyTop = true,
+                        applyBottom = false,
                         additionalStart = 16.dp
                     )
                 )
