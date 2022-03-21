@@ -108,7 +108,8 @@ fun Home() {
                 MovieDetail(
                     onMovieSelected = { movieId ->
                         navController.navigate("${MainDestinations.DETAIL.route}/$movieId")
-                    }
+                    },
+                    onBackNavigation = { navController.popBackStack() }
                 )
             }
         }

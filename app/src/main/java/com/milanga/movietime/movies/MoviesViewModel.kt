@@ -146,6 +146,7 @@ class MoviesViewModel @Inject constructor(private val moviesRepository: MoviesRe
                 .map { moviesResponse: MoviesResponse -> moviesResponse.movies }
                 .flowOn(Dispatchers.Default)
                 .catch {
+                    it.printStackTrace()
                     viewModelState.update {
                         onError(it)
                     }

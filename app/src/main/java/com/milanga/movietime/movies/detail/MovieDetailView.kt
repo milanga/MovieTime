@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -30,6 +31,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.google.accompanist.placeholder.placeholder
 import com.milanga.compose.black25Opacity
 import com.milanga.movietime.R
 import com.milanga.movietime.core.UIContentState
@@ -46,7 +48,11 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 
 @ExperimentalMaterial3Api
 @Composable
-fun MovieDetail(viewModel: MovieDetailViewModel = hiltViewModel(), onMovieSelected: (id: Int) -> Unit) {
+fun MovieDetail(
+    viewModel: MovieDetailViewModel = hiltViewModel(),
+    onMovieSelected: (id: Int) -> Unit,
+    onBackNavigation: () -> Unit
+) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiStateStateFlowLifecycleAware = remember(viewModel.uiState, lifecycleOwner) {
         viewModel.uiState.flowWithLifecycle(
@@ -56,9 +62,38 @@ fun MovieDetail(viewModel: MovieDetailViewModel = hiltViewModel(), onMovieSelect
     }
     val uiState = uiStateStateFlowLifecycleAware.collectAsState(MovieDetailViewModel.MovieDetailUiState.Content()).value
 
-    when(uiState){
-        is MovieDetailViewModel.MovieDetailUiState.Error -> DetailErrorScreen(uiState)
-        is MovieDetailViewModel.MovieDetailUiState.Content -> DetailContent(uiState, onMovieSelected, {viewModel.onRecommendationsThreshold()})
+    Box (
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        when (uiState) {
+            is MovieDetailViewModel.MovieDetailUiState.Error -> DetailErrorScreen(
+                uiState,
+                Modifier.align(Alignment.Center)
+            )
+            is MovieDetailViewModel.MovieDetailUiState.Content -> DetailContent(
+                uiState,
+                onMovieSelected,
+                { viewModel.onRecommendationsThreshold() }
+            )
+        }
+        IconButton(
+            onClick = { onBackNavigation() },
+            modifier = Modifier
+                .padding(
+                    rememberInsetsPaddingValues(
+                        LocalWindowInsets.current.systemBars,
+                        applyBottom = false,
+                        additionalStart = 16.dp
+                    )
+                )
+                .background(
+                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.4f),
+                    shape = CircleShape
+                )
+        ){
+            Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
+        }
     }
 }
 
@@ -69,94 +104,106 @@ private fun DetailContent(
     onMovieSelected: (id: Int) -> Unit,
     onRecommendationsThresholdReached: () -> Unit
 ){
-    Box (
+    LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        contentPadding = PaddingValues(bottom = 24.dp)
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 24.dp)
-        ) {
-            item {
-                when (content.movieDetail) {
-                    is UIContentState.Loading<*> -> Text(
-                        "Loading",
-                        modifier = Modifier.fillMaxSize()
-                    )
-                    is UIContentState.ContentState -> {
-                        SummarySection(content.movieDetail.content)
-                    }
-                }
-            }
 
-            item {
-                when (content.movieVideos) {
-                    is UIContentState.Loading<*> -> Text(
-                        "Loading",
-                        modifier = Modifier.fillMaxSize()
-                    )
-                    is UIContentState.ContentState -> {
-                        if (content.movieVideos.content.size > 0) {
-                            VideoView(content.movieVideos.content.first())
-                        }
-                    }
-                }
-            }
-
-            item {
-                SectionTitle(
-                    stringResource(R.string.recommendations),
-                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+        item{
+            when (content.movieDetail) {
+                is UIContentState.Loading<*> -> BackdropTitle(loading = true)
+                is UIContentState.ContentState -> BackdropTitle(
+                    backdropUrl = content.movieDetail.content.getBackdropUrl(),
+                    title = content.movieDetail.content.title
                 )
             }
+        }
 
-            item {
-                when (content.movieRecommendations) {
-                    is UIContentState.Loading<*> -> LoadingList()
-                    is UIContentState.ContentState -> {
-                        ListSection(
-                            content.movieRecommendations,
-                            onMovieSelected,
-                            Modifier.padding(
-                                rememberInsetsPaddingValues(
-                                    LocalWindowInsets.current.systemBars,
-                                    applyTop = false,
-                                    additionalBottom = 16.dp
-                                )
-                            ),
-                            onRecommendationsThresholdReached,
-                        )
+        item {
+            when (content.movieDetail) {
+                is UIContentState.Loading<*> -> LoadingBlock(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(140.dp)
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 8.dp)
+                )
+                is UIContentState.ContentState -> Overview(content.movieDetail.content.overview)
+            }
+        }
+
+        item {
+            when (content.movieDetail) {
+                is UIContentState.Loading<*> -> LoadingBlock(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 8.dp)
+                )
+                is UIContentState.ContentState -> {
+                    if (!content.movieDetail.content.tagline.isNullOrEmpty()){
+                        Tagline(content.movieDetail.content.tagline)
                     }
                 }
             }
         }
-        IconButton(
-            onClick = { /*TODO*/ },
-            modifier = Modifier
-                .padding(
-                    rememberInsetsPaddingValues(
-                        LocalWindowInsets.current.systemBars,
-                        applyBottom = false,
-                        additionalStart = 16.dp
+
+        item {
+            when (content.movieVideos) {
+                is UIContentState.Loading<*> -> VideoView(loading = true)
+                is UIContentState.ContentState -> {
+                    if (content.movieVideos.content.size > 0) {
+                        VideoView(content.movieVideos.content.first().key)
+                    }
+                }
+            }
+        }
+
+        item {
+            SectionTitle(
+                stringResource(R.string.recommendations),
+                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+            )
+        }
+
+        item {
+            when (content.movieRecommendations) {
+                is UIContentState.Loading<*> -> LoadingList()
+                is UIContentState.ContentState -> {
+                    ListSection(
+                        content.movieRecommendations,
+                        onMovieSelected,
+                        Modifier.padding(
+                            rememberInsetsPaddingValues(
+                                LocalWindowInsets.current.systemBars,
+                                applyTop = false,
+                                additionalBottom = 16.dp
+                            )
+                        ),
+                        onRecommendationsThresholdReached,
                     )
-                )
-                .background(color = black25Opacity, shape = CircleShape)
-                .clip(CircleShape)
-        ){
-            Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null, tint = Color.White)
+                }
+            }
         }
     }
 }
 //}
 
 @Composable
-private fun DetailErrorScreen(error: MovieDetailViewModel.MovieDetailUiState.Error){
-    Text("error")
+private fun DetailErrorScreen(
+    error: MovieDetailViewModel.MovieDetailUiState.Error,
+    modifier: Modifier
+){
+    Text("error", modifier)
 }
 
 @Composable
-private fun VideoView(videoInfo: Video){
+private fun VideoView(
+    videoKey: String = "",
+    loading: Boolean = false
+){
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
@@ -167,7 +214,7 @@ private fun VideoView(videoInfo: Video){
 
             initialize(object : AbstractYouTubePlayerListener() {
                 override fun onReady(youTubePlayer: YouTubePlayer) {
-                    youTubePlayer.cueVideo(videoInfo.key, 0f)
+                    youTubePlayer.cueVideo(videoKey, 0f)
                 }
             })
         }
@@ -179,13 +226,60 @@ private fun VideoView(videoInfo: Video){
             .padding(start = 16.dp, end = 16.dp, top = 8.dp)
             .fillMaxWidth()
             .wrapContentHeight()
+            .placeholder(
+                loading,
+                MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+            )
     )
 }
 
-@ExperimentalMaterial3Api
-@OptIn(ExperimentalCoilApi::class)
 @Composable
-private fun SummarySection(movieDetail: MovieDetail){
+private fun Tagline(
+    tagline: String = "",
+    loading: Boolean = false
+) {
+    Text(
+        text = tagline,
+        style = MaterialTheme.typography.headlineSmall,
+        color = MaterialTheme.colorScheme.onSurface,
+        modifier = Modifier
+            .padding(top = 8.dp, start = 16.dp, end = 16.dp)
+            .placeholder(
+                loading,
+                MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+            )
+    )
+}
+
+@Composable
+private fun Overview(
+    overview: String
+) {
+    Text(
+        text = overview,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurface,
+        modifier = Modifier
+            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+    )
+}
+
+@Composable
+private fun LoadingBlock(
+    modifier: Modifier = Modifier
+){
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+    ){}
+}
+
+@Composable
+private fun BackdropTitle(
+    backdropUrl: String = "",
+    title: String = "",
+    loading: Boolean = false
+) {
     Box(
         modifier = Modifier
             .padding(bottom = 16.dp)
@@ -194,7 +288,7 @@ private fun SummarySection(movieDetail: MovieDetail){
     ) {
         Image(
             painter = rememberImagePainter(
-                data = movieDetail.getBackdropUrl(),
+                data = backdropUrl,
                 builder = {
                     crossfade(true)
                 }
@@ -204,10 +298,14 @@ private fun SummarySection(movieDetail: MovieDetail){
             modifier = Modifier
                 .fillMaxSize()
                 .clipToBounds()
+                .placeholder(
+                    loading,
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                )
         )
 
         Text(
-            text = movieDetail.title,
+            text = title,
             style = MaterialTheme.typography.displaySmall,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
@@ -221,24 +319,11 @@ private fun SummarySection(movieDetail: MovieDetail){
                         )
                     )
                 )
-                .padding(top = 14.dp, start = 16.dp, bottom = 7.dp)
-        )
-    }
-
-    Text(
-        text = movieDetail.overview,
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier
-            .padding(start = 16.dp, end=16.dp, bottom = 8.dp)
-    )
-
-    if (!movieDetail.tagline.isNullOrEmpty()){
-        Text(
-            text = movieDetail.tagline,
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp)
+                .padding(top = 14.dp, start = 16.dp, bottom = 7.dp, end = 16.dp)
+                .placeholder(
+                    loading,
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                )
         )
     }
 }

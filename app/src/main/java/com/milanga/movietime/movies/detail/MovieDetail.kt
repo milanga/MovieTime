@@ -19,7 +19,7 @@ data class MovieDetail(
     @JsonProperty("production_companies") val productionCompanies: List<Company>,
     @JsonProperty("production_countries") val productionCountries: List<Country>,
     @JsonProperty("release_date") val releaseDate: String,
-    @JsonProperty("revenue") val revenue: Int,
+    @JsonProperty("revenue") val revenue: Long,
     @JsonProperty("runtime") val runtime: Int?,
     @JsonProperty("spoken_languages") val spokeLanguages: List<Language>,
     @JsonProperty("status") val status: String,

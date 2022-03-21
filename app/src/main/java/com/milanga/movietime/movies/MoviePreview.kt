@@ -19,7 +19,7 @@ data class MoviePreview(
     @JsonProperty("popularity") val popularity: String,
     @JsonProperty("overview") val overview: String,
     @JsonProperty("genre_ids") val genreIds: List<Int>,
-    @JsonProperty("release_date") val releaseDate: Date,
+    @JsonProperty("release_date") val releaseDate: Date?,
     @JsonProperty("adult") val adult: Boolean,
     @JsonProperty("video") val video: Boolean,
 ) {
