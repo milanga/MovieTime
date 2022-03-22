@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -14,7 +13,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -27,19 +25,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.placeholder.placeholder
-import com.milanga.compose.black25Opacity
 import com.milanga.movietime.R
 import com.milanga.movietime.core.UIContentState
-import com.milanga.movietime.movies.detail.MovieDetail
 import com.milanga.movietime.movies.detail.MovieDetailViewModel
-import com.milanga.movietime.movies.detail.Video
 import com.milanga.movietime.views.ListSection
-import com.milanga.movietime.views.LoadingList
 import com.milanga.movietime.views.SectionTitle
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -170,10 +163,10 @@ private fun DetailContent(
 
         item {
             when (content.movieRecommendations) {
-                is UIContentState.Loading<*> -> LoadingList()
+                is UIContentState.Loading<*> -> ListSection(loading = true)
                 is UIContentState.ContentState -> {
                     ListSection(
-                        content.movieRecommendations,
+                        content.movieRecommendations.content,
                         onMovieSelected,
                         Modifier.padding(
                             rememberInsetsPaddingValues(

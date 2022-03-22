@@ -1,25 +1,21 @@
 package com.milanga.movietime.views
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.MutatePriority
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
@@ -27,15 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.placeholder
-import com.milanga.compose.black60Opacity
-import com.milanga.compose.black85Opacity
-import com.milanga.compose.yellow
-import com.milanga.movietime.core.UIContentState
 import com.milanga.movietime.movies.MoviePreview
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
@@ -43,14 +32,16 @@ import kotlin.math.ceil
 
 @Composable
 fun ListSection(
-    moviesContent: UIContentState<List<MoviePreview>>,
-    onMovieSelected: (id: Int) -> Unit,
+    moviesList: List<MoviePreview> = emptyList(),
+    onMovieSelected: (id: Int) -> Unit = {},
     modifier: Modifier = Modifier,
     onScrollThresholdReached: ()->Unit = {},
+    loading: Boolean = false
 ) {
-    when(moviesContent){
-        is UIContentState.Loading -> LoadingList()
-        is UIContentState.ContentState -> MovieList(moviesContent.content, onMovieSelected, modifier, onScrollThresholdReached)
+    if(loading){
+        LoadingList()
+    } else {
+        MovieList(moviesList, onMovieSelected, modifier, onScrollThresholdReached)
     }
 }
 

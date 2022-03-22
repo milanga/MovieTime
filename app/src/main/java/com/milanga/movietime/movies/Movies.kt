@@ -93,10 +93,10 @@ private fun Content(
         }
 
         item {
-            ListSection(
+            MoviesListSection(
                 content.topRatedMovies,
                 onMovieSelected,
-                onScrollThresholdReached = onTopRatedMoviesThresholdReached
+                onTopRatedMoviesThresholdReached
             )
         }
 
@@ -108,12 +108,28 @@ private fun Content(
         }
 
         item {
-            ListSection(
+            MoviesListSection(
                 content.upcomingMovies,
                 onMovieSelected,
-                onScrollThresholdReached = onUpcomingMoviesThresholdReached
+                onUpcomingMoviesThresholdReached
             )
         }
+    }
+}
+
+@Composable
+private fun MoviesListSection(
+    uiContentState: UIContentState<List<MoviePreview>>,
+    onMovieSelected: (id: Int) -> Unit,
+    onTopRatedMoviesThresholdReached: () -> Unit
+) {
+    when (uiContentState) {
+        is UIContentState.Loading -> ListSection(loading = true)
+        is UIContentState.ContentState -> ListSection(
+            uiContentState.content,
+            onMovieSelected,
+            onScrollThresholdReached = onTopRatedMoviesThresholdReached
+        )
     }
 }
 
