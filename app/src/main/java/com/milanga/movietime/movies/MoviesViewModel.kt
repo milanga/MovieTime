@@ -12,7 +12,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MoviesViewModel @Inject constructor(private val moviesRepository: MoviesRepository): ViewModel() {
+class MoviesViewModel @Inject constructor(
+    private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
+    private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase,
+    private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase
+): ViewModel() {
     sealed interface MoviesUiState{
         object Error: MoviesUiState
         data class Content(
@@ -66,7 +70,7 @@ class MoviesViewModel @Inject constructor(private val moviesRepository: MoviesRe
     private val topRatedListState: ListState = ListState().apply {
         onLoadPage = { page ->
             loadMovies(
-                { moviesRepository.getTopRatedMovies(page) },
+                { getTopRatedMoviesUseCase(page) },
                 { movieList, state ->
                     val movies = if (state.topRatedMovies is ViewModelContentState.ContentState){
                         state.topRatedMovies.content.plus(movieList)
@@ -88,7 +92,7 @@ class MoviesViewModel @Inject constructor(private val moviesRepository: MoviesRe
     private val upcomingListState: ListState = ListState().apply {
         onLoadPage = { page ->
             loadMovies(
-                { moviesRepository.getUpcomingMovies(page) },
+                { getUpcomingMoviesUseCase(page) },
                 { movieList, state ->
                     val movies = if (state.upcomingMovies is ViewModelContentState.ContentState){
                         state.upcomingMovies.content.plus(movieList)
@@ -110,7 +114,7 @@ class MoviesViewModel @Inject constructor(private val moviesRepository: MoviesRe
     private val popularListState: ListState = ListState().apply {
         onLoadPage = { page ->
             loadMovies(
-                { moviesRepository.getPopularMovies(page) },
+                { getPopularMoviesUseCase(page) },
                 { movieList, state ->
                     val movies = if (state.popularMovies is ViewModelContentState.ContentState){
                         state.popularMovies.content.plus(movieList)
@@ -136,14 +140,13 @@ class MoviesViewModel @Inject constructor(private val moviesRepository: MoviesRe
     }
 
     private fun loadMovies(
-        repositoryCall: () -> Flow<MoviesResponse>,
+        useCaseCall: () -> Flow<List<MoviePreview>>,
         onSuccess: (List<MoviePreview>, MoviesViewModelState) -> MoviesViewModelState,
         onError: (MoviesViewModelState) -> MoviesViewModelState,
         onComplete: ()->Unit = {}
     ) {
         viewModelScope.launch {
-            repositoryCall()
-                .map { moviesResponse: MoviesResponse -> moviesResponse.movies }
+            useCaseCall()
                 .flowOn(Dispatchers.Default)
                 .catch {
                     it.printStackTrace()

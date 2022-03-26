@@ -17,7 +17,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val movieDetailRepository: MovieDetailRepository
+    private val getMovieRecommendationsUseCase: GetMovieRecommendationsUseCase,
+    private val getMovieDetailUseCase: GetMovieDetailUseCase,
+    private val getMovieVideosUseCase: GetMovieVideosUseCase
 ) : ViewModel() {
     private val movieId: Int = savedStateHandle.get("paramMovieId")!!
 
@@ -77,7 +79,7 @@ class MovieDetailViewModel @Inject constructor(
 
     private fun loadMovieDetail() {
         viewModelScope.launch {
-            movieDetailRepository.getMovieDetail(movieId)
+            getMovieDetailUseCase(movieId)
                 .flowOn(Dispatchers.Default)
                 .catch { flowCollector ->
                     flowCollector.printStackTrace()
@@ -95,7 +97,7 @@ class MovieDetailViewModel @Inject constructor(
 
     private fun loadMovieVideos() {
         viewModelScope.launch {
-            movieDetailRepository.getMovieVideos(movieId)
+            getMovieVideosUseCase(movieId)
                 .flowOn(Dispatchers.Default)
                 .catch { flowCollector ->
                     flowCollector.printStackTrace()
@@ -115,9 +117,8 @@ class MovieDetailViewModel @Inject constructor(
     private val recommendationsListState = ListState().apply {
         onLoadPage = { page ->
             viewModelScope.launch {
-                movieDetailRepository.getMovieRecommendations(movieId)
+                getMovieRecommendationsUseCase(movieId)
                     .flowOn(Dispatchers.Default)
-                    .map { moviesResponse: MoviesResponse -> moviesResponse.movies }
                     .catch { flowCollector ->
                         flowCollector.printStackTrace()
                         viewModelState.update { state ->
