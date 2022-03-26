@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,6 +23,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -45,10 +48,10 @@ fun ListSection(
     moviesList: List<MoviePreview> = emptyList(),
     onMovieSelected: (id: Int) -> Unit = {},
     modifier: Modifier = Modifier,
-    onScrollThresholdReached: ()->Unit = {},
+    onScrollThresholdReached: () -> Unit = {},
     loading: Boolean = false
 ) {
-    if(loading){
+    if (loading) {
         LoadingList()
     } else {
         MovieList(moviesList, onMovieSelected, modifier, onScrollThresholdReached)
@@ -56,16 +59,16 @@ fun ListSection(
 }
 
 @Composable
-fun LoadingList(){
+fun LoadingList() {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
     val posterWidth = 130.0
 
     //make list not scrollable
     val state = rememberLazyListState()
-    LaunchedEffect(key1 = state){
+    LaunchedEffect(key1 = state) {
         launch {
-            state.scroll(scrollPriority = MutatePriority.PreventUserInput) { awaitCancellation()}
+            state.scroll(scrollPriority = MutatePriority.PreventUserInput) { awaitCancellation() }
         }
     }
 
@@ -74,7 +77,7 @@ fun LoadingList(){
             .padding(start = 8.dp),
         state = state
     ) {
-        for (i in 0..ceil(screenWidth/posterWidth).toInt()){
+        for (i in 0..ceil(screenWidth / posterWidth).toInt()) {
             item {
                 PosterItem(
                     modifier = Modifier
@@ -93,20 +96,20 @@ fun MovieList(
     movieList: List<MoviePreview>,
     onMovieSelected: (id: Int) -> Unit,
     modifier: Modifier = Modifier,
-    onScrollThresholdReached: ()->Unit = {},
+    onScrollThresholdReached: () -> Unit = {},
     threshold: Int = 5
-){
+) {
     LazyRow(
         contentPadding = PaddingValues(horizontal = 8.dp),
         modifier = modifier
     ) {
         itemsIndexed(items = movieList) { index, movie ->
-            if (movieList.size - index < threshold){
+            if (movieList.size - index < threshold) {
                 onScrollThresholdReached.invoke()
             }
             PosterItem(
                 Modifier
-                    .padding(8.dp)
+                    .padding(horizontal = 8.dp)
                     .width(130.dp)
                     .aspectRatio(0.67f),
                 movie.getPosterUrl(),
@@ -126,56 +129,63 @@ fun PosterItem(
     modifier: Modifier = Modifier,
     posterUrl: String = "",
     rating: String = "",
-    onClick: ()->Unit = {},
-    interactionSource: MutableInteractionSource = remember{ MutableInteractionSource() },
+    onClick: (() -> Unit)? = null,
     loading: Boolean = false
 ) {
-    Surface(
-        modifier = modifier
-            .placeholder(
-                loading,
-                MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                shape = RoundedCornerShape(18.dp)
-            ),
-        tonalElevation = 3.dp,
-        shape = RoundedCornerShape(18.dp),
-        onClick = onClick,
-        interactionSource = interactionSource
-    ) {
-        Box(modifier= Modifier.fillMaxSize()) {
-            Image(
-                painter = rememberImagePainter(
-                    data = posterUrl,
-                    builder = {
-                        crossfade(true)
-                    }
-                ),
-                contentScale = ContentScale.Crop,
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxSize()
-            )
+    val posterShape = RoundedCornerShape(18.dp)
+    val clickModifier = if (onClick != null) {
+        Modifier
+            .clip(posterShape)
+            .clickable(onClick = onClick)
+    } else {
+        Modifier
+    }
+    val finalModifier = modifier
+        .placeholder(
+            loading,
+            MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+            shape = posterShape
+        )
+        .background(
+            MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+            shape = posterShape
+        )
+        .then(clickModifier)
 
-            Surface(
-                tonalElevation = 4.dp,
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.8f),
-                modifier = Modifier
-                    .padding(4.dp)
-                    .width(36.dp)
-                    .height(36.dp)
-                    .align(Alignment.BottomEnd)
-
-            ) {
-                Box {
-                    Text(
-                        text = rating,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSecondary,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
+    Box(modifier = finalModifier) {
+        Image(
+            painter = rememberImagePainter(
+                data = posterUrl,
+                builder = {
+                    crossfade(true)
                 }
+            ),
+            contentScale = ContentScale.Crop,
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(posterShape)
+        )
+
+        Surface(
+            tonalElevation = 4.dp,
+            shape = CircleShape,
+            color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.8f),
+            modifier = Modifier
+                .padding(4.dp)
+                .width(36.dp)
+                .height(36.dp)
+                .align(Alignment.BottomEnd)
+
+        ) {
+            Box {
+                Text(
+                    text = rating,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.align(Alignment.Center)
+                )
             }
         }
     }

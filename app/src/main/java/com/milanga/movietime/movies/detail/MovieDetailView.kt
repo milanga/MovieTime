@@ -58,6 +58,7 @@ fun MovieDetail(
     Box (
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         when (uiState) {
             is MovieDetailViewModel.MovieDetailUiState.Error -> DetailErrorScreen(

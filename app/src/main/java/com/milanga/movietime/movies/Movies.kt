@@ -131,7 +131,8 @@ private fun MoviesListSection(
         is UIContentState.ContentState -> ListSection(
             uiContentState.content,
             onMovieSelected,
-            onScrollThresholdReached = onTopRatedMoviesThresholdReached
+            onScrollThresholdReached = onTopRatedMoviesThresholdReached,
+            modifier = Modifier.padding(top = 8.dp)
         )
     }
 }
@@ -217,12 +218,10 @@ private fun BackdropItem(
     overview: String,
     onClick: ()->Unit = {}
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
     Surface(
         onClick = onClick,
         tonalElevation = 3.dp,
         modifier = modifier,
-        interactionSource = interactionSource
     ) {
         Box(
             modifier = Modifier
@@ -253,8 +252,7 @@ private fun BackdropItem(
                         .fillMaxHeight()
                         .aspectRatio(0.67f, true),
                     posterUrl,
-                    rating.toString(),
-                    interactionSource = interactionSource
+                    rating.toString()
                 )
                 Column(
                     modifier = Modifier.padding(start = 16.dp)
@@ -267,7 +265,7 @@ private fun BackdropItem(
                     )
                     Text(
                         text = overview,
-                        maxLines = 3,
+                        maxLines = 4,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color.White,
