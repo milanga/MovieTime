@@ -277,7 +277,7 @@ private fun BackdropTitle(
         modifier = Modifier
             .padding(bottom = 16.dp)
             .fillMaxWidth()
-            .aspectRatio(1.5f)
+            .aspectRatio(1.6f)
     ) {
         Image(
             painter = rememberImagePainter(

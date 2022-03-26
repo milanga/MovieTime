@@ -2,20 +2,27 @@ package com.milanga.movietime.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.MutatePriority
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.Interaction
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
@@ -26,6 +33,9 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.placeholder.placeholder
 import com.milanga.movietime.movies.MoviePreview
 import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
 
@@ -98,21 +108,26 @@ fun MovieList(
                 Modifier
                     .padding(8.dp)
                     .width(130.dp)
-                    .aspectRatio(0.67f)
-                    .clickable { onMovieSelected(movie.id) },
+                    .aspectRatio(0.67f),
                 movie.getPosterUrl(),
-                movie.getRating().toString()
+                movie.getRating().toString(),
+                { onMovieSelected(movie.id) }
             )
         }
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
+@OptIn(
+    ExperimentalCoilApi::class,
+    ExperimentalMaterial3Api::class
+)
 @Composable
 fun PosterItem(
     modifier: Modifier = Modifier,
     posterUrl: String = "",
     rating: String = "",
+    onClick: ()->Unit = {},
+    interactionSource: MutableInteractionSource = remember{ MutableInteractionSource() },
     loading: Boolean = false
 ) {
     Surface(
@@ -123,7 +138,9 @@ fun PosterItem(
                 shape = RoundedCornerShape(18.dp)
             ),
         tonalElevation = 3.dp,
-        shape = RoundedCornerShape(18.dp)
+        shape = RoundedCornerShape(18.dp),
+        onClick = onClick,
+        interactionSource = interactionSource
     ) {
         Box(modifier= Modifier.fillMaxSize()) {
             Image(

@@ -2,8 +2,11 @@ package com.milanga.movietime.movies
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -154,7 +157,7 @@ private fun Highlighted(
         count = popularMovies.size,
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(1.5f)
+            .aspectRatio(1.6f)
             .placeholder(
                 loading,
                 MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
@@ -200,7 +203,10 @@ private fun Highlighted(
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
+@OptIn(
+    ExperimentalCoilApi::class,
+    ExperimentalMaterial3Api::class
+)
 @Composable
 private fun BackdropItem(
     modifier: Modifier = Modifier,
@@ -211,10 +217,12 @@ private fun BackdropItem(
     overview: String,
     onClick: ()->Unit = {}
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     Surface(
         onClick = onClick,
         tonalElevation = 3.dp,
-        modifier = modifier
+        modifier = modifier,
+        interactionSource = interactionSource
     ) {
         Box(
             modifier = Modifier
@@ -237,21 +245,19 @@ private fun BackdropItem(
                 modifier = Modifier
                     .matchParentSize()
                     .background(color = black60Opacity)
-                    .padding(horizontal = 16.dp)
+                    .padding(start = 16.dp, end = 16.dp, top = 38.dp)
             ) {
                 PosterItem(
                     Modifier
-                        .padding(vertical = 38.dp)
+                        .padding(bottom = 38.dp)
                         .fillMaxHeight()
-                        .aspectRatio(0.66f, true),
+                        .aspectRatio(0.67f, true),
                     posterUrl,
-                    rating.toString()
-
+                    rating.toString(),
+                    interactionSource = interactionSource
                 )
                 Column(
-                    modifier = Modifier.padding(
-                        top = 32.dp, start = 16.dp, end = 16.dp
-                    )
+                    modifier = Modifier.padding(start = 16.dp)
                 ) {
                     Text(
                         text = title,
