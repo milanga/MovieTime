@@ -169,13 +169,15 @@ private fun DetailContent(
                     ListSection(
                         content.movieRecommendations.content,
                         onMovieSelected,
-                        Modifier.padding(
-                            rememberInsetsPaddingValues(
-                                LocalWindowInsets.current.systemBars,
-                                applyTop = false,
-                                additionalBottom = 16.dp
+                        Modifier
+                            .padding(
+                                rememberInsetsPaddingValues(
+                                    LocalWindowInsets.current.systemBars,
+                                    applyTop = false,
+                                    additionalBottom = 16.dp
+                                )
                             )
-                        ),
+                            .padding(top=8.dp),
                         onRecommendationsThresholdReached,
                     )
                 }
