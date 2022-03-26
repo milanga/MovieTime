@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.*
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Movie
@@ -12,8 +13,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -127,17 +130,16 @@ private fun BottomNavBar(
         enter = slideInHorizontally(tween(350, easing = LinearOutSlowInEasing)) {-it},
         exit = slideOutHorizontally(tween(500)) {-it}
     ) {
-        MovieTimeNavigationBar(modifier = Modifier.padding(rememberInsetsPaddingValues(
-            insets = LocalWindowInsets.current.systemBars,
-            applyTop = false
-        ))) {
+        val bottomSysBarsHeight = with(LocalDensity.current){LocalWindowInsets.current.systemBars.bottom.toDp()}
+        MovieTimeNavigationBar(modifier = Modifier.height(80.dp + bottomSysBarsHeight)) {
             navSections.forEach { navSection ->
                 MovieTimeNavigationBarItem(
                     selected = currentSectionRoute == navSection.route,
                     onClick = { navigateToSection(navSection) },
                     icon = { Icon(imageVector = Icons.Filled.Movie, contentDescription = null) },
                     label = { Text(stringResource(navSection.title)) },
-                    alwaysShowLabel = true
+                    alwaysShowLabel = true,
+                    modifier = Modifier.padding(bottom = bottomSysBarsHeight)
                 )
             }
         }
