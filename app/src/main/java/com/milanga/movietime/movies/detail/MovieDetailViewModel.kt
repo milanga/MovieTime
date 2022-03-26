@@ -7,7 +7,6 @@ import com.milanga.movietime.core.ListState
 import com.milanga.movietime.core.UIContentState
 import com.milanga.movietime.core.ViewModelContentState
 import com.milanga.movietime.movies.MoviePreview
-import com.milanga.movietime.movies.MoviesRepository
 import com.milanga.movietime.movies.MoviesResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val moviesRepository: MoviesRepository
+    private val movieDetailRepository: MovieDetailRepository
 ) : ViewModel() {
     private val movieId: Int = savedStateHandle.get("paramMovieId")!!
 
@@ -78,7 +77,7 @@ class MovieDetailViewModel @Inject constructor(
 
     private fun loadMovieDetail() {
         viewModelScope.launch {
-            moviesRepository.getMovieDetail(movieId)
+            movieDetailRepository.getMovieDetail(movieId)
                 .flowOn(Dispatchers.Default)
                 .catch { flowCollector ->
                     flowCollector.printStackTrace()
@@ -96,7 +95,7 @@ class MovieDetailViewModel @Inject constructor(
 
     private fun loadMovieVideos() {
         viewModelScope.launch {
-            moviesRepository.getMovieVideos(movieId)
+            movieDetailRepository.getMovieVideos(movieId)
                 .flowOn(Dispatchers.Default)
                 .catch { flowCollector ->
                     flowCollector.printStackTrace()
@@ -116,7 +115,7 @@ class MovieDetailViewModel @Inject constructor(
     private val recommendationsListState = ListState().apply {
         onLoadPage = { page ->
             viewModelScope.launch {
-                moviesRepository.getMovieRecommendations(movieId)
+                movieDetailRepository.getMovieRecommendations(movieId)
                     .flowOn(Dispatchers.Default)
                     .map { moviesResponse: MoviesResponse -> moviesResponse.movies }
                     .catch { flowCollector ->
