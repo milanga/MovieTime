@@ -1,20 +1,25 @@
 package com.milanga.movietime.movies
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Movie
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -26,6 +31,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.google.accompanist.insets.LocalWindowInsets
 import com.milanga.compose.black60Opacity
 import com.milanga.movietime.R
 import com.milanga.movietime.core.UIContentState
@@ -37,11 +43,15 @@ import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.milanga.movietime.components.MovieTimeNavigationBar
+import com.milanga.movietime.components.MovieTimeNavigationBarItem
+import com.milanga.movietime.home.NavSection
 import com.milanga.movietime.views.SectionTitle
 import kotlin.math.absoluteValue
 
 @Composable
-fun Movies(viewModel: MoviesViewModel = hiltViewModel(), onMovieSelected: (id: Int)->Unit) {
+@OptIn(ExperimentalMaterial3Api::class)
+fun Movies(viewModel: MoviesViewModel = hiltViewModel(), onMovieSelected: (id: Int)->Unit, navSections: List<NavSection>, onSectionSelected: (NavSection)->Unit) {
     val systemUiController: SystemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
         color = Color.Transparent
@@ -55,11 +65,26 @@ fun Movies(viewModel: MoviesViewModel = hiltViewModel(), onMovieSelected: (id: I
     }
     val uiState = uiStateStateFlowLifecycleAware.collectAsState(MoviesViewModel.MoviesUiState.Content()).value
 
-    when(uiState){
-        is MoviesViewModel.MoviesUiState.Error -> ErrorScreen(uiState)
-        is MoviesViewModel.MoviesUiState.Content -> Content(uiState, onMovieSelected, {viewModel.onTopRatedMoviesThreshold()}, {viewModel.onUpcomingMoviesThreshold()}, {viewModel.onPopularMoviesThreshold()})
+    Scaffold(bottomBar = {
+        val bottomSysBarsHeight = with(LocalDensity.current){ LocalWindowInsets.current.systemBars.bottom.toDp()}
+        MovieTimeNavigationBar(modifier = Modifier.height(80.dp + bottomSysBarsHeight)) {
+            navSections.forEach { navSection ->
+                MovieTimeNavigationBarItem(
+                    selected = navSection == NavSection.Movies,
+                    onClick = { onSectionSelected(navSection) },
+                    icon = { Icon(imageVector = Icons.Filled.Movie, contentDescription = null) },
+                    label = { Text(stringResource(navSection.title)) },
+                    alwaysShowLabel = true,
+                    modifier = Modifier.padding(bottom = bottomSysBarsHeight)
+                )
+            }
+        }
+    }) {
+        when(uiState){
+            is MoviesViewModel.MoviesUiState.Error -> ErrorScreen(uiState)
+            is MoviesViewModel.MoviesUiState.Content -> Content(uiState, onMovieSelected, {viewModel.onTopRatedMoviesThreshold()}, {viewModel.onUpcomingMoviesThreshold()}, {viewModel.onPopularMoviesThreshold()})
+        }
     }
-
 }
 
 @Composable
