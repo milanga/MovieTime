@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.*
 import androidx.compose.animation.AnimatedContentScope.SlideDirection.Companion.Left
 import androidx.compose.animation.AnimatedContentScope.SlideDirection.Companion.Right
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,12 +27,10 @@ import androidx.navigation.navArgument
 import com.milanga.movietime.R
 import com.milanga.movietime.components.MovieTimeNavigationBar
 import com.milanga.movietime.components.MovieTimeNavigationBarItem
-import com.milanga.movietime.components.MovieTimeScaffold
 import com.milanga.movietime.home.MainDestinations.HOME
 import com.milanga.movietime.movies.MovieDetail
-import com.milanga.movietime.movies.Movies
+import com.milanga.movietime.movies.domain.Movies
 import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
