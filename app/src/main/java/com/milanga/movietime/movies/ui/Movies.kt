@@ -29,7 +29,7 @@ import com.milanga.compose.black60Opacity
 import com.milanga.movietime.R
 import com.milanga.movietime.core.UIContentState
 import com.milanga.movietime.views.ListSection
-import com.milanga.movietime.views.PosterItem
+import com.milanga.movietime.views.PosterItemView
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
@@ -40,8 +40,8 @@ import com.milanga.movietime.components.MovieTimeNavigationBar
 import com.milanga.movietime.components.MovieTimeNavigationBarItem
 import com.milanga.movietime.home.NavSection
 import com.milanga.movietime.movies.presentation.MoviesViewModel
-import com.milanga.movietime.movies.domain.MoviePreview
 import com.milanga.movietime.views.SectionTitle
+import com.milanga.movietime.views.model.PosterItem
 import kotlin.math.absoluteValue
 
 @Composable
@@ -149,7 +149,7 @@ private fun MoviesListSection(
     when (uiContentState) {
         is UIContentState.Loading -> ListSection(loading = true)
         is UIContentState.ContentState -> ListSection(
-            uiContentState.content,
+            uiContentState.content.map{ PosterItem(it.id, it.getPosterUrl(), it.getRating().toString()) },
             onMovieSelected,
             onScrollThresholdReached = onTopRatedMoviesThresholdReached,
             modifier = Modifier.padding(top = 8.dp)
@@ -266,7 +266,7 @@ private fun BackdropItem(
                     .background(color = black60Opacity)
                     .padding(start = 16.dp, end = 16.dp, top = 38.dp)
             ) {
-                PosterItem(
+                PosterItemView(
                     Modifier
                         .padding(bottom = 38.dp)
                         .fillMaxHeight()

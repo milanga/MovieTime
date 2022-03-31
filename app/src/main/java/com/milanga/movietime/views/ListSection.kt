@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.placeholder.placeholder
-import com.milanga.movietime.movies.domain.MoviePreview
+import com.milanga.movietime.views.model.PosterItem
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
@@ -35,7 +35,7 @@ import kotlin.math.ceil
 
 @Composable
 fun ListSection(
-    moviesList: List<MoviePreview> = emptyList(),
+    posterList: List<PosterItem> = emptyList(),
     onMovieSelected: (id: Int) -> Unit = {},
     modifier: Modifier = Modifier,
     onScrollThresholdReached: () -> Unit = {},
@@ -44,7 +44,7 @@ fun ListSection(
     if (loading) {
         LoadingList()
     } else {
-        MovieList(moviesList, onMovieSelected, modifier, onScrollThresholdReached)
+        MovieList(posterList, onMovieSelected, modifier, onScrollThresholdReached)
     }
 }
 
@@ -69,7 +69,7 @@ fun LoadingList() {
     ) {
         for (i in 0..ceil(screenWidth / posterWidth).toInt()) {
             item {
-                PosterItem(
+                PosterItemView(
                     modifier = Modifier
                         .padding(8.dp)
                         .width(130.dp)
@@ -83,7 +83,7 @@ fun LoadingList() {
 
 @Composable
 fun MovieList(
-    movieList: List<MoviePreview>,
+    posterList: List<PosterItem>,
     onMovieSelected: (id: Int) -> Unit,
     modifier: Modifier = Modifier,
     onScrollThresholdReached: () -> Unit = {},
@@ -93,18 +93,18 @@ fun MovieList(
         contentPadding = PaddingValues(horizontal = 8.dp),
         modifier = modifier
     ) {
-        itemsIndexed(items = movieList) { index, movie ->
-            if (movieList.size - index < threshold) {
+        itemsIndexed(items = posterList) { index, posterItem ->
+            if (posterList.size - index < threshold) {
                 onScrollThresholdReached.invoke()
             }
-            PosterItem(
+            PosterItemView(
                 Modifier
                     .padding(horizontal = 8.dp)
                     .width(130.dp)
                     .aspectRatio(0.67f),
-                movie.getPosterUrl(),
-                movie.getRating().toString(),
-                { onMovieSelected(movie.id) }
+                posterItem.posterUrl,
+                posterItem.rating,
+                { onMovieSelected(posterItem.id) }
             )
         }
     }
@@ -115,7 +115,7 @@ fun MovieList(
     ExperimentalMaterial3Api::class
 )
 @Composable
-fun PosterItem(
+fun PosterItemView(
     modifier: Modifier = Modifier,
     posterUrl: String = "",
     rating: String = "",
@@ -184,7 +184,7 @@ fun PosterItem(
 @Preview
 @Composable
 private fun PosterItemPreview() {
-    PosterItem(
+    PosterItemView(
         modifier = Modifier
             .padding(16.dp)
             .width(120.dp)

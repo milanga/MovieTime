@@ -34,6 +34,7 @@ import com.milanga.movietime.core.UIContentState
 import com.milanga.movietime.moviedetail.presentation.MovieDetailViewModel
 import com.milanga.movietime.views.ListSection
 import com.milanga.movietime.views.SectionTitle
+import com.milanga.movietime.views.model.PosterItem
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -167,7 +168,7 @@ private fun DetailContent(
                 is UIContentState.Loading<*> -> ListSection(loading = true)
                 is UIContentState.ContentState -> {
                     ListSection(
-                        content.movieRecommendations.content,
+                        content.movieRecommendations.content.map{ PosterItem(it.id, it.getPosterUrl(), it.getRating().toString()) },
                         onMovieSelected,
                         Modifier
                             .padding(
