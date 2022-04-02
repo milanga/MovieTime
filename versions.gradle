@@ -1,0 +1,55 @@
+/**
+ * Versions
+ * **/
+
+/**Java versions**/
+ext.javaSourceCompatibility = JavaVersion.VERSION_1_8
+ext.javaTargetCompatibility = JavaVersion.VERSION_1_8
+ext.kotlinJvmTarget = JavaVersion.VERSION_1_8.toString()
+
+/**sdk versions**/
+ext.minSdkVersion = 23
+ext.targetSdkVersion = 31
+ext.compileSdkVersion = 31
+
+/**compose**/
+ext.kotlinCompilerExtensionVersion = '1.1.0-beta02'
+
+/**Dependencies versions**/
+//compose
+ext.composeUiVersion = '1.1.1'
+ext.composeFoundationVersion = '1.1.1'
+ext.composeMaterial3Version = '1.0.0-alpha08'
+ext.composeMaterialVersion = '1.1.1'
+
+//core
+ext.androidxCoreVersion = '1.7.0'
+
+//activity
+ext.androidxActivityVersion = '1.4.0'
+
+//lifecycle
+ext.androidxLifecycleVersion = '2.4.1'
+
+//navigation
+ext.androidxNavigationVersion = '2.4.1'
+
+//accompanist
+ext.accompanistVersion = '0.23.1'
+ext.accompanistAnimatedNavVersion = '0.21.4-beta'
+
+//coil
+ext.coilVersion = '1.3.2'
+
+//retrofit
+ext.retrofitVersion = '2.9.0'
+ext.okhttpVersion = '4.9.2'
+
+//DI
+ext.daggerVersion = '2.40'
+ext.hiltVersion = '1.0.0'
+ext.hiltLifecycleViewmodelVersion = '1.0.0-alpha03'
+ext.hiltNavigationCompose = '1.0.0'
+
+//Youtube player
+ext.youtubePlayerVersion = '11.0.1'
