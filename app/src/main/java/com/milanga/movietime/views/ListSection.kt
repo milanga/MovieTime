@@ -42,14 +42,14 @@ fun ListSection(
     loading: Boolean = false
 ) {
     if (loading) {
-        LoadingList()
+        LoadingList(modifier)
     } else {
         MovieList(posterList, onMovieSelected, modifier, onScrollThresholdReached)
     }
 }
 
 @Composable
-fun LoadingList() {
+fun LoadingList(modifier: Modifier) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
     val posterWidth = 130.0
@@ -63,15 +63,15 @@ fun LoadingList() {
     }
 
     LazyRow(
-        modifier = Modifier
-            .padding(start = 8.dp),
-        state = state
+        modifier = modifier,
+        state = state,
+        contentPadding = PaddingValues(horizontal = 8.dp)
     ) {
         for (i in 0..ceil(screenWidth / posterWidth).toInt()) {
             item {
                 PosterItemView(
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(horizontal = 8.dp)
                         .width(130.dp)
                         .aspectRatio(0.67f),
                     loading = true
