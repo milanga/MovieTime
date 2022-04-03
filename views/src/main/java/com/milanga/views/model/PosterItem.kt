@@ -1,4 +1,4 @@
-package com.milanga.movietime.views.model
+package com.milanga.views.model
 
 data class PosterItem(
     val id: Int,

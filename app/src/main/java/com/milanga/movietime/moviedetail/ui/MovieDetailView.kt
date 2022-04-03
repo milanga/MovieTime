@@ -34,7 +34,7 @@ import com.milanga.movietime.core.UIContentState
 import com.milanga.movietime.moviedetail.presentation.MovieDetailViewModel
 import com.milanga.movietime.views.ListSection
 import com.milanga.movietime.views.SectionTitle
-import com.milanga.movietime.views.model.PosterItem
+import com.milanga.views.model.PosterItem
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView

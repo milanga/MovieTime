@@ -39,7 +39,7 @@ import com.milanga.movietime.movies.presentation.MoviesViewModel
 import com.milanga.movietime.views.ListSection
 import com.milanga.movietime.views.PosterItemView
 import com.milanga.movietime.views.SectionTitle
-import com.milanga.movietime.views.model.PosterItem
+import com.milanga.views.model.PosterItem
 import kotlin.math.absoluteValue
 
 @Composable

@@ -1,0 +1,32 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdk rootProject.compileSdkVersion
+
+    defaultConfig {
+        minSdk rootProject.minSdkVersion
+        targetSdk rootProject.targetSdkVersion
+    }
+
+    buildFeatures {
+        compose true
+        // Disable unused AGP features
+        aidl false
+        renderScript false
+        resValues false
+        shaders false
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = rootProject.kotlinCompilerExtensionVersion
+    }
+
+    compileOptions {
+        sourceCompatibility = rootProject.javaSourceCompatibility
+        targetCompatibility = rootProject.javaTargetCompatibility
+    }
+    kotlinOptions {
+        jvmTarget = "$kotlinJvmTarget"
+    }
+}
