@@ -9,6 +9,19 @@ android {
         targetSdk rootProject.targetSdkVersion
     }
 
+    buildFeatures {
+        compose true
+        // Disable unused AGP features
+        aidl false
+        renderScript false
+        resValues false
+        shaders false
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = rootProject.kotlinCompilerExtensionVersion
+    }
+
     compileOptions {
         sourceCompatibility = rootProject.javaSourceCompatibility
         targetCompatibility = rootProject.javaTargetCompatibility

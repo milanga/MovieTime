@@ -1,4 +1,4 @@
-package com.movietime.movietime.core
+package com.movietime.core.domain
 
 import java.lang.RuntimeException
 

@@ -29,8 +29,8 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.placeholder.placeholder
+import com.movietime.core.domain.UIContentState
 import com.movietime.movietime.R
-import com.movietime.movietime.core.UIContentState
 import com.movietime.movietime.moviedetail.presentation.MovieDetailViewModel
 import com.movietime.movietime.views.ListSection
 import com.movietime.movietime.views.SectionTitle
@@ -138,8 +138,9 @@ private fun DetailContent(
                         .padding(top = 8.dp)
                 )
                 is UIContentState.ContentState -> {
-                    if (!content.movieDetail.content.tagline.isNullOrEmpty()){
-                        Tagline(content.movieDetail.content.tagline)
+                    val tagline = content.movieDetail.content.tagline
+                    if (!tagline.isNullOrEmpty()){
+                        Tagline(tagline)
                     }
                 }
             }

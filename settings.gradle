@@ -10,3 +10,4 @@ rootProject.name = "MovieTime"
 include ':app'
 include ':views'
 include ':core:networking'
+include ':core:domain'

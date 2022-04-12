@@ -1,4 +1,4 @@
-package com.movietime.movietime.core
+package com.movietime.core.domain
 
 class ListState(
     private val startPageIndex: Int = 1

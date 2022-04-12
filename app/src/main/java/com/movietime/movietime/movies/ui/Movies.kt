@@ -33,8 +33,8 @@ import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.movietime.compose.black60Opacity
+import com.movietime.core.domain.UIContentState
 import com.movietime.movietime.R
-import com.movietime.movietime.core.UIContentState
 import com.movietime.movietime.movies.presentation.MoviesViewModel
 import com.movietime.movietime.views.ListSection
 import com.movietime.movietime.views.SectionTitle

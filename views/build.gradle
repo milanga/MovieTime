@@ -1,4 +1,4 @@
-apply from: "../android-library-config.gradle"
+apply from: "../compose-library-config.gradle"
 
 dependencies {
     // Tooling support (Previews, etc.)

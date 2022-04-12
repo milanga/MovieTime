@@ -2,9 +2,9 @@ package com.movietime.movietime.movies.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.movietime.movietime.core.ListState
-import com.movietime.movietime.core.UIContentState
-import com.movietime.movietime.core.ViewModelContentState
+import com.movietime.core.domain.ListState
+import com.movietime.core.domain.UIContentState
+import com.movietime.core.domain.ViewModelContentState
 import com.movietime.movietime.movies.domain.MoviePreview
 import com.movietime.movietime.movies.interactors.GetPopularMoviesUseCase
 import com.movietime.movietime.movies.interactors.GetTopRatedMoviesUseCase

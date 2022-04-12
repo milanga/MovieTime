@@ -3,9 +3,9 @@ package com.movietime.movietime.moviedetail.presentation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.movietime.movietime.core.ListState
-import com.movietime.movietime.core.UIContentState
-import com.movietime.movietime.core.ViewModelContentState
+import com.movietime.core.domain.ListState
+import com.movietime.core.domain.UIContentState
+import com.movietime.core.domain.ViewModelContentState
 import com.movietime.movietime.moviedetail.domain.MovieDetail
 import com.movietime.movietime.moviedetail.domain.Video
 import com.movietime.movietime.movies.domain.MoviePreview
