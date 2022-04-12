@@ -1,9 +1,8 @@
-package com.movietime.app.client.interceptor
+package com.milanga.core.networking
 
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
-import javax.inject.Named
 
 class ApiKeyInterceptor(private val tmdbApiKey: String) : Interceptor {
     @Throws(IOException::class)

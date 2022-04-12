@@ -1,0 +1,41 @@
+plugins {
+    id 'kotlin-kapt'
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+android {
+    compileSdk rootProject.compileSdkVersion
+
+    defaultConfig {
+        minSdk rootProject.minSdkVersion
+        targetSdk rootProject.targetSdkVersion
+        buildConfigField "String", "TMDB_API_KEY", project.properties["TMDB_API_KEY"]
+    }
+
+    compileOptions {
+        sourceCompatibility = rootProject.javaSourceCompatibility
+        targetCompatibility = rootProject.javaTargetCompatibility
+    }
+    kotlinOptions {
+        jvmTarget = "$kotlinJvmTarget"
+    }
+}
+
+kapt {
+    correctErrorTypes true
+}
+
+dependencies {
+    //DI
+    implementation "com.google.dagger:hilt-android:$daggerVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$daggerVersion"
+
+    //Networking
+    //  Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-jackson:$retrofitVersion"
+    //  Okhttp
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+}

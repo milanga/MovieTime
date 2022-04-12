@@ -1,7 +1,5 @@
-package com.milanga.movietime.api
+package com.milanga.core.networking
 
-import com.milanga.movietime.BuildConfig
-import com.movietime.app.client.interceptor.ApiKeyInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
