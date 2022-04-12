@@ -30,9 +30,9 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.movietime.movietime.R
-import com.movietime.movietime.components.MovieTimeNavigationBar
-import com.movietime.movietime.components.MovieTimeNavigationBarItem
-import com.movietime.movietime.movies.domain.Movies
+import com.movietime.views.components.MovieTimeNavigationBar
+import com.movietime.views.components.MovieTimeNavigationBarItem
+import com.movietime.movietime.movies.domain.MovieHome
 
 const val HomeSectionsRoute = "home/sections"
 
@@ -78,7 +78,7 @@ fun Home(
                 },
             ) {
                 composable(NavSection.Movies.route) {
-                    Movies(onMovieSelected = onMovieSelected)
+                    MovieHome(onMovieSelected = onMovieSelected)
                 }
 
                 composable(NavSection.Series.route) {

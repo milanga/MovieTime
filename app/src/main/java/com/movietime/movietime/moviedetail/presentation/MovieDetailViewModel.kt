@@ -8,7 +8,7 @@ import com.movietime.core.domain.UIContentState
 import com.movietime.core.domain.ViewModelContentState
 import com.movietime.movietime.moviedetail.domain.MovieDetail
 import com.movietime.movietime.moviedetail.domain.Video
-import com.movietime.movietime.movies.domain.MoviePreview
+import com.movietime.movie.home.domain.MoviePreview
 import com.movietime.movietime.moviedetail.interactors.GetMovieDetailUseCase
 import com.movietime.movietime.moviedetail.interactors.GetMovieRecommendationsUseCase
 import com.movietime.movietime.moviedetail.interactors.GetMovieVideosUseCase

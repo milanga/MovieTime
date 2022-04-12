@@ -1,13 +1,13 @@
 package com.movietime.movietime.moviedetail.source.remote
 
-import com.movietime.movietime.movies.source.remote.model.RemoteMoviesResponse
+import com.movietime.movie.home.source.remote.model.RemoteMoviesResponse
 import com.movietime.movietime.moviedetail.data.MovieDetailDataSource
 import com.movietime.movietime.moviedetail.domain.MovieDetail
 import com.movietime.movietime.moviedetail.domain.Video
 import com.movietime.movietime.moviedetail.source.remote.mappers.MovieDetailMapper
 import com.movietime.movietime.moviedetail.source.remote.mappers.VideoMapper
-import com.movietime.movietime.movies.domain.MoviePreview
-import com.movietime.movietime.movies.source.remote.mappers.MoviePreviewMapper
+import com.movietime.movie.home.domain.MoviePreview
+import com.movietime.movie.home.source.remote.mappers.MoviePreviewMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

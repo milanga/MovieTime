@@ -2,7 +2,7 @@ package com.movietime.movietime.moviedetail.data
 
 import com.movietime.movietime.moviedetail.domain.MovieDetail
 import com.movietime.movietime.moviedetail.domain.Video
-import com.movietime.movietime.movies.domain.MoviePreview
+import com.movietime.movie.home.domain.MoviePreview
 import kotlinx.coroutines.flow.Flow
 
 interface MovieDetailDataSource {

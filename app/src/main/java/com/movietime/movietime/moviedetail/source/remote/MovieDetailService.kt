@@ -1,6 +1,6 @@
 package com.movietime.movietime.moviedetail.source.remote
 
-import com.movietime.movietime.movies.source.remote.model.RemoteMoviesResponse
+import com.movietime.movie.home.source.remote.model.RemoteMoviesResponse
 import com.movietime.movietime.moviedetail.source.remote.model.RemoteMovieDetail
 import com.movietime.movietime.moviedetail.source.remote.model.RemoteVideosResponse
 import retrofit2.http.GET
