@@ -1,7 +1,7 @@
 package com.movietime.movietime.moviedetail.interactors
 
 import com.movietime.movietime.moviedetail.data.MovieDetailRepository
-import com.movietime.movietime.moviedetail.domain.MovieDetail
+import com.movietime.movie.domain.detail.MovieDetail
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

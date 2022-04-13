@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.movietime.core.domain.ListState
 import com.movietime.core.domain.UIContentState
 import com.movietime.core.domain.ViewModelContentState
-import com.movietime.movie.home.domain.MoviePreview
+import com.movietime.movie.domain.MoviePreview
 import com.movietime.movie.home.interactors.GetPopularMoviesUseCase
 import com.movietime.movie.home.interactors.GetTopRatedMoviesUseCase
 import com.movietime.movie.home.interactors.GetUpcomingMoviesUseCase

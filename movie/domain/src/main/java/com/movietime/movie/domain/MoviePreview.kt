@@ -1,4 +1,4 @@
-package com.movietime.movie.home.domain
+package com.movietime.movie.domain
 
 import java.math.RoundingMode
 import java.text.DecimalFormat

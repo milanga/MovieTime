@@ -273,6 +273,7 @@ private fun LoadingBlock(
 }
 
 @Composable
+@OptIn(coil.annotation.ExperimentalCoilApi::class)
 private fun BackdropTitle(
     backdropUrl: String = "",
     title: String = "",

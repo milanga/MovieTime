@@ -1,6 +1,6 @@
 package com.movietime.movietime.moviedetail.source.remote.mappers
 
-import com.movietime.movietime.moviedetail.domain.Country
+import com.movietime.movie.domain.detail.Country
 import com.movietime.movietime.moviedetail.source.remote.model.RemoteCountry
 
 object CountryMapper {

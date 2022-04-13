@@ -1,4 +1,4 @@
-package com.movietime.movietime.moviedetail.domain
+package com.movietime.movie.domain.detail
 
 data class Company(
     val name: String,

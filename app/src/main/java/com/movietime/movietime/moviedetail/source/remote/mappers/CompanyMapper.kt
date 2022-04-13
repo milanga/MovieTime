@@ -1,6 +1,6 @@
 package com.movietime.movietime.moviedetail.source.remote.mappers
 
-import com.movietime.movietime.moviedetail.domain.Company
+import com.movietime.movie.domain.detail.Company
 import com.movietime.movietime.moviedetail.source.remote.model.RemoteCompany
 
 object CompanyMapper {

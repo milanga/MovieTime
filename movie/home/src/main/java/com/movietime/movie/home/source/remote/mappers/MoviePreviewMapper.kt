@@ -1,6 +1,6 @@
 package com.movietime.movie.home.source.remote.mappers
 
-import com.movietime.movie.home.domain.MoviePreview
+import com.movietime.movie.domain.MoviePreview
 import com.movietime.movie.home.source.remote.model.RemoteMoviePreview
 
 object MoviePreviewMapper {

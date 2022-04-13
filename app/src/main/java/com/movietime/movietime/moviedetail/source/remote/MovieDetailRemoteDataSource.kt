@@ -2,11 +2,10 @@ package com.movietime.movietime.moviedetail.source.remote
 
 import com.movietime.movie.home.source.remote.model.RemoteMoviesResponse
 import com.movietime.movietime.moviedetail.data.MovieDetailDataSource
-import com.movietime.movietime.moviedetail.domain.MovieDetail
-import com.movietime.movietime.moviedetail.domain.Video
+import com.movietime.movie.domain.detail.MovieDetail
+import com.movietime.movie.domain.detail.Video
 import com.movietime.movietime.moviedetail.source.remote.mappers.MovieDetailMapper
 import com.movietime.movietime.moviedetail.source.remote.mappers.VideoMapper
-import com.movietime.movie.home.domain.MoviePreview
 import com.movietime.movie.home.source.remote.mappers.MoviePreviewMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -45,7 +44,7 @@ class MovieDetailRemoteDataSource @Inject constructor(
             }
             .flowOn(Dispatchers.Default)
 
-    override fun getMovieRecommendations(movieId: Int, page: Int): Flow<List<MoviePreview>> =
+    override fun getMovieRecommendations(movieId: Int, page: Int): Flow<List<com.movietime.movie.domain.MoviePreview>> =
         flow {
             emit(movieDetailService.getMovieRecommendations(movieId, page))
         }

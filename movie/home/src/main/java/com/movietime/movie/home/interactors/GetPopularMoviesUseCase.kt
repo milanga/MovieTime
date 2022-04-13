@@ -1,7 +1,7 @@
 package com.movietime.movie.home.interactors
 
 import com.movietime.movie.home.data.MoviesRepository
-import com.movietime.movie.home.domain.MoviePreview
+import com.movietime.movie.domain.MoviePreview
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

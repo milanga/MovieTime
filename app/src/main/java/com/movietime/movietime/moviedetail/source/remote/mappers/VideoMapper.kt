@@ -1,6 +1,6 @@
 package com.movietime.movietime.moviedetail.source.remote.mappers
 
-import com.movietime.movietime.moviedetail.domain.Video
+import com.movietime.movie.domain.detail.Video
 import com.movietime.movietime.moviedetail.source.remote.model.RemoteVideo
 
 object VideoMapper {

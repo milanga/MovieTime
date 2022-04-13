@@ -6,9 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.movietime.core.domain.ListState
 import com.movietime.core.domain.UIContentState
 import com.movietime.core.domain.ViewModelContentState
-import com.movietime.movietime.moviedetail.domain.MovieDetail
-import com.movietime.movietime.moviedetail.domain.Video
-import com.movietime.movie.home.domain.MoviePreview
+import com.movietime.movie.domain.detail.MovieDetail
+import com.movietime.movie.domain.detail.Video
 import com.movietime.movietime.moviedetail.interactors.GetMovieDetailUseCase
 import com.movietime.movietime.moviedetail.interactors.GetMovieRecommendationsUseCase
 import com.movietime.movietime.moviedetail.interactors.GetMovieVideosUseCase
@@ -32,14 +31,14 @@ class MovieDetailViewModel @Inject constructor(
         data class Content(
             val movieDetail: UIContentState<MovieDetail> = UIContentState.Loading(),
             val movieVideos: UIContentState<List<Video>> = UIContentState.Loading(),
-            val movieRecommendations: UIContentState<List<MoviePreview>> = UIContentState.Loading()
+            val movieRecommendations: UIContentState<List<com.movietime.movie.domain.MoviePreview>> = UIContentState.Loading()
         ) : MovieDetailUiState
     }
 
     private data class MovieDetailViewModelState(
         val movieDetail: ViewModelContentState<MovieDetail>,
         val movieVideos: ViewModelContentState<List<Video>>,
-        val movieRecommendations: ViewModelContentState<List<MoviePreview>>
+        val movieRecommendations: ViewModelContentState<List<com.movietime.movie.domain.MoviePreview>>
     ) {
         fun toUiState(): MovieDetailUiState {
             if (
@@ -119,7 +118,7 @@ class MovieDetailViewModel @Inject constructor(
 
 
     private val recommendationsListState = ListState().apply {
-        onLoadPage = { page ->
+        onLoadPage = { _ ->
             viewModelScope.launch {
                 getMovieRecommendationsUseCase(movieId)
                     .flowOn(Dispatchers.Default)

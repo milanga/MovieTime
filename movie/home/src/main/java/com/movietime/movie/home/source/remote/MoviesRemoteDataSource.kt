@@ -1,7 +1,7 @@
 package com.movietime.movie.home.source.remote
 
 import com.movietime.movie.home.data.MoviesDataSource
-import com.movietime.movie.home.domain.MoviePreview
+import com.movietime.movie.domain.MoviePreview
 import com.movietime.movie.home.source.remote.mappers.MoviePreviewMapper
 import com.movietime.movie.home.source.remote.model.RemoteMoviesResponse
 import kotlinx.coroutines.Dispatchers
