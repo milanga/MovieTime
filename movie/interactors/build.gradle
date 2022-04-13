@@ -1,0 +1,11 @@
+apply from: "../../android-library-config.gradle"
+
+dependencies {
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidxLifecycleVersion"
+    //DI
+    implementation "com.google.dagger:hilt-android:$daggerVersion"
+
+    implementation project(":movie:domain")
+    implementation project(":movie:data")
+}

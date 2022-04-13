@@ -1,0 +1,39 @@
+plugins {
+    id 'kotlin-kapt'
+}
+apply from: "../../../compose-library-config.gradle"
+
+dependencies {
+    // AndroidX
+    implementation "androidx.core:core-ktx:$androidxCoreVersion"
+    //UI
+    implementation "androidx.compose.ui:ui:$composeUiVersion"
+    implementation "androidx.compose.ui:ui-util:$composeUiVersion"
+    // Tooling support (Previews, etc.)
+    implementation "androidx.compose.ui:ui-tooling:$composeUiVersion"
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    implementation "androidx.compose.foundation:foundation:$composeFoundationVersion"
+    // Material Design
+    implementation "androidx.compose.material3:material3:$composeMaterial3Version"
+    // Integration with ViewModels
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$androidxLifecycleVersion"
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidxLifecycleVersion"
+    //Accompanist
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion"
+    implementation "com.google.accompanist:accompanist-pager:$accompanistVersion"
+    implementation "com.google.accompanist:accompanist-placeholder-material:$accompanistVersion"
+    //Coil
+    implementation "io.coil-kt:coil-compose:$coilVersion"
+    //DI
+    implementation "com.google.dagger:hilt-android:$daggerVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$daggerVersion"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltLifecycleViewmodelVersion"
+    kapt "androidx.hilt:hilt-compiler:$hiltVersion"
+    implementation "androidx.hilt:hilt-navigation-compose:$hiltNavigationCompose"
+
+    implementation project(":views")
+    implementation project(":core:domain")
+    implementation project(":movie:domain")
+    implementation project(":movie:interactors")
+}

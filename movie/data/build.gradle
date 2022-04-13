@@ -1,0 +1,20 @@
+plugins {
+    id 'kotlin-kapt'
+}
+apply from: "../../android-library-config.gradle"
+
+dependencies {
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidxLifecycleVersion"
+
+    //Networking
+    //  Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-jackson:$retrofitVersion"
+
+    //DI
+    implementation "com.google.dagger:hilt-android:$daggerVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$daggerVersion"
+
+    implementation project(":movie:domain")
+}

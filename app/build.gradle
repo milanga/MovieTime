@@ -78,19 +78,7 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:$androidxNavigationVersion"
     //Accompanist
     implementation "com.google.accompanist:accompanist-insets:$accompanistVersion"
-    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion"
-    implementation "com.google.accompanist:accompanist-pager:$accompanistVersion"
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanistAnimatedNavVersion"
-    implementation "com.google.accompanist:accompanist-placeholder-material:$accompanistVersion"
-    //Coil
-    implementation "io.coil-kt:coil-compose:$coilVersion"
-    //Networking
-    //  Retrofit
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-jackson:$retrofitVersion"
-    //  Okhttp
-    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
     //DI
     implementation "com.google.dagger:hilt-android:$daggerVersion"
     kapt "com.google.dagger:hilt-android-compiler:$daggerVersion"
@@ -102,7 +90,7 @@ dependencies {
     implementation project(":views")
     implementation project(":core:networking")
     implementation project(":core:domain")
-    implementation project(":movie:home")
+    implementation project(":movie:presentation:home")
     implementation project(":movie:domain")
-    implementation project(":movie:detail")
+    implementation project(":movie:presentation:detail")
 }
