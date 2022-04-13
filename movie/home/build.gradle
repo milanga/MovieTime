@@ -15,22 +15,13 @@ dependencies {
     implementation "androidx.compose.foundation:foundation:$composeFoundationVersion"
     // Material Design
     implementation "androidx.compose.material3:material3:$composeMaterial3Version"
-    // Material design icons
-//    implementation "androidx.compose.material:material-icons-core:$composeMaterialVersion"
-//    implementation "androidx.compose.material:material-icons-extended:$composeMaterialVersion"
-    // Integration with activities
-//    implementation "androidx.activity:activity-compose:$androidxActivityVersion"
     // Integration with ViewModels
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$androidxLifecycleVersion"
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidxLifecycleVersion"
-    //Navigation
-//    implementation "androidx.navigation:navigation-compose:$androidxNavigationVersion"
     //Accompanist
-    implementation "com.google.accompanist:accompanist-insets:$accompanistVersion"
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion"
     implementation "com.google.accompanist:accompanist-pager:$accompanistVersion"
-//    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanistAnimatedNavVersion"
     implementation "com.google.accompanist:accompanist-placeholder-material:$accompanistVersion"
     //Coil
     implementation "io.coil-kt:coil-compose:$coilVersion"
