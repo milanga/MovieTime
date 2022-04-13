@@ -1,59 +1,9 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
 }
-
-android {
-    compileSdk rootProject.compileSdkVersion
-
-    defaultConfig {
-        applicationId "com.milanga.movietime"
-        minSdk rootProject.minSdkVersion
-        targetSdk rootProject.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    buildFeatures {
-        compose true
-        // Disable unused AGP features
-        aidl false
-        renderScript false
-        resValues false
-        shaders false
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = rootProject.kotlinCompilerExtensionVersion
-    }
-
-    compileOptions {
-        sourceCompatibility = rootProject.javaSourceCompatibility
-        targetCompatibility = rootProject.javaTargetCompatibility
-    }
-    kotlinOptions {
-        jvmTarget = "$kotlinJvmTarget"
-    }
-}
-
-kapt {
-    correctErrorTypes true
-}
+apply from: "../../compose-library-config.gradle"
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     // AndroidX
     implementation "androidx.core:core-ktx:$androidxCoreVersion"
     //UI
@@ -65,22 +15,13 @@ dependencies {
     implementation "androidx.compose.foundation:foundation:$composeFoundationVersion"
     // Material Design
     implementation "androidx.compose.material3:material3:$composeMaterial3Version"
-    // Material design icons
-    implementation "androidx.compose.material:material-icons-core:$composeMaterialVersion"
-    implementation "androidx.compose.material:material-icons-extended:$composeMaterialVersion"
-    // Integration with activities
-    implementation "androidx.activity:activity-compose:$androidxActivityVersion"
     // Integration with ViewModels
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$androidxLifecycleVersion"
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidxLifecycleVersion"
-    //Navigation
-    implementation "androidx.navigation:navigation-compose:$androidxNavigationVersion"
     //Accompanist
     implementation "com.google.accompanist:accompanist-insets:$accompanistVersion"
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion"
-    implementation "com.google.accompanist:accompanist-pager:$accompanistVersion"
-    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanistAnimatedNavVersion"
     implementation "com.google.accompanist:accompanist-placeholder-material:$accompanistVersion"
     //Coil
     implementation "io.coil-kt:coil-compose:$coilVersion"
@@ -97,12 +38,12 @@ dependencies {
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltLifecycleViewmodelVersion"
     kapt "androidx.hilt:hilt-compiler:$hiltVersion"
     implementation "androidx.hilt:hilt-navigation-compose:$hiltNavigationCompose"
-
+    // Youtube player
+    implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:$youtubePlayerVersion"
 
     implementation project(":views")
     implementation project(":core:networking")
     implementation project(":core:domain")
-    implementation project(":movie:home")
     implementation project(":movie:domain")
-    implementation project(":movie:detail")
+    implementation project(":movie:home")
 }

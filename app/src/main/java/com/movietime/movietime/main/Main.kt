@@ -14,7 +14,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.movietime.movietime.home.Home
-import com.movietime.movietime.movies.MovieDetail
+import com.movietime.movietime.movies.MovieDetailView
 
 
 sealed class MainDestinations(val route: String) {
@@ -48,7 +48,7 @@ fun Main() {
             popExitTransition = { slideOutOfContainer(Right, tween(500)) }
 
         ) { backStackEntry: NavBackStackEntry ->
-            MovieDetail(
+            MovieDetailView(
                 onMovieSelected = { movieId ->
                     navController.navigate("${MainDestinations.DETAIL.route}/$movieId")
                 },
