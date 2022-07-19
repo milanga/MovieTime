@@ -26,9 +26,9 @@ dependencies {
     //Coil
     implementation "io.coil-kt:coil-compose:$coilVersion"
     //DI
-    implementation "com.google.dagger:hilt-android:$daggerVersion"
-    kapt "com.google.dagger:hilt-android-compiler:$daggerVersion"
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltLifecycleViewmodelVersion"
+    implementation "com.google.dagger:hilt-android:$daggerHiltVersion"
+    kapt "com.google.dagger:hilt-compiler:$daggerHiltVersion"
+
     kapt "androidx.hilt:hilt-compiler:$hiltVersion"
     implementation "androidx.hilt:hilt-navigation-compose:$hiltNavigationCompose"
 

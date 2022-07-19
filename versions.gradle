@@ -13,7 +13,7 @@ ext.targetSdkVersion = 31
 ext.compileSdkVersion = 31
 
 /**compose**/
-ext.kotlinCompilerExtensionVersion = '1.1.0-beta02'
+ext.kotlinCompilerExtensionVersion = '1.2.0'
 
 /**Dependencies versions**/
 //compose
@@ -46,9 +46,8 @@ ext.retrofitVersion = '2.9.0'
 ext.okhttpVersion = '4.9.2'
 
 //DI
-ext.daggerVersion = '2.40'
+ext.daggerHiltVersion = '2.42'
 ext.hiltVersion = '1.0.0'
-ext.hiltLifecycleViewmodelVersion = '1.0.0-alpha03'
 ext.hiltNavigationCompose = '1.0.0'
 
 //Youtube player

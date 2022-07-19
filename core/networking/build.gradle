@@ -2,6 +2,7 @@ plugins {
     id 'kotlin-kapt'
 }
 apply from: "../../android-library-config.gradle"
+apply plugin: 'kotlin-android'
 
 android {
     defaultConfig {
@@ -15,8 +16,8 @@ kapt {
 
 dependencies {
     //DI
-    implementation "com.google.dagger:hilt-android:$daggerVersion"
-    kapt "com.google.dagger:hilt-android-compiler:$daggerVersion"
+    implementation "com.google.dagger:hilt-android:$daggerHiltVersion"
+    kapt "com.google.dagger:hilt-compiler:$daggerHiltVersion"
 
     //Networking
     //  Retrofit
@@ -25,4 +26,6 @@ dependencies {
     //  Okhttp
     implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+    implementation "androidx.core:core-ktx:$androidxCoreVersion"
+    
 }
