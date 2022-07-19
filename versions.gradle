@@ -9,30 +9,30 @@ ext.kotlinJvmTarget = JavaVersion.VERSION_1_8.toString()
 
 /**sdk versions**/
 ext.minSdkVersion = 24
-ext.targetSdkVersion = 31
-ext.compileSdkVersion = 31
+ext.targetSdkVersion = 32
+ext.compileSdkVersion = 32
 
 /**compose**/
 ext.kotlinCompilerExtensionVersion = '1.2.0'
 
 /**Dependencies versions**/
 //compose
-ext.composeUiVersion = '1.1.1'
-ext.composeFoundationVersion = '1.1.1'
-ext.composeMaterial3Version = '1.0.0-alpha08'
+ext.composeUiVersion = '1.3.0-alpha01'
+ext.composeFoundationVersion = '1.3.0-alpha01'
+ext.composeMaterial3Version = '1.0.0-alpha14'
 ext.composeMaterialVersion = '1.1.1'
 
 //core
-ext.androidxCoreVersion = '1.7.0'
+ext.androidxCoreVersion = '1.8.0'
 
 //activity
-ext.androidxActivityVersion = '1.4.0'
+ext.androidxActivityVersion = '1.5.0'
 
 //lifecycle
-ext.androidxLifecycleVersion = '2.4.1'
+ext.androidxLifecycleVersion = '2.5.0'
 
 //navigation
-ext.androidxNavigationVersion = '2.4.1'
+ext.androidxNavigationVersion = '2.5.0'
 
 //accompanist
 ext.accompanistVersion = '0.23.1'
