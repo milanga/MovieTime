@@ -1,4 +1,4 @@
-package com.movietime.movietime.views
+package com.movietime.main.views
 
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.layout.*

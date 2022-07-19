@@ -1,5 +1,6 @@
-package com.movietime.movietime.home
+package com.movietime.main.home
 
+import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -29,10 +30,10 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.movietime.movietime.R
+import com.movietime.movie.home.ui.MovieHome
 import com.movietime.views.components.MovieTimeNavigationBar
 import com.movietime.views.components.MovieTimeNavigationBarItem
-import com.movietime.movietime.movies.domain.MovieHome
+import com.movietime.main.R
 
 const val HomeSectionsRoute = "home/sections"
 
@@ -44,6 +45,7 @@ sealed class NavSection(val route: String, @StringRes val title: Int, val icon: 
 
 val homeSections = listOf(NavSection.Movies, NavSection.Series, NavSection.Search)
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(
     ExperimentalMaterial3Api::class,
     ExperimentalAnimationApi::class

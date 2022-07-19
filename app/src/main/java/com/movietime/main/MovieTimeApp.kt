@@ -1,4 +1,4 @@
-package com.movietime.movietime
+package com.movietime.main
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

@@ -1,4 +1,4 @@
-package com.movietime.movietime.movies
+package com.movietime.movie.detail.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,8 +32,8 @@ import com.google.accompanist.placeholder.placeholder
 import com.movietime.core.domain.UIContentState
 import com.movietime.movie.detail.R
 import com.movietime.movie.detail.presentation.MovieDetailViewModel
-import com.movietime.movietime.views.ListSection
-import com.movietime.movietime.views.SectionTitle
+import com.movietime.main.views.ListSection
+import com.movietime.main.views.SectionTitle
 import com.movietime.views.model.PosterItem
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -68,9 +68,10 @@ fun MovieDetailView(
             )
             is MovieDetailViewModel.MovieDetailUiState.Content -> DetailContent(
                 uiState,
-                onMovieSelected,
-                { viewModel.onRecommendationsThreshold() }
-            )
+                onMovieSelected) {
+                    viewModel.onRecommendationsThreshold()
+                }
+
         }
         IconButton(
             onClick = { onBackNavigation() },
@@ -187,7 +188,7 @@ private fun DetailContent(
         }
     }
 }
-//}
+
 
 @Composable
 private fun DetailErrorScreen(
@@ -303,27 +304,25 @@ private fun BackdropTitle(
                 )
         )
 
-        Text(
-            text = title,
-            style = MaterialTheme.typography.displaySmall,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Transparent,
-                            MaterialTheme.colorScheme.surface
+        if(!loading) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.displaySmall,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                MaterialTheme.colorScheme.surface
+                            )
                         )
                     )
-                )
-                .padding(top = 14.dp, start = 16.dp, bottom = 7.dp, end = 16.dp)
-                .placeholder(
-                    loading,
-                    MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                )
-        )
+                    .padding(top = 14.dp, start = 16.dp, bottom = 7.dp, end = 16.dp)
+            )
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-package com.movietime.movietime.movies.domain
+package com.movietime.movie.home.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,9 +35,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.movietime.core.domain.UIContentState
 import com.movietime.movie.domain.MoviePreview
 import com.movietime.movie.home.presentation.MoviesViewModel
-import com.movietime.movie.home.ui.black60Opacity
-import com.movietime.movietime.views.ListSection
-import com.movietime.movietime.views.SectionTitle
+import com.movietime.main.views.ListSection
+import com.movietime.main.views.SectionTitle
 import com.movietime.views.PosterItemView
 import com.movietime.views.model.PosterItem
 import kotlin.math.absoluteValue

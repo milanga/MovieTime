@@ -1,4 +1,4 @@
-package com.movietime.movietime.main
+package com.movietime.main.main
 
 import androidx.compose.animation.AnimatedContentScope.SlideDirection.Companion.Left
 import androidx.compose.animation.AnimatedContentScope.SlideDirection.Companion.Right
@@ -7,14 +7,13 @@ import androidx.compose.animation.core.tween
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.movietime.movietime.home.Home
-import com.movietime.movietime.movies.MovieDetailView
+import com.movietime.movie.detail.ui.MovieDetailView
+import com.movietime.main.home.Home
 
 
 sealed class MainDestinations(val route: String) {
@@ -26,12 +25,12 @@ sealed class MainDestinations(val route: String) {
 
 @ExperimentalAnimationApi
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview()
+@Preview
 @Composable
 fun Main() {
     val navController = rememberAnimatedNavController()
     AnimatedNavHost(navController, startDestination = MainDestinations.HOME.route) {
-        composable(MainDestinations.HOME.route) { backStackEntry: NavBackStackEntry ->
+        composable(MainDestinations.HOME.route) {
             Home{movieId ->
                 navController.navigate("${MainDestinations.DETAIL.route}/$movieId")
             }
@@ -47,7 +46,7 @@ fun Main() {
             popEnterTransition = { slideIntoContainer(Right, tween(500)) },
             popExitTransition = { slideOutOfContainer(Right, tween(500)) }
 
-        ) { backStackEntry: NavBackStackEntry ->
+        ) {
             MovieDetailView(
                 onMovieSelected = { movieId ->
                     navController.navigate("${MainDestinations.DETAIL.route}/$movieId")
