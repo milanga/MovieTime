@@ -43,8 +43,11 @@ import kotlin.math.absoluteValue
 import com.movietime.movie.home.R
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
-fun MovieHome(viewModel: MoviesViewModel = hiltViewModel(), onMovieSelected: (id: Int)->Unit) {
+fun MovieHome(
+    viewModel: MoviesViewModel = hiltViewModel(),
+    contentPadding: PaddingValues,
+    onMovieSelected: (id: Int) -> Unit
+) {
     val systemUiController: SystemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
         color = Color.Transparent
@@ -60,7 +63,7 @@ fun MovieHome(viewModel: MoviesViewModel = hiltViewModel(), onMovieSelected: (id
 
     when(uiState){
         is MoviesViewModel.MoviesUiState.Error -> ErrorScreen(uiState)
-        is MoviesViewModel.MoviesUiState.Content -> Content(uiState, onMovieSelected, {viewModel.onTopRatedMoviesThreshold()}, {viewModel.onUpcomingMoviesThreshold()}, {viewModel.onPopularMoviesThreshold()})
+        is MoviesViewModel.MoviesUiState.Content -> Content(uiState, onMovieSelected, contentPadding, {viewModel.onTopRatedMoviesThreshold()}, {viewModel.onUpcomingMoviesThreshold()}, {viewModel.onPopularMoviesThreshold()})
     }
 }
 
@@ -73,6 +76,7 @@ private fun ErrorScreen(error: MoviesViewModel.MoviesUiState.Error){
 private fun Content(
     content: MoviesViewModel.MoviesUiState.Content,
     onMovieSelected: (id: Int) -> Unit,
+    contentPadding: PaddingValues,
     onTopRatedMoviesThresholdReached: () -> Unit,
     onUpcomingMoviesThresholdReached: () -> Unit,
     onPopularMoviesThresholdReached: () -> Unit
@@ -81,6 +85,8 @@ private fun Content(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface)
+            .padding(contentPadding),
+        contentPadding = PaddingValues(bottom = 16.dp)
     ) {
         item {
             HighlightedSection(

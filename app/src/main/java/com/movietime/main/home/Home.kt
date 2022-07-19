@@ -45,7 +45,6 @@ sealed class NavSection(val route: String, @StringRes val title: Int, val icon: 
 
 val homeSections = listOf(NavSection.Movies, NavSection.Series, NavSection.Search)
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(
     ExperimentalMaterial3Api::class,
     ExperimentalAnimationApi::class
@@ -59,7 +58,7 @@ fun Home(
         bottomBar = {
             BottomBar(navController)
         }
-    ) {
+    ) { contentPadding ->
         AnimatedNavHost(navController, startDestination = HomeSectionsRoute) {
             navigation(
                 route = HomeSectionsRoute,
@@ -80,7 +79,7 @@ fun Home(
                 },
             ) {
                 composable(NavSection.Movies.route) {
-                    MovieHome(onMovieSelected = onMovieSelected)
+                    MovieHome(onMovieSelected = onMovieSelected, contentPadding = contentPadding)
                 }
 
                 composable(NavSection.Series.route) {
