@@ -8,7 +8,7 @@ ext.javaTargetCompatibility = JavaVersion.VERSION_1_8
 ext.kotlinJvmTarget = JavaVersion.VERSION_1_8.toString()
 
 /**sdk versions**/
-ext.minSdkVersion = 23
+ext.minSdkVersion = 24
 ext.targetSdkVersion = 31
 ext.compileSdkVersion = 31
 
