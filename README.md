@@ -1,13 +1,14 @@
-# MovieTime
+# MovieTime 🎥
 
 MovieTime is a personal project that I use to develop architecture ideas and learn new technologies. Thus it evolves and is in constantly change.
 The app connects to [TMDB](https://www.themoviedb.org/) API and displays Movies and Series info.
 
-![MovieTime Home](readme/MovieTimeHome.gif)
+![MovieTime Home](readme/MovieTimeHome.gif) ![MovieTime Detail](readme/MovieTimeDetail.gif)
 
 ## About the app
 MovieTime is developed using:
 * [Jetpack Compose](https://developer.android.com/jetpack/compose) to build de UI
+* [Material 3](https://m3.material.io/)
 * [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-guide.html) for asynchronous operations
 * [Dagger Hilt](https://dagger.dev/hilt/) for dependency injection
 * [Coil](https://github.com/coil-kt/coil) for image loading
