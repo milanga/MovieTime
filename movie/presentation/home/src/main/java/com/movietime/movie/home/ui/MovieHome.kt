@@ -32,7 +32,7 @@ import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.movietime.core.domain.UIContentState
+import com.movietime.core.presentation.UIContentState
 import com.movietime.core.views.model.PosterItem
 import com.movietime.movie.home.presentation.MoviesViewModel
 import com.movietime.main.views.ListSection

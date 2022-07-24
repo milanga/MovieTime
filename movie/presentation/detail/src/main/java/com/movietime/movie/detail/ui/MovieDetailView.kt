@@ -29,7 +29,7 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.placeholder.placeholder
-import com.movietime.core.domain.UIContentState
+import com.movietime.core.presentation.UIContentState
 import com.movietime.core.views.model.PosterItem
 import com.movietime.movie.detail.R
 import com.movietime.movie.detail.presentation.MovieDetailViewModel

@@ -1,4 +1,4 @@
-package com.movietime.core.domain
+package com.movietime.core.presentation
 
 sealed class UIContentState<T> {
     class Loading<T>: UIContentState<T>()
