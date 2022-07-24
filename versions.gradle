@@ -35,18 +35,18 @@ ext.androidxLifecycleVersion = '2.5.0'
 ext.androidxNavigationVersion = '2.5.0'
 
 //accompanist
-ext.accompanistVersion = '0.23.1'
+ext.accompanistVersion = '0.24.13-rc'
 ext.accompanistAnimatedNavVersion = '0.21.4-beta'
 
 //coil
-ext.coilVersion = '1.3.2'
+ext.coilVersion = '2.1.0'
 
 //retrofit
 ext.retrofitVersion = '2.9.0'
-ext.okhttpVersion = '4.9.2'
+ext.okhttpVersion = '4.10.0'
 
 //DI
-ext.daggerHiltVersion = '2.42'
+ext.daggerHiltVersion = '2.43'
 ext.hiltVersion = '1.0.0'
 ext.hiltNavigationCompose = '1.0.0'
 
