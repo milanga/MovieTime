@@ -1,4 +1,4 @@
-package com.movietime.movie.model.model
+package com.movietime.movie.domain.model
 
 data class Country(
     val name: String,

@@ -1,4 +1,4 @@
-package com.movietime.movie.model.model
+package com.movietime.movie.domain.model
 
 data class MovieDetail(
     val adult: Boolean,

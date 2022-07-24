@@ -40,7 +40,7 @@ import com.movietime.main.views.SectionTitle
 import com.movietime.views.PosterItemView
 import kotlin.math.absoluteValue
 import com.movietime.movie.home.R
-import com.movietime.movie.model.model.MoviePreview
+import com.movietime.movie.domain.model.MoviePreview
 
 @Composable
 fun MovieHome(

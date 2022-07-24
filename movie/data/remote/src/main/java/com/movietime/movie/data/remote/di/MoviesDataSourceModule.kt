@@ -3,7 +3,7 @@ package com.movietime.movie.data.remote.di
 import com.movietime.movie.data.remote.MoviesRemoteDataSource
 import com.movietime.movie.data.remote.MoviesService
 import com.movietime.movie.data.remote.mappers.MoviePreviewMapper
-import com.movietime.movie.model.repository.MoviesDataSource
+import com.movietime.movie.domain.repository.MoviesDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

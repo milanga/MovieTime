@@ -1,7 +1,7 @@
 package com.movietime.movie.data.remote.mappers
 
 import com.movietime.movie.data.remote.model.RemoteMoviePreview
-import com.movietime.movie.model.model.MoviePreview
+import com.movietime.movie.domain.model.MoviePreview
 import javax.inject.Inject
 
 class MoviePreviewMapper @Inject constructor(

@@ -1,6 +1,6 @@
-package com.movietime.movie.model.repository
+package com.movietime.movie.domain.repository
 
-import com.movietime.movie.model.interactors.MovieDetailRepository
+import com.movietime.movie.domain.interactors.MovieDetailRepository
 import javax.inject.Inject
 
 class MovieDetailRepositoryImpl @Inject constructor(

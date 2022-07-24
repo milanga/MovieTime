@@ -1,9 +1,9 @@
-package com.movietime.movie.model.di
+package com.movietime.movie.domain.di
 
-import com.movietime.movie.model.interactors.MovieDetailRepository
-import com.movietime.movie.model.interactors.MoviesRepository
-import com.movietime.movie.model.repository.MovieDetailRepositoryImpl
-import com.movietime.movie.model.repository.MoviesRepositoryImpl
+import com.movietime.movie.domain.interactors.MovieDetailRepository
+import com.movietime.movie.domain.interactors.MoviesRepository
+import com.movietime.movie.domain.repository.MovieDetailRepositoryImpl
+import com.movietime.movie.domain.repository.MoviesRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Reusable

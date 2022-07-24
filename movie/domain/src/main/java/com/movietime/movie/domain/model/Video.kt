@@ -1,4 +1,4 @@
-package com.movietime.movie.model.model
+package com.movietime.movie.domain.model
 
 data class Video(
     val id: String,

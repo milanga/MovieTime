@@ -2,8 +2,8 @@ package com.movietime.movie.data.remote
 
 import com.movietime.movie.data.remote.mappers.MoviePreviewMapper
 import com.movietime.movie.data.remote.model.RemoteMoviesResponse
-import com.movietime.movie.model.model.MoviePreview
-import com.movietime.movie.model.repository.MoviesDataSource
+import com.movietime.movie.domain.model.MoviePreview
+import com.movietime.movie.domain.repository.MoviesDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

@@ -1,7 +1,7 @@
-package com.movietime.movie.model.interactors
+package com.movietime.movie.domain.interactors
 
-import com.movietime.movie.model.model.Video
-import com.movietime.movie.model.repository.MovieDetailRepositoryImpl
+import com.movietime.movie.domain.model.Video
+import com.movietime.movie.domain.repository.MovieDetailRepositoryImpl
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

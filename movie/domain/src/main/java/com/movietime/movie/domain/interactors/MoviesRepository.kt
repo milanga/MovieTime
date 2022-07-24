@@ -1,6 +1,6 @@
-package com.movietime.movie.model.interactors
+package com.movietime.movie.domain.interactors
 
-import com.movietime.movie.model.model.MoviePreview
+import com.movietime.movie.domain.model.MoviePreview
 import kotlinx.coroutines.flow.Flow
 
 interface MoviesRepository {

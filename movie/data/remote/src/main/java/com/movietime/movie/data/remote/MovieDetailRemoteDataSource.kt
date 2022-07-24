@@ -5,10 +5,10 @@ import com.movietime.movie.data.remote.mappers.MovieDetailMapper
 import com.movietime.movie.data.remote.mappers.MoviePreviewMapper
 import com.movietime.movie.data.remote.mappers.VideoMapper
 import com.movietime.movie.data.remote.model.RemoteMoviesResponse
-import com.movietime.movie.model.model.MovieDetail
-import com.movietime.movie.model.model.MoviePreview
-import com.movietime.movie.model.model.Video
-import com.movietime.movie.model.repository.MovieDetailDataSource
+import com.movietime.movie.domain.model.MovieDetail
+import com.movietime.movie.domain.model.MoviePreview
+import com.movietime.movie.domain.model.Video
+import com.movietime.movie.domain.repository.MovieDetailDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
