@@ -3,6 +3,8 @@
 MovieTime is a personal project that I use to develop architecture ideas and learn new technologies. Thus it evolves and is in constantly change.
 The app connects to [TMDB](https://www.themoviedb.org/) API and displays Movies and Series info.
 
+![MovieTime demo](readme/MovieTimeApp.gif)
+
 ## About the app
 MovieTime is developed using:
 * [Jetpack Compose](https://developer.android.com/jetpack/compose) to build de UI
