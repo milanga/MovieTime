@@ -25,6 +25,6 @@ TMDB_API_KEY="YOUR_TMDB_KEY"
 ```
 
 ## Architecture
-I follow clean architecture principles where high policy layers don't depends on details. 
-This allows me to easily change the UI or the data source without affecting the domain.
+I follow [clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) principles where high policy layers don't depends on details. 
+This allows me to easily change the UI or the data sources without affecting the domain.
 ![Clean architecture](readme/architecture.png)
