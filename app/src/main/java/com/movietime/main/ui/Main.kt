@@ -12,7 +12,7 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.movietime.home.presentation.Home
+import com.movietime.home.presentation.ui.Home
 import com.movietime.movie.detail.ui.MovieDetailView
 
 
