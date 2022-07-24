@@ -32,8 +32,8 @@ dependencies {
     implementation "androidx.hilt:hilt-navigation-compose:$hiltNavigationCompose"
     // Youtube player
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:$youtubePlayerVersion"
+    implementation project(':core:presentation')
 
-    implementation project(":core:domain")
     implementation project(':movie:domain')
     implementation project(':core:views')
 }

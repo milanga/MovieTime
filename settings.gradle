@@ -9,7 +9,7 @@ dependencyResolutionManagement {
 rootProject.name = "MovieTime"
 include ':app'
 include ':core:networking'
-include ':core:domain'
+include ':core:presentation'
 include ':movie:presentation:home'
 include ':movie:presentation:detail'
 include ':movie:data:remote'
