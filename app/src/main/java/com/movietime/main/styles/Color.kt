@@ -1,4 +1,5 @@
-package com.movietime.main
+package com.movietime.main.styles
+
 import androidx.compose.ui.graphics.Color
 
 val md_theme_light_primary = Color(0xFF006b5b)

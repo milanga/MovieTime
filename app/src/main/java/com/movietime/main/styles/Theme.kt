@@ -1,4 +1,4 @@
-package com.movietime.main
+package com.movietime.main.styles
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.isSystemInDarkTheme

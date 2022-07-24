@@ -1,4 +1,4 @@
-package com.movietime.main
+package com.movietime.main.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

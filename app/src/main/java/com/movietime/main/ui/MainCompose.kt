@@ -1,10 +1,9 @@
-package com.movietime.main
+package com.movietime.main.ui
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
-import com.movietime.main.AppTheme
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.movietime.main.main.Main
+import com.movietime.main.styles.AppTheme
 
 @ExperimentalAnimationApi
 @Composable

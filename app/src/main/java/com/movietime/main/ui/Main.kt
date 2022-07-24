@@ -1,4 +1,4 @@
-package com.movietime.main.main
+package com.movietime.main.ui
 
 import androidx.compose.animation.AnimatedContentScope.SlideDirection.Companion.Left
 import androidx.compose.animation.AnimatedContentScope.SlideDirection.Companion.Right
