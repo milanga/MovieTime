@@ -2,5 +2,4 @@ apply from: "../../android-library-config.gradle"
 apply plugin: 'kotlin-android'
 dependencies {
     implementation "androidx.core:core-ktx:$androidxCoreVersion"
-    
 }

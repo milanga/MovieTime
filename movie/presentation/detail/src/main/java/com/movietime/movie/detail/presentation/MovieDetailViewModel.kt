@@ -6,11 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.movietime.core.domain.ListState
 import com.movietime.core.domain.UIContentState
 import com.movietime.core.domain.ViewModelContentState
-import com.movietime.movie.interactors.GetMovieDetailUseCase
-import com.movietime.movie.interactors.GetMovieRecommendationsUseCase
-import com.movietime.movie.interactors.GetMovieVideosUseCase
-import com.movietime.movie.domain.detail.MovieDetail
-import com.movietime.movie.domain.detail.Video
+import com.movietime.movie.model.model.MovieDetail
+import com.movietime.movie.model.model.MoviePreview
+import com.movietime.movie.model.model.Video
+import com.movietime.movie.model.interactors.GetMovieDetailUseCase
+import com.movietime.movie.model.interactors.GetMovieRecommendationsUseCase
+import com.movietime.movie.model.interactors.GetMovieVideosUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -31,14 +32,14 @@ class MovieDetailViewModel @Inject constructor(
         data class Content(
             val movieDetail: UIContentState<MovieDetail> = UIContentState.Loading(),
             val movieVideos: UIContentState<List<Video>> = UIContentState.Loading(),
-            val movieRecommendations: UIContentState<List<com.movietime.movie.domain.MoviePreview>> = UIContentState.Loading()
+            val movieRecommendations: UIContentState<List<MoviePreview>> = UIContentState.Loading()
         ) : MovieDetailUiState
     }
 
     private data class MovieDetailViewModelState(
         val movieDetail: ViewModelContentState<MovieDetail>,
         val movieVideos: ViewModelContentState<List<Video>>,
-        val movieRecommendations: ViewModelContentState<List<com.movietime.movie.domain.MoviePreview>>
+        val movieRecommendations: ViewModelContentState<List<MoviePreview>>
     ) {
         fun toUiState(): MovieDetailUiState {
             if (

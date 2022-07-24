@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.movietime.core.domain.ListState
 import com.movietime.core.domain.UIContentState
 import com.movietime.core.domain.ViewModelContentState
-import com.movietime.movie.domain.MoviePreview
-import com.movietime.movie.interactors.GetPopularMoviesUseCase
-import com.movietime.movie.interactors.GetTopRatedMoviesUseCase
-import com.movietime.movie.interactors.GetUpcomingMoviesUseCase
+import com.movietime.movie.model.model.MoviePreview
+import com.movietime.movie.model.interactors.GetPopularMoviesUseCase
+import com.movietime.movie.model.interactors.GetTopRatedMoviesUseCase
+import com.movietime.movie.model.interactors.GetUpcomingMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*

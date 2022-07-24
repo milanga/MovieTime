@@ -31,8 +31,6 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.movietime.movie.home.ui.MovieHome
-import com.movietime.views.components.MovieTimeNavigationBar
-import com.movietime.views.components.MovieTimeNavigationBarItem
 import com.movietime.main.R
 
 const val HomeSectionsRoute = "home/sections"
@@ -103,12 +101,12 @@ private fun BottomBar(
     val currentSectionRoute = navBackStackEntry?.destination?.route ?: NavSection.Movies.route
     val bottomSysBarsHeight = with(LocalDensity.current) { LocalWindowInsets.current.systemBars.bottom.toDp() }
 
-    MovieTimeNavigationBar(
+    NavigationBar(
         modifier = Modifier
             .height(80.dp + bottomSysBarsHeight)
     ) {
         homeSections.forEach { navSection ->
-            MovieTimeNavigationBarItem(
+            NavigationBarItem(
                 selected = currentSectionRoute == navSection.route,
                 onClick = {
                     navController.navigate(navSection.route) {

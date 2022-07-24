@@ -8,11 +8,10 @@ dependencyResolutionManagement {
 }
 rootProject.name = "MovieTime"
 include ':app'
-include ':views'
 include ':core:networking'
 include ':core:domain'
 include ':movie:presentation:home'
-include ':movie:domain'
 include ':movie:presentation:detail'
-include ':movie:data'
-include ':movie:interactors'
+include ':movie:data:remote'
+include ':movie:domain'
+include ':core:views'

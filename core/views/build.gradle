@@ -1,0 +1,14 @@
+apply from: "../../compose-library-config.gradle"
+
+dependencies {
+    // Tooling support (Previews, etc.)
+    implementation "androidx.compose.ui:ui-tooling:$composeUiVersion"
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    implementation "androidx.compose.foundation:foundation:$composeFoundationVersion"
+    // Material Design
+    implementation "androidx.compose.material3:material3:$composeMaterial3Version"
+    //Coil
+    implementation "io.coil-kt:coil-compose:$coilVersion"
+    //Accompanist
+    implementation "com.google.accompanist:accompanist-placeholder-material:$accompanistVersion"
+}

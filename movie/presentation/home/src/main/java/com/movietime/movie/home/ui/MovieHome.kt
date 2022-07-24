@@ -33,14 +33,14 @@ import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.movietime.core.domain.UIContentState
-import com.movietime.movie.domain.MoviePreview
+import com.movietime.core.views.model.PosterItem
 import com.movietime.movie.home.presentation.MoviesViewModel
 import com.movietime.main.views.ListSection
 import com.movietime.main.views.SectionTitle
 import com.movietime.views.PosterItemView
-import com.movietime.views.model.PosterItem
 import kotlin.math.absoluteValue
 import com.movietime.movie.home.R
+import com.movietime.movie.model.model.MoviePreview
 
 @Composable
 fun MovieHome(
@@ -137,7 +137,13 @@ private fun MoviesListSection(
     when (uiContentState) {
         is UIContentState.Loading -> ListSection(loading = true, modifier = Modifier.padding(top = 8.dp))
         is UIContentState.ContentState -> ListSection(
-            uiContentState.content.map{ PosterItem(it.id, it.getPosterUrl(), it.getRating().toString()) },
+            uiContentState.content.map{
+                PosterItem(
+                    it.id,
+                    it.posterPath,
+                    it.rating.toString()
+                )
+            },
             onMovieSelected,
             onScrollThresholdReached = onTopRatedMoviesThresholdReached,
             modifier = Modifier.padding(top = 8.dp)
@@ -176,8 +182,8 @@ private fun Highlighted(
             onScrollThresholdReached.invoke()
         }
         BackdropItem(
-            backdropUrl = popularMovies[page].getBackdropUrl(),
-            posterUrl = popularMovies[page].getPosterUrl(),
+            backdropUrl = popularMovies[page].backdropPath,
+            posterUrl = popularMovies[page].posterPath,
             modifier = Modifier
                 .graphicsLayer {
                     // Calculate the absolute offset for the current page from the
@@ -206,7 +212,7 @@ private fun Highlighted(
                 .fillMaxHeight(),
             title = popularMovies[page].title,
             overview = popularMovies[page].overview,
-            rating = popularMovies[page].getRating(),
+            rating = popularMovies[page].rating,
             onClick = { onMovieSelected(popularMovies[page].id) }
         )
     }

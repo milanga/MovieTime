@@ -1,6 +1,10 @@
 apply from: "../../android-library-config.gradle"
 apply plugin: 'kotlin-android'
+
 dependencies {
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidxLifecycleVersion"
+    //DI
+    implementation "com.google.dagger:hilt-android:$daggerHiltVersion"
     implementation "androidx.core:core-ktx:$androidxCoreVersion"
-    
 }

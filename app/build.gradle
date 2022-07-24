@@ -87,10 +87,10 @@ dependencies {
     implementation "androidx.hilt:hilt-navigation-compose:$hiltNavigationCompose"
 
 
-    implementation project(":views")
     implementation project(":core:networking")
     implementation project(":core:domain")
     implementation project(":movie:presentation:home")
-    implementation project(":movie:domain")
+    implementation project(':movie:domain')
+    implementation project(':movie:data:remote')
     implementation project(":movie:presentation:detail")
 }

@@ -30,11 +30,11 @@ import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.placeholder.placeholder
 import com.movietime.core.domain.UIContentState
+import com.movietime.core.views.model.PosterItem
 import com.movietime.movie.detail.R
 import com.movietime.movie.detail.presentation.MovieDetailViewModel
 import com.movietime.main.views.ListSection
 import com.movietime.main.views.SectionTitle
-import com.movietime.views.model.PosterItem
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -110,7 +110,7 @@ private fun DetailContent(
             when (content.movieDetail) {
                 is UIContentState.Loading<*> -> BackdropTitle(loading = true)
                 is UIContentState.ContentState -> BackdropTitle(
-                    backdropUrl = content.movieDetail.content.getBackdropUrl(),
+                    backdropUrl = content.movieDetail.content.backdropPath,
                     title = content.movieDetail.content.title
                 )
             }
@@ -170,7 +170,13 @@ private fun DetailContent(
                 is UIContentState.Loading<*> -> ListSection(loading = true)
                 is UIContentState.ContentState -> {
                     ListSection(
-                        content.movieRecommendations.content.map{ PosterItem(it.id, it.getPosterUrl(), it.getRating().toString()) },
+                        content.movieRecommendations.content.map{
+                            PosterItem(
+                                it.id,
+                                it.posterPath,
+                                it.rating.toString()
+                            )
+                        },
                         onMovieSelected,
                         Modifier
                             .padding(
