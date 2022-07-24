@@ -3,7 +3,11 @@
 MovieTime is a personal project that I use to develop architecture ideas and learn new technologies. Thus it evolves and is in constantly change.
 The app connects to [TMDB](https://www.themoviedb.org/) API and displays Movies and Series info.
 
-![MovieTime Home](readme/MovieTimeHome.gif)         ![MovieTime Detail](readme/MovieTimeDetail.gif)
+### Home
+![MovieTime Home](readme/MovieTimeHome.gif)        
+
+### Detail
+![MovieTime Detail](readme/MovieTimeDetail.gif)
 
 ## About the app
 MovieTime is developed using:
