@@ -1,4 +1,4 @@
-package com.movietime.main.home
+package com.movietime.home.presentation
 
 import android.annotation.SuppressLint
 import androidx.annotation.StringRes
@@ -31,7 +31,6 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.movietime.movie.home.ui.MovieHome
-import com.movietime.main.R
 
 const val HomeSectionsRoute = "home/sections"
 

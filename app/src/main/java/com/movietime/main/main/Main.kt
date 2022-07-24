@@ -12,8 +12,8 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.movietime.home.presentation.Home
 import com.movietime.movie.detail.ui.MovieDetailView
-import com.movietime.main.home.Home
 
 
 sealed class MainDestinations(val route: String) {
