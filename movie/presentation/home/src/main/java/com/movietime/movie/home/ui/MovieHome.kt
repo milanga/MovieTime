@@ -130,20 +130,14 @@ private fun Content(
 
 @Composable
 private fun MoviesListSection(
-    uiContentState: UIContentState<List<MoviePreview>>,
+    uiContentState: UIContentState<List<PosterItem>>,
     onMovieSelected: (id: Int) -> Unit,
     onTopRatedMoviesThresholdReached: () -> Unit
 ) {
     when (uiContentState) {
         is UIContentState.Loading -> ListSection(loading = true, modifier = Modifier.padding(top = 8.dp))
         is UIContentState.ContentState -> ListSection(
-            uiContentState.content.map{
-                PosterItem(
-                    it.id,
-                    it.posterPath,
-                    it.rating.toString()
-                )
-            },
+            uiContentState.content,
             onMovieSelected,
             onScrollThresholdReached = onTopRatedMoviesThresholdReached,
             modifier = Modifier.padding(top = 8.dp)

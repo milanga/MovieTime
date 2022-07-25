@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
 import com.movietime.core.presentation.UIContentState
 import com.movietime.core.presentation.ViewModelContentState
+import com.movietime.core.views.model.PosterItem
 import com.movietime.movie.domain.model.MoviePreview
 import com.movietime.movie.domain.interactors.GetPopularMoviesUseCase
 import com.movietime.movie.domain.interactors.GetTopRatedMoviesUseCase
@@ -25,15 +26,15 @@ class MoviesViewModel @Inject constructor(
         object Error: MoviesUiState
         data class Content(
             val popularMovies: UIContentState<List<MoviePreview>> = UIContentState.Loading(),
-            val topRatedMovies: UIContentState<List<MoviePreview>> = UIContentState.Loading(),
-            val upcomingMovies: UIContentState<List<MoviePreview>> = UIContentState.Loading()
+            val topRatedMovies: UIContentState<List<PosterItem>> = UIContentState.Loading(),
+            val upcomingMovies: UIContentState<List<PosterItem>> = UIContentState.Loading()
         ): MoviesUiState
     }
 
     private data class MoviesViewModelState(
         val popularMovies: ViewModelContentState<List<MoviePreview>>,
-        val topRatedMovies: ViewModelContentState<List<MoviePreview>>,
-        val upcomingMovies: ViewModelContentState<List<MoviePreview>>
+        val topRatedMovies: ViewModelContentState<List<PosterItem>>,
+        val upcomingMovies: ViewModelContentState<List<PosterItem>>
     ){
         fun toUiState(): MoviesUiState {
             if (
@@ -78,10 +79,11 @@ class MoviesViewModel @Inject constructor(
             loadMovies(
                 { getTopRatedMoviesUseCase(page) },
                 { movieList, state ->
+                    val moviePosterList = movieList.map { PosterItem(it.id, it.posterPath, "%.1f".format(it.rating)) }
                     val movies = if (state.topRatedMovies is ViewModelContentState.ContentState){
-                        state.topRatedMovies.content.plus(movieList)
+                        state.topRatedMovies.content.plus(moviePosterList)
                     } else {
-                        movieList
+                        moviePosterList
                     }
                     state.copy(topRatedMovies = ViewModelContentState.ContentState(movies))
                 },
@@ -100,10 +102,11 @@ class MoviesViewModel @Inject constructor(
             loadMovies(
                 { getUpcomingMoviesUseCase(page) },
                 { movieList, state ->
+                    val moviePosterList = movieList.map { PosterItem(it.id, it.posterPath, "%.1f".format(it.rating)) }
                     val movies = if (state.upcomingMovies is ViewModelContentState.ContentState){
-                        state.upcomingMovies.content.plus(movieList)
+                        state.upcomingMovies.content.plus(moviePosterList)
                     } else {
-                        movieList
+                        moviePosterList
                     }
                     state.copy(upcomingMovies = ViewModelContentState.ContentState(movies))
                 },

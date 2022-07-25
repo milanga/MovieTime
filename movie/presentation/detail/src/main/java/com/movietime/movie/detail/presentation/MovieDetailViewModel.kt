@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
 import com.movietime.core.presentation.UIContentState
 import com.movietime.core.presentation.ViewModelContentState
+import com.movietime.core.views.model.PosterItem
 import com.movietime.movie.domain.model.MovieDetail
 import com.movietime.movie.domain.model.MoviePreview
 import com.movietime.movie.domain.model.Video
@@ -32,14 +33,14 @@ class MovieDetailViewModel @Inject constructor(
         data class Content(
             val movieDetail: UIContentState<MovieDetail> = UIContentState.Loading(),
             val movieVideos: UIContentState<List<Video>> = UIContentState.Loading(),
-            val movieRecommendations: UIContentState<List<MoviePreview>> = UIContentState.Loading()
+            val movieRecommendations: UIContentState<List<PosterItem>> = UIContentState.Loading()
         ) : MovieDetailUiState
     }
 
     private data class MovieDetailViewModelState(
         val movieDetail: ViewModelContentState<MovieDetail>,
         val movieVideos: ViewModelContentState<List<Video>>,
-        val movieRecommendations: ViewModelContentState<List<MoviePreview>>
+        val movieRecommendations: ViewModelContentState<List<PosterItem>>
     ) {
         fun toUiState(): MovieDetailUiState {
             if (
@@ -130,12 +131,13 @@ class MovieDetailViewModel @Inject constructor(
                         }
                     }
                     .collect { movieList ->
+                        val moviePosterList = movieList.map { PosterItem(it.id, it.posterPath, "%.1f".format(it.rating)) }
                         viewModelState.update { state ->
                             val movies =
                                 if (state.movieRecommendations is ViewModelContentState.ContentState) {
-                                    state.movieRecommendations.content.plus(movieList)
+                                    state.movieRecommendations.content.plus(moviePosterList)
                                 } else {
-                                    movieList
+                                    moviePosterList
                                 }
                             state.copy(
                                 movieRecommendations = ViewModelContentState.ContentState(

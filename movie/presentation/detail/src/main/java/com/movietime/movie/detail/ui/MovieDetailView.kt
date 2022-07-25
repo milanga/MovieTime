@@ -30,7 +30,6 @@ import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.placeholder.placeholder
 import com.movietime.core.presentation.UIContentState
-import com.movietime.core.views.model.PosterItem
 import com.movietime.movie.detail.R
 import com.movietime.movie.detail.presentation.MovieDetailViewModel
 import com.movietime.main.views.ListSection
@@ -170,13 +169,7 @@ private fun DetailContent(
                 is UIContentState.Loading<*> -> ListSection(loading = true)
                 is UIContentState.ContentState -> {
                     ListSection(
-                        content.movieRecommendations.content.map{
-                            PosterItem(
-                                it.id,
-                                it.posterPath,
-                                it.rating.toString()
-                            )
-                        },
+                        content.movieRecommendations.content,
                         onMovieSelected,
                         Modifier
                             .padding(
