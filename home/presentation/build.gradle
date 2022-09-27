@@ -19,7 +19,6 @@ dependencies {
     //Navigation
     implementation "androidx.navigation:navigation-compose:$androidxNavigationVersion"
     //Accompanist
-    implementation "com.google.accompanist:accompanist-insets:$accompanistVersion"
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanistAnimatedNavVersion"
 
     implementation project(':movie:presentation:home')

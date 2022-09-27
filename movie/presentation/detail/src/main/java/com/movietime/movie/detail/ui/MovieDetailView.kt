@@ -26,8 +26,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import coil.compose.rememberImagePainter
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.placeholder.placeholder
 import com.movietime.core.presentation.UIContentState
 import com.movietime.movie.detail.R
@@ -75,12 +73,9 @@ fun MovieDetailView(
         IconButton(
             onClick = { onBackNavigation() },
             modifier = Modifier
+                .padding(start = 16.dp)
                 .padding(
-                    rememberInsetsPaddingValues(
-                        LocalWindowInsets.current.systemBars,
-                        applyBottom = false,
-                        additionalStart = 16.dp
-                    )
+                    WindowInsets.statusBars.only(WindowInsetsSides.Top).asPaddingValues()
                 )
                 .background(
                     color = MaterialTheme.colorScheme.surface.copy(alpha = 0.4f),
@@ -173,13 +168,15 @@ private fun DetailContent(
                         onMovieSelected,
                         Modifier
                             .padding(
-                                rememberInsetsPaddingValues(
-                                    LocalWindowInsets.current.systemBars,
-                                    applyTop = false,
-                                    additionalBottom = 16.dp
-                                )
+                                WindowInsets.navigationBars.only(WindowInsetsSides.Bottom).asPaddingValues()
+
+//                                        rememberInsetsPaddingValues(
+//                                    LocalWindowInsets.current.systemBars,
+//                                    applyTop = false,
+//                                    additionalBottom = 16.dp
+//                                )
                             )
-                            .padding(top=8.dp),
+                            .padding(top = 8.dp, bottom = 16.dp),
                         onRecommendationsThresholdReached,
                     )
                 }

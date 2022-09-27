@@ -7,9 +7,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Person
@@ -22,10 +20,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
@@ -97,17 +95,20 @@ fun Home(
 private fun BottomBar(
     navController: NavHostController
 ) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentSectionRoute = navBackStackEntry?.destination?.route ?: NavSection.Movies.route
-    val bottomSysBarsHeight = with(LocalDensity.current) { LocalWindowInsets.current.systemBars.bottom.toDp() }
+    val bottomSysBarsHeight = with(LocalDensity.current) {
+        WindowInsets.systemBars.getBottom(this).toDp()
+    }
 
     NavigationBar(
         modifier = Modifier
             .height(80.dp + bottomSysBarsHeight)
     ) {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination
+
         homeSections.forEach { navSection ->
             NavigationBarItem(
-                selected = currentSectionRoute == navSection.route,
+                selected = currentDestination?.hierarchy?.any { it.route == navSection.route } == true,
                 onClick = {
                     navController.navigate(navSection.route) {
                         // Pop up to the start destination of the graph to
