@@ -1,12 +1,8 @@
 package com.movietime.home.presentation.ui
 
-import android.annotation.SuppressLint
 import androidx.annotation.StringRes
-import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Movie
@@ -20,20 +16,23 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.movietime.movie.home.ui.MovieHome
 import com.movietime.home.presentation.R
-
-const val HomeSectionsRoute = "home/sections"
+import com.movietime.movie.home.navigation.moviesGraph
 
 sealed class NavSection(val route: String, @StringRes val title: Int, val icon: ImageVector) {
+    companion object{
+        const val HomeSectionsRoute = "home/sections"
+    }
     object Movies : NavSection("$HomeSectionsRoute/movies", R.string.movies, Icons.Filled.Movie)
     object Series : NavSection("$HomeSectionsRoute/series", R.string.series, Icons.Filled.Tv)
     object Search : NavSection("$HomeSectionsRoute/search", R.string.profile, Icons.Filled.Person)
@@ -46,47 +45,29 @@ val homeSections = listOf(NavSection.Movies, NavSection.Series, NavSection.Searc
     ExperimentalAnimationApi::class
 )
 @Composable
-fun Home(
-    onMovieSelected: (movieId: Int)->Unit
-){
+fun Home(){
     val navController = rememberAnimatedNavController()
     Scaffold(
         bottomBar = {
             BottomBar(navController)
         }
     ) { contentPadding ->
-        AnimatedNavHost(navController, startDestination = HomeSectionsRoute) {
-            navigation(
-                route = HomeSectionsRoute,
-                startDestination = NavSection.Movies.route,
-                exitTransition = {
-                    if (targetState.destination.route !in homeSections.map { it.route }) {
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, tween(500))
-                    } else {
-                        fadeOut(animationSpec = tween(700))
-                    }
-                },
-                popEnterTransition = {
-                    if (initialState.destination.route !in homeSections.map { it.route }) {
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Right, tween(500))
-                    } else {
-                        fadeIn(animationSpec = tween(700))
-                    }
-                },
-            ) {
-                composable(NavSection.Movies.route) {
-                    MovieHome(onMovieSelected = onMovieSelected, contentPadding = contentPadding)
-                }
+        AnimatedNavHost(navController, startDestination = NavSection.Movies.route) {
+            moviesGraph(NavSection.Movies.route, navController, contentPadding)
 
-                composable(NavSection.Series.route) {
+            navigation(route = NavSection.Series.route, startDestination = "series/home"){
+                composable("series/home") {
                     Surface(Modifier.fillMaxSize()) {}
                 }
-
-                composable(NavSection.Search.route) {
-                    Surface(Modifier.fillMaxSize()) {}
-                }
-
             }
+
+            navigation(route = NavSection.Search.route, startDestination = "search/home"){
+                composable("search/home") {
+                    Surface(Modifier.fillMaxSize()) {}
+                }
+            }
+
+
         }
     }
 }

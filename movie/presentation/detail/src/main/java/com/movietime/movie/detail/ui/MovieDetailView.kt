@@ -42,7 +42,8 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 fun MovieDetailView(
     viewModel: MovieDetailViewModel = hiltViewModel(),
     onMovieSelected: (id: Int) -> Unit,
-    onBackNavigation: () -> Unit
+    onBackNavigation: () -> Unit,
+    contentPadding: PaddingValues
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiStateStateFlowLifecycleAware = remember(viewModel.uiState, lifecycleOwner) {
@@ -55,6 +56,7 @@ fun MovieDetailView(
 
     Box (
         modifier = Modifier
+            .padding(contentPadding)
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface)
     ) {
