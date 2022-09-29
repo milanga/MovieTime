@@ -1,7 +1,12 @@
 package com.movietime.movie.detail.ui
 
+import android.view.MotionEvent
+import android.view.View
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -16,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -196,23 +202,17 @@ private fun VideoView(
     loading: Boolean = false
 ){
     val lifecycleOwner = LocalLifecycleOwner.current
-    val context = LocalContext.current
-
-    val youtubePlayer = remember {
-        YouTubePlayerView(context).apply {
-            lifecycleOwner.lifecycle.addObserver(this)
-            enableAutomaticInitialization = false
-
-            initialize(object : AbstractYouTubePlayerListener() {
-                override fun onReady(youTubePlayer: YouTubePlayer) {
-                    youTubePlayer.cueVideo(videoKey, 0f)
-                }
-            })
-        }
-    }
     AndroidView(
-        {
-            youtubePlayer
+        { context ->
+            YouTubePlayerView(context).apply {
+                lifecycleOwner.lifecycle.addObserver(this)
+                enableAutomaticInitialization = false
+                initialize(object : AbstractYouTubePlayerListener() {
+                    override fun onReady(youTubePlayer: YouTubePlayer) {
+                        youTubePlayer.cueVideo(videoKey, 0f)
+                    }
+                })
+            }
         }, modifier = Modifier
             .padding(start = 16.dp, end = 16.dp, top = 8.dp)
             .fillMaxWidth()

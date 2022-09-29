@@ -51,4 +51,4 @@ ext.hiltVersion = '1.0.0'
 ext.hiltNavigationCompose = '1.0.0'
 
 //Youtube player
-ext.youtubePlayerVersion = '11.0.1'
+ext.youtubePlayerVersion = '11.1.0'
