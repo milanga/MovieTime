@@ -171,12 +171,6 @@ private fun DetailContent(
                         Modifier
                             .padding(
                                 WindowInsets.navigationBars.only(WindowInsetsSides.Bottom).asPaddingValues()
-
-//                                        rememberInsetsPaddingValues(
-//                                    LocalWindowInsets.current.systemBars,
-//                                    applyTop = false,
-//                                    additionalBottom = 16.dp
-//                                )
                             )
                             .padding(top = 8.dp, bottom = 16.dp),
                         onRecommendationsThresholdReached,
