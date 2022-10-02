@@ -9,8 +9,8 @@ ext.kotlinJvmTarget = JavaVersion.VERSION_1_8.toString()
 
 /**sdk versions**/
 ext.minSdkVersion = 24
-ext.targetSdkVersion = 32
-ext.compileSdkVersion = 32
+ext.targetSdkVersion = 33
+ext.compileSdkVersion = 33
 
 /**compose**/
 ext.kotlinCompilerExtensionVersion = '1.2.0'
@@ -19,7 +19,7 @@ ext.kotlinCompilerExtensionVersion = '1.2.0'
 //compose
 ext.composeUiVersion = '1.3.0-alpha01'
 ext.composeFoundationVersion = '1.3.0-alpha01'
-ext.composeMaterial3Version = '1.0.0-alpha14'
+ext.composeMaterial3Version = '1.0.0-beta03'
 ext.composeMaterialVersion = '1.1.1'
 
 //core

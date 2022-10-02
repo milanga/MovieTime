@@ -50,7 +50,8 @@ fun Home(){
     Scaffold(
         bottomBar = {
             BottomBar(navController)
-        }
+        },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { contentPadding ->
         AnimatedNavHost(navController, startDestination = NavSection.Movies.route) {
             moviesGraph(NavSection.Movies.route, navController, contentPadding)
@@ -76,14 +77,7 @@ fun Home(){
 private fun BottomBar(
     navController: NavHostController
 ) {
-    val bottomSysBarsHeight = with(LocalDensity.current) {
-        WindowInsets.systemBars.getBottom(this).toDp()
-    }
-
-    NavigationBar(
-        modifier = Modifier
-            .height(80.dp + bottomSysBarsHeight)
-    ) {
+    NavigationBar {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
 
@@ -108,7 +102,6 @@ private fun BottomBar(
                 icon = { Icon(imageVector = navSection.icon, contentDescription = null) },
                 label = { Text(stringResource(navSection.title)) },
                 alwaysShowLabel = true,
-                modifier = Modifier.padding(bottom = bottomSysBarsHeight)
             )
         }
     }
