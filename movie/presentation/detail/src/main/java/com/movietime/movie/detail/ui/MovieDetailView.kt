@@ -1,11 +1,6 @@
 package com.movietime.movie.detail.ui
 
-import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.spring
-import androidx.compose.foundation.Image
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,29 +13,17 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
-import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
-import coil.request.ImageRequest
 import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.movietime.core.presentation.UIContentState
@@ -61,7 +44,6 @@ fun MovieDetailView(
     onBackNavigation: () -> Unit,
     contentPadding: PaddingValues
 ) {
-    rememberSystemUiController().setStatusBarColor(color = Color.Transparent, darkIcons = true)
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiStateStateFlowLifecycleAware = remember(viewModel.uiState, lifecycleOwner) {
         viewModel.uiState.flowWithLifecycle(
@@ -72,9 +54,10 @@ fun MovieDetailView(
     val uiState = uiStateStateFlowLifecycleAware.collectAsState(MovieDetailViewModel.MovieDetailUiState.Content()).value
 
     val listState = rememberLazyListState()
-
     var appBarHeight by remember { mutableStateOf(0) }
-    val showTopAppBar by remember {
+    var iconWidth by remember { mutableStateOf(0) }
+    val appBarHorizontalPadding = with(LocalDensity.current){(8.dp).toPx()}
+    val showAppBarTitle by remember {
         derivedStateOf {
             val visibleItemsInfo = listState.layoutInfo.visibleItemsInfo
             val threshold = appBarHeight
@@ -82,10 +65,12 @@ fun MovieDetailView(
         }
     }
 
-    val title = if (uiState is MovieDetailViewModel.MovieDetailUiState.Content && uiState.movieDetail is UIContentState.ContentState){
-        uiState.movieDetail.content.title
-    } else
-        ""
+    val title =
+        if (uiState is MovieDetailViewModel.MovieDetailUiState.Content && uiState.movieDetail is UIContentState.ContentState) {
+            uiState.movieDetail.content.title
+        } else
+            ""
+
 
 
     Scaffold(
@@ -94,34 +79,7 @@ fun MovieDetailView(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface),
         topBar = {
-            TopAppBar(
-                title = {
-                    if(showTopAppBar) {
-                        Text(title)
-                    }
-                },
-                colors = TopAppBarDefaults.smallTopAppBarColors(Color.Transparent),
-                navigationIcon = {
-                    IconButton(
-                        onClick = { onBackNavigation() },
-                        modifier = Modifier
-                            .background(
-                                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.4f),
-                                shape = CircleShape
-                            )
-                    ){
-                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onSizeChanged { size ->
-                        Log.d("bar height", size.height.toString())
-                        appBarHeight = size.height
-                    }
-                    .background(if (showTopAppBar) Color.White else Color.Transparent)
-            )
-
+            topBar(showAppBarTitle, title, onBackNavigation, {iconWidth = it}, {appBarHeight = it})
         }
     ) {
         when (uiState) {
@@ -132,8 +90,7 @@ fun MovieDetailView(
                 uiState,
                 listState,
                 onMovieSelected,
-                !showTopAppBar,
-                CollapsableConfig(appBarHeight, with(LocalDensity.current){(40.dp).toPx()}, MaterialTheme.typography.titleLarge.fontSize)
+                CollapsableConfig(appBarHeight, iconWidth - appBarHorizontalPadding, MaterialTheme.typography.titleLarge.fontSize)
             ) {
                 viewModel.onRecommendationsThreshold()
             }
@@ -144,12 +101,61 @@ fun MovieDetailView(
 
 @ExperimentalMaterial3Api
 @Composable
+private fun topBar(
+    showTopAppBar: Boolean,
+    title: String,
+    onBackNavigation: () -> Unit,
+    onIconWidthChanged: (Int) -> Unit,
+    onAppBarHeightChanged: (Int) -> Unit
+) {
+    val backgroundAlpha by animateFloatAsState(targetValue = if (showTopAppBar) 1f else 0f)
+    Box {
+        TopAppBar(
+            title = {
+                if (showTopAppBar) {
+                    Text(title)
+                }
+            },
+            colors = TopAppBarDefaults.smallTopAppBarColors(Color.Transparent),
+            navigationIcon = {
+                IconButton(
+                    onClick = { onBackNavigation() },
+                    modifier = Modifier
+                        .background(
+                            color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f),
+                            shape = CircleShape
+                        )
+                        .onSizeChanged { size ->
+                            onIconWidthChanged(size.width)
+                        }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .onSizeChanged { size ->
+                    onAppBarHeightChanged(size.height)
+                }
+                .background(
+                    brush = SolidColor(MaterialTheme.colorScheme.secondaryContainer),
+                    alpha = backgroundAlpha
+                )
+        )
+    }
+}
+
+@ExperimentalMaterial3Api
+@Composable
 private fun DetailContent(
     content: MovieDetailViewModel.MovieDetailUiState.Content,
     listState: LazyListState,
     onMovieSelected: (id: Int) -> Unit,
-    showTitle: Boolean,
-    collapsableConfig: CollapsableConfig,
+    collapsableTitleConfig: CollapsableConfig,
     onRecommendationsThresholdReached: () -> Unit
 ){
     LazyColumn(
@@ -165,7 +171,7 @@ private fun DetailContent(
                 is UIContentState.ContentState -> CollapsibleBackdropTitle(
                     backdropUrl = content.movieDetail.content.backdropPath,
                     title = content.movieDetail.content.title,
-                    collapsableConfig = collapsableConfig,
+                    collapsableConfig = collapsableTitleConfig,
                     listState = listState
                 )
             }
@@ -327,106 +333,3 @@ private fun LoadingBlock(
         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
     ){}
 }
-
-data class CollapsableConfig(val finalTransitionOffset: Int, val finalTranslation: Float, val finalFontSize: TextUnit)
-
-@Composable
-@OptIn(coil.annotation.ExperimentalCoilApi::class)
-private fun CollapsibleBackdropTitle(
-    backdropUrl: String = "",
-    title: String = "",
-    titleStyle: TextStyle = MaterialTheme.typography.displaySmall,
-    loading: Boolean = false,
-    collapsableConfig: CollapsableConfig = CollapsableConfig(0,0f, MaterialTheme.typography.displaySmall.fontSize),
-    listState: LazyListState
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1.6f)
-    ) {
-        Image(
-            painter = rememberAsyncImagePainter(
-                ImageRequest.Builder(LocalContext.current).data(data = backdropUrl).apply(block = fun ImageRequest.Builder.() {
-                    crossfade(true)
-                }).build()
-            ),
-            contentScale = ContentScale.Crop,
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize()
-                .clipToBounds()
-                .placeholder(
-                    loading,
-                    MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                )
-                .offset {
-                    val parallaxOffset = listState.firstVisibleItemScrollOffset / 2
-                    IntOffset(
-                        x = 0,
-                        y = parallaxOffset
-                    )
-                }
-                .graphicsLayer {
-                    alpha = if (listState.layoutInfo.visibleItemsInfo.isNotEmpty() &&
-                        listState.layoutInfo.visibleItemsInfo[0].index == 0
-                    ) {
-                        1f - listState.firstVisibleItemScrollOffset.toFloat() / (listState.layoutInfo.visibleItemsInfo[0].size - collapsableConfig.finalTransitionOffset)
-                    } else {
-                        0f
-                    }
-                }
-        )
-
-        if(!loading) {
-            var textWidth by remember { mutableStateOf(0) }
-            Text(
-                text = title,
-                style = titleStyle,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                                MaterialTheme.colorScheme.surface
-                            )
-                        )
-                    )
-                    .padding(top = 14.dp, start = 16.dp, bottom = 7.dp, end = 16.dp)
-                    .graphicsLayer {
-                        val finalScaleDifference =
-                            1 - (collapsableConfig.finalFontSize.value / titleStyle.fontSize.value)
-                        val scale = if (listState.layoutInfo.visibleItemsInfo.isNotEmpty() &&
-                            listState.layoutInfo.visibleItemsInfo[0].index == 0
-                        ) {
-                            1f - finalScaleDifference * listState.firstVisibleItemScrollOffset / (listState.layoutInfo.visibleItemsInfo[0].size - collapsableConfig.finalTransitionOffset)
-                        } else {
-                            1f
-                        }
-
-                        val translation = if (listState.layoutInfo.visibleItemsInfo.isNotEmpty() &&
-                            listState.layoutInfo.visibleItemsInfo[0].index == 0
-                        ) {
-                            (collapsableConfig.finalTranslation - textWidth * finalScaleDifference / 2) * listState.firstVisibleItemScrollOffset / (listState.layoutInfo.visibleItemsInfo[0].size - collapsableConfig.finalTransitionOffset)
-                        } else {
-                            0f
-                        }
-
-                        scaleX = scale
-                        scaleY = scale
-                        translationX = translation
-                    }
-                    .onSizeChanged {
-                        textWidth = it.width
-                    }
-            )
-        }
-    }
-}
-
-

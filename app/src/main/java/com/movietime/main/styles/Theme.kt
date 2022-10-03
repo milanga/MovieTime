@@ -8,6 +8,8 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val LightThemeColors = lightColorScheme(
 
@@ -78,6 +80,10 @@ fun AppTheme(
     } else {
         DarkThemeColors
     }
+    rememberSystemUiController().setStatusBarColor(
+        color = Color.Transparent,
+        darkIcons = !useDarkTheme
+    )
 
     MaterialTheme(
         colorScheme = colors,

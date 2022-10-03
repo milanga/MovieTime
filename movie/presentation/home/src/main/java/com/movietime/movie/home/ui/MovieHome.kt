@@ -30,8 +30,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.placeholder.placeholder
-import com.google.accompanist.systemuicontroller.SystemUiController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.movietime.core.presentation.UIContentState
 import com.movietime.core.views.model.PosterItem
 import com.movietime.movie.home.presentation.MoviesViewModel
@@ -48,10 +46,6 @@ fun MovieHome(
     contentPadding: PaddingValues,
     onMovieSelected: (id: Int) -> Unit
 ) {
-    val systemUiController: SystemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(
-        color = Color.Transparent
-    )
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiStateStateFlowLifecycleAware = remember(viewModel.uiState, lifecycleOwner) {
         viewModel.uiState.flowWithLifecycle(

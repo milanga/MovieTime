@@ -75,6 +75,7 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:$androidxNavigationVersion"
     //Accompanist
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanistAnimatedNavVersion"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion"
     //DI
     implementation "com.google.dagger:hilt-android:$daggerHiltVersion"
     kapt "com.google.dagger:hilt-compiler:$daggerHiltVersion"
