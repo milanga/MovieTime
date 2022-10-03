@@ -45,6 +45,7 @@ android {
     kotlinOptions {
         jvmTarget = "$kotlinJvmTarget"
     }
+    namespace 'com.movietime.main'
 }
 
 kapt {

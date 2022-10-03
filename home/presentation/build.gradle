@@ -3,6 +3,10 @@ plugins {
 }
 apply from: "../../compose-library-config.gradle"
 
+android {
+    namespace 'com.movietime.home.presentation'
+}
+
 dependencies {
     //UI
     implementation "androidx.compose.ui:ui:$composeUiVersion"

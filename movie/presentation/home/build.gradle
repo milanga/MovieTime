@@ -3,6 +3,10 @@ plugins {
 }
 apply from: "../../../compose-library-config.gradle"
 
+android {
+    namespace 'com.movietime.movie.home'
+}
+
 dependencies {
     // AndroidX
     implementation "androidx.core:core-ktx:$androidxCoreVersion"

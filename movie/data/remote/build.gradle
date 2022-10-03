@@ -4,6 +4,10 @@ plugins {
 apply from: "../../../android-library-config.gradle"
 apply plugin: 'kotlin-android'
 
+android {
+    namespace 'com.movietime.movie.data'
+}
+
 dependencies {
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidxLifecycleVersion"

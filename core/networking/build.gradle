@@ -5,6 +5,8 @@ apply from: "../../android-library-config.gradle"
 apply plugin: 'kotlin-android'
 
 android {
+
+    namespace 'com.movietime.core.networking'
     defaultConfig {
         buildConfigField "String", "TMDB_API_KEY", project.properties["TMDB_API_KEY"]
     }
