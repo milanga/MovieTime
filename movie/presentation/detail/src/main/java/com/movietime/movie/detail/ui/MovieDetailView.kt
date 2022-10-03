@@ -1,5 +1,6 @@
 package com.movietime.movie.detail.ui
 
+import android.view.Window
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -109,7 +111,17 @@ private fun topBar(
     onAppBarHeightChanged: (Int) -> Unit
 ) {
     val backgroundAlpha by animateFloatAsState(targetValue = if (showTopAppBar) 1f else 0f)
+    val statusHeight = with(LocalDensity.current) { WindowInsets.statusBars.getTop(this).toDp() }
+    val topBarHeight = 64.dp
     Box {
+        Surface(
+            color = MaterialTheme.colorScheme.secondaryContainer,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(topBarHeight + statusHeight)
+                .graphicsLayer { alpha = backgroundAlpha }
+        ) {}
+
         TopAppBar(
             title = {
                 if (showTopAppBar) {
@@ -141,12 +153,9 @@ private fun topBar(
                 .onSizeChanged { size ->
                     onAppBarHeightChanged(size.height)
                 }
-                .background(
-                    brush = SolidColor(MaterialTheme.colorScheme.secondaryContainer),
-                    alpha = backgroundAlpha
-                )
         )
     }
+
 }
 
 @ExperimentalMaterial3Api
