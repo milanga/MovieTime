@@ -1,6 +1,5 @@
 package com.movietime.movie.detail.ui
 
-import android.view.Window
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,7 +14,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -25,19 +23,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.google.accompanist.placeholder.placeholder
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.movietime.core.presentation.UIContentState
-import com.movietime.movie.detail.R
-import com.movietime.movie.detail.presentation.MovieDetailViewModel
 import com.movietime.main.views.ListSection
 import com.movietime.main.views.SectionTitle
+import com.movietime.movie.detail.R
+import com.movietime.movie.detail.presentation.MovieDetailViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @ExperimentalMaterial3Api
 @Composable
 fun MovieDetailView(
@@ -46,15 +46,8 @@ fun MovieDetailView(
     onBackNavigation: () -> Unit,
     contentPadding: PaddingValues
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val uiStateStateFlowLifecycleAware = remember(viewModel.uiState, lifecycleOwner) {
-        viewModel.uiState.flowWithLifecycle(
-            lifecycleOwner.lifecycle,
-            Lifecycle.State.STARTED
-        )
-    }
-    val uiState = uiStateStateFlowLifecycleAware.collectAsState(MovieDetailViewModel.MovieDetailUiState.Content()).value
 
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val listState = rememberLazyListState()
     var appBarHeight by remember { mutableStateOf(0) }
     var iconWidth by remember { mutableStateOf(0) }

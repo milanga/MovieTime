@@ -19,10 +19,9 @@ dependencies {
     implementation "androidx.compose.foundation:foundation:$composeFoundationVersion"
     // Material Design
     implementation "androidx.compose.material3:material3:$composeMaterial3Version"
-    // Integration with ViewModels
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$androidxLifecycleVersion"
     // Lifecycle
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidxLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$androidxLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:$androidxLifecycleVersion"
     //Navigation
     implementation "androidx.navigation:navigation-compose:$androidxNavigationVersion"
     //Accompanist

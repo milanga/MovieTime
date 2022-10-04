@@ -9,21 +9,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -32,28 +29,24 @@ import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.placeholder.placeholder
 import com.movietime.core.presentation.UIContentState
 import com.movietime.core.views.model.PosterItem
-import com.movietime.movie.home.presentation.MoviesViewModel
 import com.movietime.main.views.ListSection
 import com.movietime.main.views.SectionTitle
+import com.movietime.movie.domain.model.MoviePreview
+import com.movietime.movie.home.R
+import com.movietime.movie.home.presentation.MoviesViewModel
 import com.movietime.views.PosterItemView
 import kotlin.math.absoluteValue
-import com.movietime.movie.home.R
-import com.movietime.movie.domain.model.MoviePreview
+import androidx.compose.runtime.getValue
 
+
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun MovieHome(
     viewModel: MoviesViewModel = hiltViewModel(),
     contentPadding: PaddingValues,
     onMovieSelected: (id: Int) -> Unit
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val uiStateStateFlowLifecycleAware = remember(viewModel.uiState, lifecycleOwner) {
-        viewModel.uiState.flowWithLifecycle(
-            lifecycleOwner.lifecycle,
-            Lifecycle.State.STARTED
-        )
-    }
-    val uiState = uiStateStateFlowLifecycleAware.collectAsState(MoviesViewModel.MoviesUiState.Content()).value
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     when(uiState){
         is MoviesViewModel.MoviesUiState.Error -> ErrorScreen(uiState)
