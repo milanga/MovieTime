@@ -30,6 +30,8 @@ import com.movietime.main.views.ListSection
 import com.movietime.main.views.SectionTitle
 import com.movietime.movie.detail.R
 import com.movietime.movie.detail.presentation.MovieDetailViewModel
+import com.movietime.movie.detail.ui.collapsibleBackddropTitle.CollapsableConfig
+import com.movietime.movie.detail.ui.collapsibleBackddropTitle.CollapsibleBackdropTitle
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -113,9 +115,10 @@ private fun topBar(
     val backgroundAlpha by animateFloatAsState(targetValue = if (showTopAppBar) 1f else 0f)
     val statusHeight = with(LocalDensity.current) { WindowInsets.statusBars.getTop(this).toDp() }
     val topBarHeight = 64.dp
+    val appBarBackgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
     Box {
         Surface(
-            color = MaterialTheme.colorScheme.secondaryContainer,
+            color = appBarBackgroundColor,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(topBarHeight + statusHeight)
@@ -134,7 +137,7 @@ private fun topBar(
                     onClick = { onBackNavigation() },
                     modifier = Modifier
                         .background(
-                            color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f),
+                            color = appBarBackgroundColor.copy(alpha = 0.4f),
                             shape = CircleShape
                         )
                         .onSizeChanged { size ->

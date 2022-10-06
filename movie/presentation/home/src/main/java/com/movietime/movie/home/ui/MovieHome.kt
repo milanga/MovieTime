@@ -47,7 +47,7 @@ fun MovieHome(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    MovieTime(
+    MovieHome(
         uiState = uiState,
         onMovieSelected = onMovieSelected,
         onTopRatedMoviesThresholdReached = {viewModel.onTopRatedMoviesThreshold()},
@@ -56,7 +56,7 @@ fun MovieHome(
     )
 }
 @Composable
-private fun MovieTime(
+private fun MovieHome(
     uiState: MoviesViewModel.MoviesUiState,
     onMovieSelected: (id: Int) -> Unit,
     onTopRatedMoviesThresholdReached: () -> Unit,
