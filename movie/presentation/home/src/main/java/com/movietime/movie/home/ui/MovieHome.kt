@@ -36,21 +36,19 @@ import com.movietime.movie.home.R
 import com.movietime.movie.home.presentation.MoviesViewModel
 import com.movietime.views.PosterItemView
 import kotlin.math.absoluteValue
-import androidx.compose.runtime.getValue
 
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun MovieHome(
     viewModel: MoviesViewModel = hiltViewModel(),
-    contentPadding: PaddingValues,
     onMovieSelected: (id: Int) -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     when(uiState){
         is MoviesViewModel.MoviesUiState.Error -> ErrorScreen(uiState)
-        is MoviesViewModel.MoviesUiState.Content -> Content(uiState, onMovieSelected, contentPadding, {viewModel.onTopRatedMoviesThreshold()}, {viewModel.onUpcomingMoviesThreshold()}, {viewModel.onPopularMoviesThreshold()})
+        is MoviesViewModel.MoviesUiState.Content -> Content(uiState, onMovieSelected, {viewModel.onTopRatedMoviesThreshold()}, {viewModel.onUpcomingMoviesThreshold()}, {viewModel.onPopularMoviesThreshold()})
     }
 }
 
@@ -63,7 +61,6 @@ private fun ErrorScreen(error: MoviesViewModel.MoviesUiState.Error){
 private fun Content(
     content: MoviesViewModel.MoviesUiState.Content,
     onMovieSelected: (id: Int) -> Unit,
-    contentPadding: PaddingValues,
     onTopRatedMoviesThresholdReached: () -> Unit,
     onUpcomingMoviesThresholdReached: () -> Unit,
     onPopularMoviesThresholdReached: () -> Unit
@@ -71,8 +68,7 @@ private fun Content(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(contentPadding),
+            .background(MaterialTheme.colorScheme.surface),
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
         item {

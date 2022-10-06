@@ -2,12 +2,11 @@ package com.movietime.movie.home.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.*
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
-import com.movietime.movie.detail.ui.MovieDetailView
+import com.movietime.movie.detail.ui.MovieDetailRoute
 import com.movietime.movie.home.ui.MovieHome
 
 sealed class MovieDestinations(val route: String) {
@@ -23,8 +22,8 @@ sealed class MovieDestinations(val route: String) {
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.moviesGraph(
     route: String,
-    navController: NavController,
-    contentPadding: PaddingValues
+    backNavigation: () -> Unit,
+    navigateToRoute: (route: String) -> Unit
 ) {
     val transitionTime = 250
     navigation(
@@ -63,9 +62,11 @@ fun NavGraphBuilder.moviesGraph(
             ))
         }
     ) {
-        composable(MovieDestinations.HOME.route) { MovieHome(onMovieSelected = { movieId ->
-            navController.navigate("${MovieDestinations.DETAIL.route}/$movieId")
-        }, contentPadding = contentPadding) }
+        composable(MovieDestinations.HOME.route) {
+            MovieHome{ movieId ->
+                navigateToRoute("${MovieDestinations.DETAIL.route}/$movieId")
+            }
+        }
 
         composable(
             route = "${MovieDestinations.DETAIL.route}/{${MovieDestinations.DETAIL.PARAM_MOVIE_ID}}",
@@ -73,12 +74,11 @@ fun NavGraphBuilder.moviesGraph(
                 navArgument(MovieDestinations.DETAIL.PARAM_MOVIE_ID) { type = NavType.IntType }
             )
         ) {
-            MovieDetailView(
+            MovieDetailRoute(
                 onMovieSelected = { movieId ->
-                    navController.navigate("${MovieDestinations.DETAIL.route}/$movieId")
+                    navigateToRoute("${MovieDestinations.DETAIL.route}/$movieId")
                 },
-                onBackNavigation = { navController.popBackStack() },
-                contentPadding = contentPadding
+                onBackNavigation = backNavigation
             )
         }
     }

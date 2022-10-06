@@ -35,8 +35,8 @@ ext.androidxLifecycleVersion = '2.6.0-alpha02'
 ext.androidxNavigationVersion = '2.5.0'
 
 //accompanist
-ext.accompanistVersion = '0.24.13-rc'
-ext.accompanistAnimatedNavVersion = '0.21.4-beta'
+ext.accompanistVersion = '0.26.4-beta'
+ext.accompanistAnimatedNavVersion = '0.26.4-beta'
 
 //coil
 ext.coilVersion = '2.1.0'

@@ -22,11 +22,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.flowWithLifecycle
-import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.placeholder.material.placeholder
 import com.movietime.core.presentation.UIContentState
 import com.movietime.main.views.ListSection
 import com.movietime.main.views.SectionTitle
@@ -40,14 +38,24 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @ExperimentalMaterial3Api
 @Composable
-fun MovieDetailView(
+fun MovieDetailRoute(
     viewModel: MovieDetailViewModel = hiltViewModel(),
     onMovieSelected: (id: Int) -> Unit,
-    onBackNavigation: () -> Unit,
-    contentPadding: PaddingValues
+    onBackNavigation: () -> Unit
 ) {
 
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    MovieDetailView(
+        uiState = uiState,
+        onMovieSelected = onMovieSelected,
+        onBackNavigation = {onBackNavigation()}
+    ){viewModel.onRecommendationsThreshold()}
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MovieDetailView(uiState: MovieDetailViewModel.MovieDetailUiState, onMovieSelected: (id: Int) -> Unit, onBackNavigation: () -> Unit, onRecommendationsThresholdReached: () -> Unit){
     val listState = rememberLazyListState()
     var appBarHeight by remember { mutableStateOf(0) }
     var iconWidth by remember { mutableStateOf(0) }
@@ -70,7 +78,6 @@ fun MovieDetailView(
 
     Scaffold(
         modifier = Modifier
-            .padding(contentPadding)
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface),
         topBar = {
@@ -87,7 +94,7 @@ fun MovieDetailView(
                 onMovieSelected,
                 CollapsableConfig(appBarHeight, iconWidth - appBarHorizontalPadding, MaterialTheme.typography.titleLarge.fontSize)
             ) {
-                viewModel.onRecommendationsThreshold()
+                onRecommendationsThresholdReached()
             }
 
         }

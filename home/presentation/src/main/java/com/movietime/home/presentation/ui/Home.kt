@@ -1,9 +1,10 @@
 package com.movietime.home.presentation.ui
 
 import androidx.annotation.StringRes
-import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Person
@@ -13,14 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -53,8 +50,8 @@ fun Home(){
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { contentPadding ->
-        AnimatedNavHost(navController, startDestination = NavSection.Movies.route) {
-            moviesGraph(NavSection.Movies.route, navController, contentPadding)
+        AnimatedNavHost(navController, startDestination = NavSection.Movies.route, modifier = Modifier.padding(contentPadding)) {
+            moviesGraph(NavSection.Movies.route, {navController.popBackStack()}){route ->  navController.navigate(route)}
 
             navigation(route = NavSection.Series.route, startDestination = "series/home"){
                 composable("series/home") {
@@ -75,7 +72,7 @@ fun Home(){
 
 @Composable
 private fun BottomBar(
-    navController: NavHostController
+    navController: NavController
 ) {
     NavigationBar {
         val navBackStackEntry by navController.currentBackStackEntryAsState()

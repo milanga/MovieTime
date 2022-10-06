@@ -25,7 +25,7 @@ dependencies {
     //Navigation
     implementation "androidx.navigation:navigation-compose:$androidxNavigationVersion"
     //Accompanist
-    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanistAnimatedNavVersion"
+    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanistVersion"
     implementation "com.google.accompanist:accompanist-pager:$accompanistVersion"
     implementation "com.google.accompanist:accompanist-placeholder-material:$accompanistVersion"
     //Coil
