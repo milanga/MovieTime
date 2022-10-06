@@ -36,6 +36,7 @@ import com.movietime.movie.home.R
 import com.movietime.movie.home.presentation.MoviesViewModel
 import com.movietime.views.PosterItemView
 import kotlin.math.absoluteValue
+import androidx.compose.runtime.getValue
 
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -44,11 +45,33 @@ fun MovieHome(
     viewModel: MoviesViewModel = hiltViewModel(),
     onMovieSelected: (id: Int) -> Unit
 ) {
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    MovieTime(
+        uiState = uiState,
+        onMovieSelected = onMovieSelected,
+        onTopRatedMoviesThresholdReached = {viewModel.onTopRatedMoviesThreshold()},
+        onUpcomingMoviesThresholdReached = {viewModel.onUpcomingMoviesThreshold()},
+        onPopularMoviesThresholdReached = {viewModel.onPopularMoviesThreshold()}
+    )
+}
+@Composable
+private fun MovieTime(
+    uiState: MoviesViewModel.MoviesUiState,
+    onMovieSelected: (id: Int) -> Unit,
+    onTopRatedMoviesThresholdReached: () -> Unit,
+    onUpcomingMoviesThresholdReached: () -> Unit,
+    onPopularMoviesThresholdReached: () -> Unit
+){
     when(uiState){
         is MoviesViewModel.MoviesUiState.Error -> ErrorScreen(uiState)
-        is MoviesViewModel.MoviesUiState.Content -> Content(uiState, onMovieSelected, {viewModel.onTopRatedMoviesThreshold()}, {viewModel.onUpcomingMoviesThreshold()}, {viewModel.onPopularMoviesThreshold()})
+        is MoviesViewModel.MoviesUiState.Content -> Content(
+            content = uiState,
+            onMovieSelected = onMovieSelected,
+            onTopRatedMoviesThresholdReached = onTopRatedMoviesThresholdReached,
+            onUpcomingMoviesThresholdReached = onUpcomingMoviesThresholdReached,
+            onPopularMoviesThresholdReached = onPopularMoviesThresholdReached
+        )
     }
 }
 

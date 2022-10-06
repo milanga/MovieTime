@@ -25,40 +25,40 @@ fun NavGraphBuilder.moviesGraph(
     backNavigation: () -> Unit,
     navigateToRoute: (route: String) -> Unit
 ) {
-    val transitionTime = 250
+    val transitionTimeInMillis = 250
     navigation(
         startDestination = MovieDestinations.HOME.route,
         route = route,
         enterTransition = {
             if(initialState.destination.parent?.id == targetState.destination.parent?.id){
-                fadeIn(animationSpec = tween(transitionTime)) + slideIntoContainer(AnimatedContentScope.SlideDirection.Start, tween(
-                    transitionTime
+                fadeIn(animationSpec = tween(transitionTimeInMillis)) + slideIntoContainer(AnimatedContentScope.SlideDirection.Start, tween(
+                    transitionTimeInMillis
                 ))
             } else {
-                fadeIn(animationSpec = tween(transitionTime))
+                fadeIn(animationSpec = tween(transitionTimeInMillis))
             }
         },
         exitTransition = {
             if(initialState.destination.parent?.id == targetState.destination.parent?.id){
-                fadeOut(animationSpec = tween(transitionTime)) + slideOutOfContainer(AnimatedContentScope.SlideDirection.Start, tween(
-                    transitionTime
+                fadeOut(animationSpec = tween(transitionTimeInMillis)) + slideOutOfContainer(AnimatedContentScope.SlideDirection.Start, tween(
+                    transitionTimeInMillis
                 ))
             } else {
-                fadeOut(animationSpec = tween(transitionTime))
+                fadeOut(animationSpec = tween(transitionTimeInMillis))
             }
         },
         popEnterTransition = {
             if(initialState.destination.parent?.id == targetState.destination.parent?.id){
-                fadeIn(animationSpec = tween(transitionTime)) + slideIntoContainer(AnimatedContentScope.SlideDirection.End, tween(
-                    transitionTime
+                fadeIn(animationSpec = tween(transitionTimeInMillis)) + slideIntoContainer(AnimatedContentScope.SlideDirection.End, tween(
+                    transitionTimeInMillis
                 ))
             } else {
-                fadeIn(animationSpec = tween(transitionTime))
+                fadeIn(animationSpec = tween(transitionTimeInMillis))
             }
         },
         popExitTransition = {
-            fadeOut(animationSpec = tween(transitionTime)) + slideOutOfContainer(AnimatedContentScope.SlideDirection.End, tween(
-                transitionTime
+            fadeOut(animationSpec = tween(transitionTimeInMillis)) + slideOutOfContainer(AnimatedContentScope.SlideDirection.End, tween(
+                transitionTimeInMillis
             ))
         }
     ) {
