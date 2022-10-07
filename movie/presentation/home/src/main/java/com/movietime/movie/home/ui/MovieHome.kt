@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -166,7 +167,7 @@ private fun Highlighted(
             .aspectRatio(1.6f)
             .placeholder(
                 loading,
-                MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)
             )
     ) { page ->
         if (popularMovies.size - page < threshold){

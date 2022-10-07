@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -121,7 +122,7 @@ private fun CollapsibleBackdrop(
             .clipToBounds()
             .placeholder(
                 isLoading,
-                MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)
             )
             .offset {
                 IntOffset(

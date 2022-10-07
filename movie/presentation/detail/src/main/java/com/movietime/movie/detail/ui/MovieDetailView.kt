@@ -300,7 +300,7 @@ private fun VideoView(
             .wrapContentHeight()
             .placeholder(
                 loading,
-                MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)
             )
     )
 }
@@ -342,6 +342,6 @@ private fun LoadingBlock(
 ){
     Surface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+        color = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)
     ){}
 }

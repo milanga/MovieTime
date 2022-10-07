@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,11 +69,11 @@ private fun getCompleteModifier(
     return modifier
         .placeholder(
             loading,
-            MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+            MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
             shape = posterShape
         )
         .background(
-            MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+            MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
             shape = posterShape
         )
         .then(clickModifier)

@@ -55,10 +55,10 @@ class MoviesViewModel @Inject constructor(
 
     private val viewModelState = MutableStateFlow(
         MoviesViewModelState(
-        ViewModelContentState.Loading(),
-        ViewModelContentState.Loading(),
-        ViewModelContentState.Loading()
-    )
+            ViewModelContentState.Loading(),
+            ViewModelContentState.Loading(),
+            ViewModelContentState.Loading()
+        )
     )
 
 
