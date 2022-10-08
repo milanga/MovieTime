@@ -4,7 +4,7 @@ import com.movietime.movie.domain.interactors.MoviesRepository
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class MoviesRepositoryImpl @Inject constructor(
+class RemoteMoviesRepository @Inject constructor(
     private val remoteDataSource: MoviesDataSource,
 ): MoviesRepository {
     override fun getPopularMovies(page: Int) = flow{

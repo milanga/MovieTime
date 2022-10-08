@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class MovieDetailRepositoryImpl @Inject constructor(
+class RemoteMovieDetailRepository @Inject constructor(
     private val remoteDetailDataSource: MovieDetailDataSource,
 ): MovieDetailRepository {
     override fun getMovieDetail(movieId: Int): Flow<MovieDetail> = flow{
