@@ -29,3 +29,9 @@ I follow [clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/t
 This allows me to easily change the UI or the data sources without affecting the domain.
 
 ![Clean architecture](readme/architecture.png)
+
+## Roadmap
+* Modify ViewModels to work with one loading for the whole screen (all items are loading almost at the same time and this would help to avoid unnecessary recompositions)
+* Remove the usage of domain classes from the view
+* Add Unit test
+* Add screen previews

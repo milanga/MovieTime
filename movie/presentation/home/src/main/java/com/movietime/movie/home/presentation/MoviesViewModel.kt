@@ -37,14 +37,14 @@ class MoviesViewModel @Inject constructor(
         val upcomingMovies: ViewModelContentState<List<PosterItem>>
     ){
         fun toUiState(): MoviesUiState {
-            if (
+            return if (
                 popularMovies is ViewModelContentState.Error ||
                 topRatedMovies is ViewModelContentState.Error ||
                 upcomingMovies is ViewModelContentState.Error
             ){
-                return MoviesUiState.Error
+                MoviesUiState.Error
             } else {
-                return MoviesUiState.Content(
+                MoviesUiState.Content(
                     popularMovies.toUiContentState(),
                     topRatedMovies.toUiContentState(),
                     upcomingMovies.toUiContentState()
@@ -157,10 +157,10 @@ class MoviesViewModel @Inject constructor(
         viewModelScope.launch {
             useCaseCall()
                 .flowOn(Dispatchers.Default)
-                .catch {
-                    it.printStackTrace()
-                    viewModelState.update {
-                        onError(it)
+                .catch { throwable ->
+                    throwable.printStackTrace()
+                    viewModelState.update { state ->
+                        onError(state)
                     }
                 }.onCompletion {
                     onComplete()

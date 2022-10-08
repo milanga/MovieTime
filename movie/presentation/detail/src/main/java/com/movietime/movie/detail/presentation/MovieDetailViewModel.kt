@@ -7,12 +7,11 @@ import com.movietime.core.presentation.ListState
 import com.movietime.core.presentation.UIContentState
 import com.movietime.core.presentation.ViewModelContentState
 import com.movietime.core.views.model.PosterItem
-import com.movietime.movie.domain.model.MovieDetail
-import com.movietime.movie.domain.model.MoviePreview
-import com.movietime.movie.domain.model.Video
 import com.movietime.movie.domain.interactors.GetMovieDetailUseCase
 import com.movietime.movie.domain.interactors.GetMovieRecommendationsUseCase
 import com.movietime.movie.domain.interactors.GetMovieVideosUseCase
+import com.movietime.movie.domain.model.MovieDetail
+import com.movietime.movie.domain.model.Video
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -26,7 +25,7 @@ class MovieDetailViewModel @Inject constructor(
     private val getMovieDetailUseCase: GetMovieDetailUseCase,
     private val getMovieVideosUseCase: GetMovieVideosUseCase
 ) : ViewModel() {
-    private val movieId: Int = savedStateHandle.get("paramMovieId")!!
+    private val movieId: Int = savedStateHandle["paramMovieId"]!!
 
     sealed interface MovieDetailUiState {
         object Error : MovieDetailUiState
@@ -43,14 +42,14 @@ class MovieDetailViewModel @Inject constructor(
         val movieRecommendations: ViewModelContentState<List<PosterItem>>
     ) {
         fun toUiState(): MovieDetailUiState {
-            if (
+            return if (
                 movieDetail is ViewModelContentState.Error ||
                 movieVideos is ViewModelContentState.Error ||
                 movieRecommendations is ViewModelContentState.Error
             ) {
-                return MovieDetailUiState.Error
+                MovieDetailUiState.Error
             } else {
-                return MovieDetailUiState.Content(
+                MovieDetailUiState.Content(
                     movieDetail.toUiContentState(),
                     movieVideos.toUiContentState(),
                     movieRecommendations.toUiContentState()
