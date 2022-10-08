@@ -17,36 +17,36 @@ ext.kotlinCompilerExtensionVersion = '1.2.0'
 
 /**Dependencies versions**/
 //compose
-ext.composeUiVersion = '1.3.0-alpha01'
+ext.composeUiVersion = '1.3.0-beta03'
 ext.composeFoundationVersion = '1.3.0-alpha01'
 ext.composeMaterial3Version = '1.0.0-beta03'
-ext.composeMaterialVersion = '1.1.1'
+ext.composeMaterialVersion = '1.2.1'
 
 //core
-ext.androidxCoreVersion = '1.8.0'
+ext.androidxCoreVersion = '1.9.0'
 
 //activity
-ext.androidxActivityVersion = '1.5.0'
+ext.androidxActivityVersion = '1.6.0'
 
 //lifecycle
 ext.androidxLifecycleVersion = '2.6.0-alpha02'
 
 //navigation
-ext.androidxNavigationVersion = '2.5.0'
+ext.androidxNavigationVersion = '2.5.2'
 
 //accompanist
 ext.accompanistVersion = '0.26.4-beta'
 ext.accompanistAnimatedNavVersion = '0.26.4-beta'
 
 //coil
-ext.coilVersion = '2.1.0'
+ext.coilVersion = '2.2.1'
 
 //retrofit
 ext.retrofitVersion = '2.9.0'
 ext.okhttpVersion = '4.10.0'
 
 //DI
-ext.daggerHiltVersion = '2.43'
+ext.daggerHiltVersion = '2.44'
 ext.hiltVersion = '1.0.0'
 ext.hiltNavigationCompose = '1.0.0'
 
