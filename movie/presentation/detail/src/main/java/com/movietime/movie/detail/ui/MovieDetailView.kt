@@ -25,11 +25,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.placeholder.material.placeholder
-import com.movietime.core.presentation.UIContentState
 import com.movietime.main.views.ListSection
 import com.movietime.main.views.SectionTitle
 import com.movietime.movie.detail.R
 import com.movietime.movie.detail.presentation.MovieDetailViewModel
+import com.movietime.movie.detail.presentation.model.MovieDetailUiState
 import com.movietime.movie.detail.ui.collapsibleBackddropTitle.CollapsableConfig
 import com.movietime.movie.detail.ui.collapsibleBackddropTitle.CollapsibleBackdropTitle
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -57,7 +57,7 @@ fun MovieDetailRoute(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-private fun MovieDetailView(uiState: MovieDetailViewModel.MovieDetailUiState, onMovieSelected: (id: Int) -> Unit, onBackNavigation: () -> Unit, onRecommendationsThresholdReached: () -> Unit){
+private fun MovieDetailView(uiState: MovieDetailUiState, onMovieSelected: (id: Int) -> Unit, onBackNavigation: () -> Unit, onRecommendationsThresholdReached: () -> Unit){
     val listState = rememberLazyListState()
     var appBarHeight by remember { mutableStateOf(0) }
     var iconWidth by remember { mutableStateOf(0) }
@@ -71,7 +71,7 @@ private fun MovieDetailView(uiState: MovieDetailViewModel.MovieDetailUiState, on
     }
 
     val title =
-        if (uiState is MovieDetailViewModel.MovieDetailUiState.Content) {
+        if (uiState is MovieDetailUiState.Content) {
             uiState.movieDetail.title
         } else
             ""
@@ -85,11 +85,11 @@ private fun MovieDetailView(uiState: MovieDetailViewModel.MovieDetailUiState, on
         }
     ) { padding ->
         when (uiState) {
-            is MovieDetailViewModel.MovieDetailUiState.Error -> DetailErrorScreen(
+            is MovieDetailUiState.Error -> DetailErrorScreen(
                 uiState,
                 Modifier.consumedWindowInsets(padding)
             )
-            is MovieDetailViewModel.MovieDetailUiState.Content -> DetailContent(
+            is MovieDetailUiState.Content -> DetailContent(
                 uiState,
                 listState,
                 onMovieSelected,
@@ -98,7 +98,7 @@ private fun MovieDetailView(uiState: MovieDetailViewModel.MovieDetailUiState, on
             ) {
                 onRecommendationsThresholdReached()
             }
-            is MovieDetailViewModel.MovieDetailUiState.Loading -> Loading(Modifier.consumedWindowInsets(padding))
+            is MovieDetailUiState.Loading -> Loading(Modifier.consumedWindowInsets(padding))
         }
     }
 }
@@ -198,7 +198,7 @@ private fun Loading(
 @ExperimentalMaterial3Api
 @Composable
 private fun DetailContent(
-    content: MovieDetailViewModel.MovieDetailUiState.Content,
+    content: MovieDetailUiState.Content,
     listState: LazyListState,
     onMovieSelected: (id: Int) -> Unit,
     collapsableTitleConfig: CollapsableConfig,
@@ -273,7 +273,7 @@ private fun DetailContent(
 
 @Composable
 private fun DetailErrorScreen(
-    error: MovieDetailViewModel.MovieDetailUiState.Error,
+    error: MovieDetailUiState.Error,
     modifier: Modifier
 ){
     Box(modifier = modifier.fillMaxSize()){

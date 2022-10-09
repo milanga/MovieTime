@@ -5,10 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
 import com.movietime.core.views.model.PosterItem
+import com.movietime.movie.detail.presentation.model.MovieDetailUiState
+import com.movietime.movie.detail.presentation.model.toPosterItem
+import com.movietime.movie.detail.presentation.model.toUiMovieDetail
+import com.movietime.movie.detail.presentation.model.toUiVideo
 import com.movietime.movie.domain.interactors.GetMovieDetailUseCase
 import com.movietime.movie.domain.interactors.GetMovieRecommendationsUseCase
 import com.movietime.movie.domain.interactors.GetMovieVideosUseCase
 import com.movietime.movie.domain.model.MovieDetail
+import com.movietime.movie.domain.model.MoviePreview
 import com.movietime.movie.domain.model.Video
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -30,7 +35,7 @@ class MovieDetailViewModel @Inject constructor(
                 getMovieRecommendationsUseCase(movieId, page)
                     .onCompletion { this@apply.finishLoading() }
                     .map { recommendationPage ->
-                        recommendationPage.map { PosterItem(it.id, it.posterPath, "%.1f".format(it.rating)) }
+                        recommendationPage.map(MoviePreview::toPosterItem)
                     }
                     .collectLatest { recommendationItems ->
                         recommendations.getAndUpdate{ currentList ->
@@ -46,20 +51,10 @@ class MovieDetailViewModel @Inject constructor(
         MutableStateFlow(emptyList())
     }
 
-    sealed interface MovieDetailUiState {
-        object Error : MovieDetailUiState
-        object Loading : MovieDetailUiState
-        data class Content(
-            val movieDetail: MovieDetail,
-            val movieVideos: List<Video>,
-            val movieRecommendations: List<PosterItem>
-        ) : MovieDetailUiState
-    }
-
     // UI state exposed to the UI
     val uiState: StateFlow<MovieDetailUiState> = combine(
-        getMovieDetailUseCase(movieId),
-        getMovieVideosUseCase(movieId),
+        getMovieDetailUseCase(movieId).map(MovieDetail::toUiMovieDetail),
+        getMovieVideosUseCase(movieId).map { it.map(Video::toUiVideo) },
         recommendations
     ) { movieDetail, videos, recommendations ->
         val movieDetailUiState: MovieDetailUiState = MovieDetailUiState.Content(
