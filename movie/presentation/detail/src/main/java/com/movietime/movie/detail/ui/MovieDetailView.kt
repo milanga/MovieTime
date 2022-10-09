@@ -55,7 +55,7 @@ fun MovieDetailRoute(
     ){viewModel.onRecommendationsThreshold()}
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 private fun MovieDetailView(uiState: MovieDetailViewModel.MovieDetailUiState, onMovieSelected: (id: Int) -> Unit, onBackNavigation: () -> Unit, onRecommendationsThresholdReached: () -> Unit){
     val listState = rememberLazyListState()
@@ -71,12 +71,10 @@ private fun MovieDetailView(uiState: MovieDetailViewModel.MovieDetailUiState, on
     }
 
     val title =
-        if (uiState is MovieDetailViewModel.MovieDetailUiState.Content && uiState.movieDetail is UIContentState.ContentState) {
-            uiState.movieDetail.content.title
+        if (uiState is MovieDetailViewModel.MovieDetailUiState.Content) {
+            uiState.movieDetail.title
         } else
             ""
-
-
 
     Scaffold(
         modifier = Modifier
@@ -85,20 +83,22 @@ private fun MovieDetailView(uiState: MovieDetailViewModel.MovieDetailUiState, on
         topBar = {
             topBar(showAppBarTitle, title, onBackNavigation, {iconWidth = it}, {appBarHeight = it})
         }
-    ) {
+    ) { padding ->
         when (uiState) {
             is MovieDetailViewModel.MovieDetailUiState.Error -> DetailErrorScreen(
-                uiState
+                uiState,
+                Modifier.consumedWindowInsets(padding)
             )
             is MovieDetailViewModel.MovieDetailUiState.Content -> DetailContent(
                 uiState,
                 listState,
                 onMovieSelected,
-                CollapsableConfig(appBarHeight, iconWidth - appBarHorizontalPadding, MaterialTheme.typography.titleLarge.fontSize)
+                CollapsableConfig(appBarHeight, iconWidth - appBarHorizontalPadding, MaterialTheme.typography.titleLarge.fontSize),
+                Modifier.consumedWindowInsets(padding)
             ) {
                 onRecommendationsThresholdReached()
             }
-
+            is MovieDetailViewModel.MovieDetailUiState.Loading -> Loading(Modifier.consumedWindowInsets(padding))
         }
     }
 }
@@ -163,30 +163,62 @@ private fun topBar(
 
 @ExperimentalMaterial3Api
 @Composable
+private fun Loading(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        CollapsibleBackdropTitle(loading = true)
+        Spacer(modifier = Modifier.height(16.dp))
+        LoadingBlock(
+            Modifier
+                .fillMaxWidth()
+                .height(140.dp)
+                .padding(horizontal = 16.dp)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        LoadingBlock(
+            Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .padding(horizontal = 16.dp)
+                .padding(top = 8.dp)
+        )
+        VideoView(loading = true)
+        SectionTitle(
+            stringResource(R.string.recommendations),
+            Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+        )
+        ListSection(loading = true)
+    }
+}
+
+@ExperimentalMaterial3Api
+@Composable
 private fun DetailContent(
     content: MovieDetailViewModel.MovieDetailUiState.Content,
     listState: LazyListState,
     onMovieSelected: (id: Int) -> Unit,
     collapsableTitleConfig: CollapsableConfig,
+    modifier: Modifier = Modifier,
     onRecommendationsThresholdReached: () -> Unit
 ){
     LazyColumn(
         state = listState,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize(),
         contentPadding = PaddingValues(bottom = 24.dp)
     ) {
 
         item{
-            when (content.movieDetail) {
-                is UIContentState.Loading<*> -> CollapsibleBackdropTitle(loading = true, listState = listState)
-                is UIContentState.ContentState -> CollapsibleBackdropTitle(
-                    backdropUrl = content.movieDetail.content.backdropPath,
-                    title = content.movieDetail.content.title,
-                    collapsableConfig = collapsableTitleConfig,
-                    listState = listState
-                )
-            }
+            CollapsibleBackdropTitle(
+                backdropUrl = content.movieDetail.backdropPath,
+                title = content.movieDetail.title,
+                collapsableConfig = collapsableTitleConfig,
+                listState = listState
+            )
         }
 
         item{
@@ -194,15 +226,7 @@ private fun DetailContent(
         }
 
         item {
-            when (content.movieDetail) {
-                is UIContentState.Loading<*> -> LoadingBlock(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(140.dp)
-                        .padding(horizontal = 16.dp)
-                )
-                is UIContentState.ContentState -> Overview(content.movieDetail.content.overview)
-            }
+            Overview(content.movieDetail.overview)
         }
 
         item{
@@ -210,31 +234,15 @@ private fun DetailContent(
         }
 
         item {
-            when (content.movieDetail) {
-                is UIContentState.Loading<*> -> LoadingBlock(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 8.dp)
-                )
-                is UIContentState.ContentState -> {
-                    val tagline = content.movieDetail.content.tagline
-                    if (!tagline.isNullOrEmpty()){
-                        Tagline(tagline)
-                    }
-                }
+            val tagline = content.movieDetail.tagline
+            if (!tagline.isNullOrEmpty()){
+                Tagline(tagline)
             }
         }
 
         item {
-            when (content.movieVideos) {
-                is UIContentState.Loading<*> -> VideoView(loading = true)
-                is UIContentState.ContentState -> {
-                    if (content.movieVideos.content.size > 0) {
-                        VideoView(content.movieVideos.content.first().key)
-                    }
-                }
+            if (content.movieVideos.isNotEmpty()) {
+                VideoView(content.movieVideos.first().key)
             }
         }
 
@@ -246,23 +254,18 @@ private fun DetailContent(
         }
 
         item {
-            when (content.movieRecommendations) {
-                is UIContentState.Loading<*> -> ListSection(loading = true)
-                is UIContentState.ContentState -> {
-                    ListSection(
-                        content.movieRecommendations.content,
-                        onMovieSelected,
-                        Modifier
-                            .padding(
-                                WindowInsets.navigationBars
-                                    .only(WindowInsetsSides.Bottom)
-                                    .asPaddingValues()
-                            )
-                            .padding(top = 8.dp, bottom = 16.dp),
-                        onRecommendationsThresholdReached,
+            ListSection(
+                content.movieRecommendations,
+                onMovieSelected,
+                Modifier
+                    .padding(
+                        WindowInsets.navigationBars
+                            .only(WindowInsetsSides.Bottom)
+                            .asPaddingValues()
                     )
-                }
-            }
+                    .padding(top = 8.dp, bottom = 16.dp),
+                onRecommendationsThresholdReached,
+            )
         }
     }
 }
@@ -270,9 +273,10 @@ private fun DetailContent(
 
 @Composable
 private fun DetailErrorScreen(
-    error: MovieDetailViewModel.MovieDetailUiState.Error
+    error: MovieDetailViewModel.MovieDetailUiState.Error,
+    modifier: Modifier
 ){
-    Box(modifier = Modifier.fillMaxSize()){
+    Box(modifier = modifier.fillMaxSize()){
         Text("error", Modifier.align(Alignment.Center))
     }
 }

@@ -38,7 +38,7 @@ internal fun CollapsibleBackdropTitle(
     titleStyle: TextStyle = MaterialTheme.typography.displaySmall,
     loading: Boolean = false,
     collapsableConfig: CollapsableConfig = CollapsableConfig(0,0f, MaterialTheme.typography.displaySmall.fontSize),
-    listState: LazyListState
+    listState: LazyListState = LazyListState()
 ) {
     val showTitle by rememberShowTitle(listState, collapsableConfig.finalTransitionOffset)
     var textWidth by remember { mutableStateOf(0) }
@@ -131,7 +131,8 @@ private fun CollapsibleBackdrop(
                 )
             }
             .graphicsLayer {
-                alpha = transitionHelper.calculateCollapsibleBackdropAlpha()
+                if(!isLoading)
+                    alpha = transitionHelper.calculateCollapsibleBackdropAlpha()
             }
     )
 }

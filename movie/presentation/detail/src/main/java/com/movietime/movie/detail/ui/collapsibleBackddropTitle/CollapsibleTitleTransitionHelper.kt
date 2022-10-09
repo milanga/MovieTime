@@ -39,8 +39,13 @@ internal class CollapsibleTitleTransitionHelper(
 
     fun parallaxOffset() = listState.firstVisibleItemScrollOffset / 2
 
-    private fun transitionRatio() =
-        listState.firstVisibleItemScrollOffset.toFloat() /
-                (listState.layoutInfo.visibleItemsInfo[0].size - finalTransitionOffset).coerceAtLeast(1)
+    private fun transitionRatio(): Float {
+        if(listState.layoutInfo.visibleItemsInfo.isEmpty()){
+            return 0f
+        }
+        val firstItemSize = listState.layoutInfo.visibleItemsInfo[0].size
+        return listState.firstVisibleItemScrollOffset.toFloat() /
+                ( firstItemSize - finalTransitionOffset).coerceAtLeast(1)
+    }
 
 }
