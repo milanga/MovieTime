@@ -1,7 +1,10 @@
-package com.movietime.main.views
+package com.movietime.core.views
 
 import androidx.compose.foundation.MutatePriority
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,9 +22,9 @@ import kotlin.math.ceil
 
 @Composable
 fun ListSection(
+    modifier: Modifier = Modifier,
     posterList: List<PosterItem> = emptyList(),
     onMovieSelected: (id: Int) -> Unit = {},
-    modifier: Modifier = Modifier,
     onScrollThresholdReached: () -> Unit = {},
     loading: Boolean = false
 ) {

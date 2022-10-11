@@ -20,13 +20,12 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.placeholder.placeholder
-import com.movietime.core.presentation.UIContentState
+import com.movietime.core.views.ListSection
 import com.movietime.core.views.model.PosterItem
-import com.movietime.main.views.ListSection
 import com.movietime.main.views.SectionTitle
-import com.movietime.movie.domain.model.MoviePreview
 import com.movietime.movie.home.R
 import com.movietime.movie.home.presentation.MoviesViewModel
+import com.movietime.movie.home.presentation.model.HighlightedItem
 import com.movietime.movie.home.ui.highlight.HighlightedItem
 import kotlin.math.absoluteValue
 
@@ -56,29 +55,35 @@ private fun MovieHome(
     onPopularMoviesThresholdReached: () -> Unit
 ){
     when(uiState){
-        is MoviesViewModel.MoviesUiState.Error -> ErrorScreen(uiState)
+        is MoviesViewModel.MoviesUiState.Error -> ErrorScreen()
         is MoviesViewModel.MoviesUiState.Content -> Content(
-            content = uiState,
+            popularMovies = uiState.popularMovies,
+            topRatedMovies = uiState.topRatedMovies,
+            upcomingMovies = uiState.upcomingMovies,
             onMovieSelected = onMovieSelected,
             onTopRatedMoviesThresholdReached = onTopRatedMoviesThresholdReached,
             onUpcomingMoviesThresholdReached = onUpcomingMoviesThresholdReached,
             onPopularMoviesThresholdReached = onPopularMoviesThresholdReached
         )
+        is MoviesViewModel.MoviesUiState.Loading -> Content(loading = true)
     }
 }
 
 @Composable
-private fun ErrorScreen(error: MoviesViewModel.MoviesUiState.Error){
+private fun ErrorScreen() {
     Text("error")
 }
 
 @Composable
 private fun Content(
-    content: MoviesViewModel.MoviesUiState.Content,
-    onMovieSelected: (id: Int) -> Unit,
-    onTopRatedMoviesThresholdReached: () -> Unit,
-    onUpcomingMoviesThresholdReached: () -> Unit,
-    onPopularMoviesThresholdReached: () -> Unit
+    popularMovies: List<HighlightedItem> = emptyList(),
+    topRatedMovies: List<PosterItem> = emptyList(),
+    upcomingMovies: List<PosterItem> = emptyList(),
+    onMovieSelected: (id: Int) -> Unit = {},
+    loading: Boolean = false,
+    onTopRatedMoviesThresholdReached: () -> Unit = {},
+    onUpcomingMoviesThresholdReached: () -> Unit = {},
+    onPopularMoviesThresholdReached: () -> Unit = {}
 ){
     LazyColumn(
         modifier = Modifier
@@ -87,74 +92,56 @@ private fun Content(
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
         item {
-            HighlightedSection(
-                content.popularMovies,
+            Highlighted(
+                popularMovies,
                 onMovieSelected,
-                onPopularMoviesThresholdReached
+                onPopularMoviesThresholdReached,
+                loading = loading
             )
         }
 
         item {
             SectionTitle(
                 stringResource(R.string.top_rated_title),
-                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                loading = loading
             )
         }
 
         item {
-            MoviesListSection(
-                content.topRatedMovies,
-                onMovieSelected,
-                onTopRatedMoviesThresholdReached
+            ListSection(
+                posterList = topRatedMovies,
+                onMovieSelected = onMovieSelected,
+                onScrollThresholdReached = onTopRatedMoviesThresholdReached,
+                modifier = Modifier.padding(top = 8.dp),
+                loading = loading
             )
         }
 
         item {
             SectionTitle(
                 stringResource(R.string.upcoming_title),
-                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                loading = loading
             )
         }
 
         item {
-            MoviesListSection(
-                content.upcomingMovies,
-                onMovieSelected,
-                onUpcomingMoviesThresholdReached
+            ListSection(
+                posterList = upcomingMovies,
+                onMovieSelected = onMovieSelected,
+                onScrollThresholdReached = onUpcomingMoviesThresholdReached,
+                modifier = Modifier.padding(top = 8.dp),
+                loading = loading
             )
         }
-    }
-}
-
-@Composable
-private fun MoviesListSection(
-    uiContentState: UIContentState<List<PosterItem>>,
-    onMovieSelected: (id: Int) -> Unit,
-    onTopRatedMoviesThresholdReached: () -> Unit
-) {
-    when (uiContentState) {
-        is UIContentState.Loading -> ListSection(loading = true, modifier = Modifier.padding(top = 8.dp))
-        is UIContentState.ContentState -> ListSection(
-            uiContentState.content,
-            onMovieSelected,
-            onScrollThresholdReached = onTopRatedMoviesThresholdReached,
-            modifier = Modifier.padding(top = 8.dp)
-        )
-    }
-}
-
-@Composable
-private fun HighlightedSection(popularMoviesContent: UIContentState<List<MoviePreview>>, onMovieSelected: (id: Int) -> Unit, onScrollThresholdReached: () -> Unit){
-    when(popularMoviesContent){
-        is UIContentState.Loading -> Highlighted(loading = true)
-        is UIContentState.ContentState -> Highlighted(popularMoviesContent.content, onMovieSelected, onScrollThresholdReached)
     }
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Highlighted(
-    popularMovies: List<MoviePreview> = listOf(),
+    popularMovies: List<HighlightedItem> = listOf(),
     onMovieSelected: (id: Int) -> Unit = {},
     onScrollThresholdReached: () -> Unit = {},
     threshold: Int = 5,

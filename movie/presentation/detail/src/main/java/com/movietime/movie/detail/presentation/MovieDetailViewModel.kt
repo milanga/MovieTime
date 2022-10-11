@@ -34,6 +34,7 @@ class MovieDetailViewModel @Inject constructor(
             viewModelScope.launch {
                 getMovieRecommendationsUseCase(movieId, page)
                     .onCompletion { this@apply.finishLoading() }
+                    .catch { it.printStackTrace() }
                     .map { recommendationPage ->
                         recommendationPage.map(MoviePreview::toPosterItem)
                     }

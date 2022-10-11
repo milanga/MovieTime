@@ -27,7 +27,7 @@ internal fun HighlightedItem(
     backdropUrl: String,
     posterUrl: String,
     title: String,
-    rating: Float,
+    rating: String,
     overview: String,
     onClick: ()->Unit = {}
 ) {
@@ -82,7 +82,7 @@ private fun HighlightBackdropImage(backdropUrl: String, modifier: Modifier){
 @Composable
 private fun HighlightContent(
     posterUrl: String,
-    rating: Float,
+    rating: String,
     title: String,
     overview: String,
     modifier: Modifier
@@ -96,7 +96,7 @@ private fun HighlightContent(
                 .fillMaxHeight()
                 .aspectRatio(0.67f, true),
             posterUrl,
-            rating.toString()
+            rating
         )
 
         HighlightDescription(title, overview)
@@ -139,6 +139,6 @@ private fun HighlightItemPreview() {
         posterUrl = "",
         title = "Dune",
         overview = "Paul Altreides, a brilliant and gifted young man born into a great destiny beyond his understanding, must travel to the most dangerous planet in the universe to ensure the result",
-        rating = 8f
+        rating = "8.0"
     )
 }

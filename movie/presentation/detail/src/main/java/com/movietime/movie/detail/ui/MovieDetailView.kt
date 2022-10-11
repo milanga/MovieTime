@@ -25,11 +25,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.placeholder.material.placeholder
-import com.movietime.main.views.ListSection
+import com.movietime.core.views.ListSection
+import com.movietime.core.views.model.PosterItem
 import com.movietime.main.views.SectionTitle
 import com.movietime.movie.detail.R
 import com.movietime.movie.detail.presentation.MovieDetailViewModel
 import com.movietime.movie.detail.presentation.model.MovieDetailUiState
+import com.movietime.movie.detail.presentation.model.UiMovieDetail
+import com.movietime.movie.detail.presentation.model.UiVideo
 import com.movietime.movie.detail.ui.collapsibleBackddropTitle.CollapsableConfig
 import com.movietime.movie.detail.ui.collapsibleBackddropTitle.CollapsibleBackdropTitle
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -81,31 +84,37 @@ private fun MovieDetailView(uiState: MovieDetailUiState, onMovieSelected: (id: I
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface),
         topBar = {
-            topBar(showAppBarTitle, title, onBackNavigation, {iconWidth = it}, {appBarHeight = it})
+            TopBar(showAppBarTitle, title, onBackNavigation, {iconWidth = it}, {appBarHeight = it})
         }
     ) { padding ->
         when (uiState) {
             is MovieDetailUiState.Error -> DetailErrorScreen(
-                uiState,
                 Modifier.consumedWindowInsets(padding)
             )
             is MovieDetailUiState.Content -> DetailContent(
-                uiState,
-                listState,
-                onMovieSelected,
-                CollapsableConfig(appBarHeight, iconWidth - appBarHorizontalPadding, MaterialTheme.typography.titleLarge.fontSize),
-                Modifier.consumedWindowInsets(padding)
+                movieDetail = uiState.movieDetail,
+                movieVideos = uiState.movieVideos,
+                movieRecommendations = uiState.movieRecommendations,
+                listState = listState,
+                onMovieSelected = onMovieSelected,
+                collapsableTitleConfig = CollapsableConfig(appBarHeight, iconWidth - appBarHorizontalPadding, MaterialTheme.typography.titleLarge.fontSize),
+                modifier = Modifier.consumedWindowInsets(padding)
             ) {
                 onRecommendationsThresholdReached()
             }
-            is MovieDetailUiState.Loading -> Loading(Modifier.consumedWindowInsets(padding))
+            is MovieDetailUiState.Loading -> DetailContent(
+                modifier=Modifier.consumedWindowInsets(padding),
+                collapsableTitleConfig = CollapsableConfig(appBarHeight, iconWidth - appBarHorizontalPadding, MaterialTheme.typography.titleLarge.fontSize),
+                listState = listState,
+                loading = true
+            )
         }
     }
 }
 
 @ExperimentalMaterial3Api
 @Composable
-private fun topBar(
+private fun TopBar(
     showTopAppBar: Boolean,
     title: String,
     onBackNavigation: () -> Unit,
@@ -163,47 +172,16 @@ private fun topBar(
 
 @ExperimentalMaterial3Api
 @Composable
-private fun Loading(
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
-        CollapsibleBackdropTitle(loading = true)
-        Spacer(modifier = Modifier.height(16.dp))
-        LoadingBlock(
-            Modifier
-                .fillMaxWidth()
-                .height(140.dp)
-                .padding(horizontal = 16.dp)
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        LoadingBlock(
-            Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .padding(horizontal = 16.dp)
-                .padding(top = 8.dp)
-        )
-        VideoView(loading = true)
-        SectionTitle(
-            stringResource(R.string.recommendations),
-            Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
-        )
-        ListSection(loading = true)
-    }
-}
-
-@ExperimentalMaterial3Api
-@Composable
 private fun DetailContent(
-    content: MovieDetailUiState.Content,
-    listState: LazyListState,
-    onMovieSelected: (id: Int) -> Unit,
-    collapsableTitleConfig: CollapsableConfig,
     modifier: Modifier = Modifier,
-    onRecommendationsThresholdReached: () -> Unit
+    movieDetail: UiMovieDetail = UiMovieDetail("","","",""),
+    movieVideos: List<UiVideo> = emptyList(),
+    movieRecommendations: List<PosterItem> = emptyList(),
+    listState: LazyListState,
+    onMovieSelected: (id: Int) -> Unit = {},
+    collapsableTitleConfig: CollapsableConfig,
+    loading: Boolean = false,
+    onRecommendationsThresholdReached: () -> Unit = {}
 ){
     LazyColumn(
         state = listState,
@@ -214,10 +192,11 @@ private fun DetailContent(
 
         item{
             CollapsibleBackdropTitle(
-                backdropUrl = content.movieDetail.backdropPath,
-                title = content.movieDetail.title,
+                backdropUrl = movieDetail.backdropPath,
+                title = movieDetail.title,
                 collapsableConfig = collapsableTitleConfig,
-                listState = listState
+                listState = listState,
+                loading = loading
             )
         }
 
@@ -226,7 +205,7 @@ private fun DetailContent(
         }
 
         item {
-            Overview(content.movieDetail.overview)
+            Overview(movieDetail.overview, loading)
         }
 
         item{
@@ -234,38 +213,42 @@ private fun DetailContent(
         }
 
         item {
-            val tagline = content.movieDetail.tagline
-            if (!tagline.isNullOrEmpty()){
-                Tagline(tagline)
+            val tagline = movieDetail.tagline
+            if (loading || tagline.isNotEmpty()) {
+                Tagline(tagline, loading)
             }
         }
 
-        item {
-            if (content.movieVideos.isNotEmpty()) {
-                VideoView(content.movieVideos.first().key)
+        if(loading || movieVideos.isNotEmpty()) {
+            item {
+                VideoView(movieVideos.firstOrNull()?.key.orEmpty(), loading = loading)
             }
         }
 
-        item {
-            SectionTitle(
-                stringResource(R.string.recommendations),
-                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
-            )
-        }
+        if(loading || movieRecommendations.isNotEmpty()){
+            item {
+                SectionTitle(
+                    stringResource(R.string.recommendations),
+                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                    loading
+                )
+            }
 
-        item {
-            ListSection(
-                content.movieRecommendations,
-                onMovieSelected,
-                Modifier
-                    .padding(
-                        WindowInsets.navigationBars
-                            .only(WindowInsetsSides.Bottom)
-                            .asPaddingValues()
-                    )
-                    .padding(top = 8.dp, bottom = 16.dp),
-                onRecommendationsThresholdReached,
-            )
+            item {
+                ListSection(
+                    posterList = movieRecommendations,
+                    onMovieSelected = onMovieSelected,
+                    modifier = Modifier
+                        .padding(
+                            WindowInsets.navigationBars
+                                .only(WindowInsetsSides.Bottom)
+                                .asPaddingValues()
+                        )
+                        .padding(top = 8.dp, bottom = 16.dp),
+                    onScrollThresholdReached = onRecommendationsThresholdReached,
+                    loading = loading
+                )
+            }
         }
     }
 }
@@ -273,7 +256,6 @@ private fun DetailContent(
 
 @Composable
 private fun DetailErrorScreen(
-    error: MovieDetailUiState.Error,
     modifier: Modifier
 ){
     Box(modifier = modifier.fillMaxSize()){
@@ -301,7 +283,6 @@ private fun VideoView(
         }, modifier = Modifier
             .padding(start = 16.dp, end = 16.dp, top = 8.dp)
             .fillMaxWidth()
-            .wrapContentHeight()
             .placeholder(
                 loading,
                 MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)
@@ -316,36 +297,38 @@ private fun Tagline(
 ) {
     Text(
         text = tagline,
-        style = MaterialTheme.typography.headlineSmall,
+        style = MaterialTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.onSurface,
         modifier = Modifier
             .padding(top = 8.dp, start = 16.dp, end = 16.dp)
+            .fillMaxWidth()
             .placeholder(
                 loading,
-                MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)
             )
     )
 }
 
 @Composable
 private fun Overview(
-    overview: String
+    overview: String,
+    loading: Boolean = false
 ) {
+    val loadingModifier = if(loading){
+        Modifier.height(140.dp)
+    } else {
+        Modifier
+    }
     Text(
         text = overview,
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier
+        modifier = loadingModifier
+            .fillMaxWidth()
             .padding(horizontal = 16.dp)
+            .placeholder(
+                loading,
+                MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)
+            )
     )
-}
-
-@Composable
-private fun LoadingBlock(
-    modifier: Modifier = Modifier
-){
-    Surface(
-        modifier = modifier,
-        color = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)
-    ){}
 }
