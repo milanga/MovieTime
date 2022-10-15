@@ -6,7 +6,13 @@ import com.movietime.movie.domain.model.Video
 import kotlinx.coroutines.flow.Flow
 
 interface MovieDetailRepository {
-    fun getMovieDetail(movieId: Int): Flow<MovieDetail>
-    fun getMovieVideos(movieId: Int): Flow<List<Video>>
-    fun getMovieRecommendations(movieId: Int, page: Int): Flow<List<MoviePreview>>
+    val movieDetail: Flow<MovieDetail>
+    val movieVideos: Flow<List<Video>>
+    val recommendedMovies: Flow<List<MoviePreview>>
+
+    suspend fun fetchMovieDetail(movieId: Int)
+    suspend fun fetchMovieVideos(movieId: Int)
+
+    suspend fun refreshRecommendations(movieId: Int)
+    suspend fun fetchMoreRecommendations(movieId: Int)
 }

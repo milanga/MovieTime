@@ -24,52 +24,60 @@ import javax.inject.Inject
 class MovieDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getMovieRecommendationsUseCase: GetMovieRecommendationsUseCase,
-    getMovieDetailUseCase: GetMovieDetailUseCase,
-    getMovieVideosUseCase: GetMovieVideosUseCase
+    private val getMovieDetailUseCase: GetMovieDetailUseCase,
+    private val getMovieVideosUseCase: GetMovieVideosUseCase
 ) : ViewModel() {
     private val movieId: Int = savedStateHandle["paramMovieId"]!!
 
-    private val recommendationsListState = ListState{ page ->
+    private val recommendationsListState = ListState({
+        fetchRecommendations { getMovieRecommendationsUseCase.refresh(movieId) }
+    },{
+        fetchRecommendations { getMovieRecommendationsUseCase.fetchMore(movieId) }
+    })
+
+    private fun fetchRecommendations(fetchFunction: suspend ()->Unit){
         viewModelScope.launch {
-            getMovieRecommendationsUseCase(movieId, page)
-                .onCompletion { finishLoading() }
-                .catch { it.printStackTrace() }
-                .map { recommendationPage ->
-                    recommendationPage.map(MoviePreview::toPosterItem)
-                }
-                .collectLatest { recommendationItems ->
-                    recommendations.getAndUpdate{ currentList ->
-                        currentList + recommendationItems
-                    }
-                }
+            try {
+                fetchFunction()
+            } catch (e: Exception) {
+                //todo handle error
+            } finally {
+                recommendationsListState.finishLoading()
+            }
         }
     }
 
-    private val recommendations: MutableStateFlow<List<PosterItem>> by lazy {
-        recommendationsListState.refresh()
-        MutableStateFlow(emptyList())
+    // UI state exposed to the UI
+    val uiState: StateFlow<MovieDetailUiState> by lazy {
+        initializeData()
+        combine(
+            getMovieDetailUseCase.movieDetail.map(MovieDetail::toUiMovieDetail),
+            getMovieVideosUseCase.movieVideos.map { it.map(Video::toUiVideo) },
+            getMovieRecommendationsUseCase.recommendedMovies.map{ it.map(MoviePreview::toPosterItem) }
+        ) { movieDetail, videos, recommendations ->
+            val movieDetailUiState: MovieDetailUiState = MovieDetailUiState.Content(
+                movieDetail,
+                videos,
+                recommendations
+            )
+            movieDetailUiState
+        }.catch { throwable ->
+            throwable.printStackTrace()
+            emit(MovieDetailUiState.Error)
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            MovieDetailUiState.Loading
+        )
     }
 
-    // UI state exposed to the UI
-    val uiState: StateFlow<MovieDetailUiState> = combine(
-        getMovieDetailUseCase(movieId).map(MovieDetail::toUiMovieDetail),
-        getMovieVideosUseCase(movieId).map { it.map(Video::toUiVideo) },
-        recommendations
-    ) { movieDetail, videos, recommendations ->
-        val movieDetailUiState: MovieDetailUiState = MovieDetailUiState.Content(
-            movieDetail,
-            videos,
-            recommendations
-        )
-        movieDetailUiState
-    }.catch { throwable ->
-        throwable.printStackTrace()
-        emit(MovieDetailUiState.Error)
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        MovieDetailUiState.Loading
-    )
+    private fun initializeData() {
+        recommendationsListState.refresh()
+        viewModelScope.launch {
+            getMovieDetailUseCase.fetchMovieDetail(movieId)
+            getMovieVideosUseCase.fetchMovieVideos(movieId)
+        }
+    }
 
     fun onRecommendationsThreshold() {
         recommendationsListState.thresholdReached()

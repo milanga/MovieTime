@@ -7,5 +7,7 @@ import javax.inject.Inject
 class GetMovieDetailUseCase @Inject constructor(
     private val movieDetailRepository: MovieDetailRepository
 ) {
-    operator fun invoke(movieId: Int): Flow<MovieDetail> = movieDetailRepository.getMovieDetail(movieId)
+    val movieDetail = movieDetailRepository.movieDetail
+
+    suspend fun fetchMovieDetail(movieId: Int) = movieDetailRepository.fetchMovieDetail(movieId)
 }

@@ -1,23 +1,20 @@
 package com.movietime.core.presentation
 
 class ListState(
-    private val startPageIndex: Int = 1,
-    private val onLoadPage: ListState.(pageIndex: Int)->Unit = {}
+    private val onRefresh: ListState.()->Unit,
+    private val onLoadMore: ListState.()->Unit
 ) {
-    private var currentPage = startPageIndex
     private var loading = false
 
     fun refresh(){
-        currentPage = startPageIndex
         loading = true
-        onLoadPage(currentPage)
+        onRefresh()
     }
 
     fun thresholdReached() {
         if (!loading){
             loading = true
-            currentPage++
-            onLoadPage(currentPage)
+            onLoadMore()
         }
     }
 
