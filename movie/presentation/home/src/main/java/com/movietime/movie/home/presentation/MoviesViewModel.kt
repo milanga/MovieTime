@@ -106,7 +106,7 @@ class MoviesViewModel @Inject constructor(
         topRatedMovies,
         upcomingMovies
     ) { popularMovies, topRatedMovies, upcomingMovies ->
-        if(popularMovies.isEmpty() && topRatedMovies.isEmpty() && upcomingMovies.isEmpty()){
+        if(popularMovies.isEmpty() || topRatedMovies.isEmpty() || upcomingMovies.isEmpty()){
             MoviesUiState.Loading
         } else {
             val movieDetailUiState: MoviesUiState = MoviesUiState.Content(

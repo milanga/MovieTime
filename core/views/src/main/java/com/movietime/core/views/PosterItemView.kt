@@ -41,14 +41,16 @@ fun PosterItemView(
                 .clip(posterShape)
         )
 
-        Rate(
-            rating,
-            Modifier
-                .padding(4.dp)
-                .width(36.dp)
-                .height(36.dp)
-                .align(Alignment.BottomEnd)
-        )
+        if(rating.isNotEmpty()) {
+            Rate(
+                rating,
+                Modifier
+                    .padding(4.dp)
+                    .width(36.dp)
+                    .height(36.dp)
+                    .align(Alignment.BottomEnd)
+            )
+        }
     }
 }
 
@@ -69,10 +71,6 @@ private fun getCompleteModifier(
     return modifier
         .placeholder(
             loading,
-            MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
-            shape = posterShape
-        )
-        .background(
             MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
             shape = posterShape
         )

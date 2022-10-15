@@ -3,12 +3,16 @@ package com.movietime.movie.home.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -85,57 +89,67 @@ private fun Content(
     onUpcomingMoviesThresholdReached: () -> Unit = {},
     onPopularMoviesThresholdReached: () -> Unit = {}
 ){
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface),
-        contentPadding = PaddingValues(bottom = 16.dp)
-    ) {
-        item {
-            Highlighted(
-                popularMovies,
-                onMovieSelected,
-                onPopularMoviesThresholdReached,
-                loading = loading
-            )
-        }
+    Box(Modifier.background(MaterialTheme.colorScheme.surface)) {
+        Spacer(
+            Modifier
+            .fillMaxWidth()
+            .aspectRatio(1.6f)
+            .background(Brush.verticalGradient(listOf(MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp), MaterialTheme.colorScheme.surface ), startY = 200f))
+        )
 
-        item {
-            SectionTitle(
-                stringResource(R.string.top_rated_title),
-                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                loading = loading
-            )
-        }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Transparent),
+            contentPadding = PaddingValues(bottom = 16.dp, top = 40.dp)
+        ) {
+            item {
+                Highlighted(
+                    popularMovies,
+                    onMovieSelected,
+                    onPopularMoviesThresholdReached,
+                    loading = loading
+                )
+            }
 
-        item {
-            ListSection(
-                posterList = topRatedMovies,
-                onMovieSelected = onMovieSelected,
-                onScrollThresholdReached = onTopRatedMoviesThresholdReached,
-                modifier = Modifier.padding(top = 8.dp),
-                loading = loading
-            )
-        }
+            item {
+                SectionTitle(
+                    stringResource(R.string.top_rated_title),
+                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                    loading = loading
+                )
+            }
 
-        item {
-            SectionTitle(
-                stringResource(R.string.upcoming_title),
-                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                loading = loading
-            )
-        }
+            item {
+                ListSection(
+                    posterList = topRatedMovies,
+                    onMovieSelected = onMovieSelected,
+                    onScrollThresholdReached = onTopRatedMoviesThresholdReached,
+                    modifier = Modifier.padding(top = 8.dp),
+                    loading = loading
+                )
+            }
 
-        item {
-            ListSection(
-                posterList = upcomingMovies,
-                onMovieSelected = onMovieSelected,
-                onScrollThresholdReached = onUpcomingMoviesThresholdReached,
-                modifier = Modifier.padding(top = 8.dp),
-                loading = loading
-            )
+            item {
+                SectionTitle(
+                    stringResource(R.string.upcoming_title),
+                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                    loading = loading
+                )
+            }
+
+            item {
+                ListSection(
+                    posterList = upcomingMovies,
+                    onMovieSelected = onMovieSelected,
+                    onScrollThresholdReached = onUpcomingMoviesThresholdReached,
+                    modifier = Modifier.padding(top = 8.dp),
+                    loading = loading
+                )
+            }
         }
     }
+
 }
 
 @OptIn(ExperimentalPagerApi::class)
@@ -147,48 +161,54 @@ private fun Highlighted(
     threshold: Int = 5,
     loading: Boolean = false
 ) {
-    HorizontalPager(
-        count = popularMovies.size,
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1.6f)
-            .placeholder(
-                loading,
-                MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)
-            )
-    ) { page ->
-        if (popularMovies.size - page < threshold){
-            onScrollThresholdReached.invoke()
-        }
-        HighlightedItem(
-            backdropUrl = popularMovies[page].backdropPath,
-            posterUrl = popularMovies[page].posterPath,
-            modifier = Modifier
-                .graphicsLayer {
-                    val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
-
-                    lerp(
-                        start = 0.95f,
-                        stop = 1f,
-                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    ).also { scale ->
-                        scaleX = scale
-                        scaleY = scale
-                    }
-
-                    alpha = lerp(
-                        start = 0.5f,
-                        stop = 1f,
-                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    )
-                }
+    val modifier = if(loading){
+        Modifier
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth()
-                .fillMaxHeight(),
-            title = popularMovies[page].title,
-            overview = popularMovies[page].overview,
-            rating = popularMovies[page].rating,
-            onClick = { onMovieSelected(popularMovies[page].id) }
-        )
+                .aspectRatio(1.78f)
+                .placeholder(true, MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp), RoundedCornerShape(18.dp))
+
+    } else {
+        Modifier
+            .fillMaxWidth()
     }
+        HorizontalPager(
+            count = popularMovies.size,
+            modifier = modifier,
+            contentPadding = PaddingValues(horizontal = 16.dp)
+        ) { page ->
+            if (popularMovies.size - page < threshold) {
+                onScrollThresholdReached.invoke()
+            }
+            HighlightedItem(
+                modifier = Modifier
+                    .graphicsLayer {
+                        val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
+
+                        lerp(
+                            start = 0.95f,
+                            stop = 1f,
+                            fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                        ).also { scale ->
+                            scaleX = scale
+                            scaleY = scale
+                        }
+
+                        alpha = lerp(
+                            start = 0.5f,
+                            stop = 1f,
+                            fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                        )
+                    }
+                    .fillMaxWidth()
+                    .aspectRatio(1.78f)
+                    .clip(RoundedCornerShape(18.dp)),
+                backdropUrl = popularMovies[page].backdropPath,
+                posterUrl = popularMovies[page].posterPath,
+                rating = popularMovies[page].rating,
+                overview = popularMovies[page].overview
+            ) { onMovieSelected(popularMovies[page].id) }
+        }
+
 }
 
