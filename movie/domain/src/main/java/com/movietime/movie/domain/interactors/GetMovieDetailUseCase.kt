@@ -1,13 +1,18 @@
 package com.movietime.movie.domain.interactors
 
-import com.movietime.movie.domain.model.MovieDetail
-import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-class GetMovieDetailUseCase @Inject constructor(
-    private val movieDetailRepository: MovieDetailRepository
+class GetMovieDetailUseCase @AssistedInject constructor(
+    @Assisted private val movieDetailRepository: MovieDetailRepository
 ) {
     val movieDetail = movieDetailRepository.movieDetail
 
-    suspend fun fetchMovieDetail(movieId: Int) = movieDetailRepository.fetchMovieDetail(movieId)
+    suspend fun fetchMovieDetail() = movieDetailRepository.fetchMovieDetail()
+}
+
+@AssistedFactory
+interface GetMovieDetailUseCaseFactory {
+    fun create(movieDetailRepository: MovieDetailRepository): GetMovieDetailUseCase
 }

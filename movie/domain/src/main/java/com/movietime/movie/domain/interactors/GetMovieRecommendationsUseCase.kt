@@ -1,12 +1,19 @@
 package com.movietime.movie.domain.interactors
 
-import javax.inject.Inject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-class GetMovieRecommendationsUseCase @Inject constructor(
-    private val movieDetailRepository: MovieDetailRepository
+class GetMovieRecommendationsUseCase @AssistedInject constructor(
+    @Assisted private val movieDetailRepository: MovieDetailRepository
 ) {
     val recommendedMovies = movieDetailRepository.recommendedMovies
 
-    suspend fun refresh(movieId: Int) = movieDetailRepository.refreshRecommendations(movieId)
-    suspend fun fetchMore(movieId: Int) = movieDetailRepository.fetchMoreRecommendations(movieId)
+    suspend fun refresh() = movieDetailRepository.refreshRecommendations()
+    suspend fun fetchMore() = movieDetailRepository.fetchMoreRecommendations()
+}
+
+@AssistedFactory
+interface GetMovieRecommendationsUseCaseFactory {
+    fun create(movieDetailRepository: MovieDetailRepository): GetMovieRecommendationsUseCase
 }

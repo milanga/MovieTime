@@ -1,17 +1,21 @@
 package com.movietime.movie.domain.repository
 
 import com.movietime.movie.domain.interactors.MovieDetailRepository
+import com.movietime.movie.domain.interactors.MovieDetailRepositoryFactory
 import com.movietime.movie.domain.model.MovieDetail
 import com.movietime.movie.domain.model.MoviePreview
 import com.movietime.movie.domain.model.Video
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import javax.inject.Inject
 
-class RemoteMovieDetailRepository @Inject constructor(
+class RemoteMovieDetailRepository @AssistedInject constructor(
     private val remoteDetailDataSource: MovieDetailDataSource,
+    @Assisted private val movieId: Int
 ): MovieDetailRepository {
     private var recommendationsPage = 1
     private val _recommendedMovies = MutableStateFlow<List<MoviePreview>>(emptyList())
@@ -23,20 +27,24 @@ class RemoteMovieDetailRepository @Inject constructor(
     private val _movieVideos = MutableSharedFlow<List<Video>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     override val movieVideos: Flow<List<Video>> = _movieVideos
 
-    override suspend fun fetchMovieDetail(movieId: Int) {
+    override suspend fun fetchMovieDetail() {
         _movieDetail.emit(remoteDetailDataSource.getMovieDetail(movieId))
     }
-    override suspend fun fetchMovieVideos(movieId: Int) {
+    override suspend fun fetchMovieVideos() {
         _movieVideos.emit(remoteDetailDataSource.getMovieVideos(movieId))
     }
 
-    override suspend fun refreshRecommendations(movieId: Int) {
+    override suspend fun refreshRecommendations() {
         recommendationsPage = 1
         _recommendedMovies.emit(remoteDetailDataSource.getMovieRecommendations(movieId, recommendationsPage))
     }
-    override suspend fun fetchMoreRecommendations(movieId: Int) {
+    override suspend fun fetchMoreRecommendations() {
         recommendationsPage++
         _recommendedMovies.emit(_recommendedMovies.value.plus(remoteDetailDataSource.getMovieRecommendations(movieId, recommendationsPage)))
     }
-    //todo mover id al constructor
+}
+
+@AssistedFactory
+interface RemoteMovieDetailRepositoryFactory: MovieDetailRepositoryFactory {
+    override fun create(movieId: Int): RemoteMovieDetailRepository
 }

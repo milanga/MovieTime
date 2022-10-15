@@ -10,9 +10,13 @@ interface MovieDetailRepository {
     val movieVideos: Flow<List<Video>>
     val recommendedMovies: Flow<List<MoviePreview>>
 
-    suspend fun fetchMovieDetail(movieId: Int)
-    suspend fun fetchMovieVideos(movieId: Int)
+    suspend fun fetchMovieDetail()
+    suspend fun fetchMovieVideos()
 
-    suspend fun refreshRecommendations(movieId: Int)
-    suspend fun fetchMoreRecommendations(movieId: Int)
+    suspend fun refreshRecommendations()
+    suspend fun fetchMoreRecommendations()
+}
+
+interface MovieDetailRepositoryFactory{
+    fun create(movieId: Int): MovieDetailRepository
 }
