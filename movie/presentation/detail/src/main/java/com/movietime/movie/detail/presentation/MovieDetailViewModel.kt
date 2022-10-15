@@ -29,21 +29,19 @@ class MovieDetailViewModel @Inject constructor(
 ) : ViewModel() {
     private val movieId: Int = savedStateHandle["paramMovieId"]!!
 
-    private val recommendationsListState = ListState().apply {
-        onLoadPage = { page ->
-            viewModelScope.launch {
-                getMovieRecommendationsUseCase(movieId, page)
-                    .onCompletion { this@apply.finishLoading() }
-                    .catch { it.printStackTrace() }
-                    .map { recommendationPage ->
-                        recommendationPage.map(MoviePreview::toPosterItem)
+    private val recommendationsListState = ListState{ page ->
+        viewModelScope.launch {
+            getMovieRecommendationsUseCase(movieId, page)
+                .onCompletion { finishLoading() }
+                .catch { it.printStackTrace() }
+                .map { recommendationPage ->
+                    recommendationPage.map(MoviePreview::toPosterItem)
+                }
+                .collectLatest { recommendationItems ->
+                    recommendations.getAndUpdate{ currentList ->
+                        currentList + recommendationItems
                     }
-                    .collectLatest { recommendationItems ->
-                        recommendations.getAndUpdate{ currentList ->
-                            currentList + recommendationItems
-                        }
-                    }
-            }
+                }
         }
     }
 

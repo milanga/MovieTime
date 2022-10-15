@@ -1,11 +1,11 @@
 package com.movietime.core.presentation
 
 class ListState(
-    private val startPageIndex: Int = 1
+    private val startPageIndex: Int = 1,
+    private val onLoadPage: ListState.(pageIndex: Int)->Unit = {}
 ) {
     private var currentPage = startPageIndex
     private var loading = false
-    var onLoadPage: (pageIndex: Int)->Unit = {}
 
     fun refresh(){
         currentPage = startPageIndex

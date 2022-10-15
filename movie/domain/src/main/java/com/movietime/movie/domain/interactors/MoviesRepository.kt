@@ -4,7 +4,11 @@ import com.movietime.movie.domain.model.MoviePreview
 import kotlinx.coroutines.flow.Flow
 
 interface MoviesRepository {
-    fun getPopularMovies(page: Int): Flow<List<MoviePreview>>
-    fun getTopRatedMovies(page: Int): Flow<List<MoviePreview>>
-    fun getUpcomingMovies(page: Int): Flow<List<MoviePreview>>
+
+    val popularMovies: Flow<List<MoviePreview>>
+    val topRatedMovies: Flow<List<MoviePreview>>
+    val upcomingMovies: Flow<List<MoviePreview>>
+    suspend fun fetchPopularMovies(page: Int)
+    suspend fun fetchTopRatedMovies(page: Int)
+    suspend fun fetchUpcomingMovies(page: Int)
 }

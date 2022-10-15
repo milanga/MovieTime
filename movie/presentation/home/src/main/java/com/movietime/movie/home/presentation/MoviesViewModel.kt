@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
 import com.movietime.core.views.model.PosterItem
 import com.movietime.movie.detail.presentation.model.toPosterItem
-import com.movietime.movie.domain.interactors.GetPopularMoviesUseCase
-import com.movietime.movie.domain.interactors.GetTopRatedMoviesUseCase
-import com.movietime.movie.domain.interactors.GetUpcomingMoviesUseCase
+import com.movietime.movie.domain.interactors.PopularMoviesUseCase
+import com.movietime.movie.domain.interactors.TopRatedMoviesUseCase
+import com.movietime.movie.domain.interactors.UpcomingMoviesUseCase
 import com.movietime.movie.domain.model.MoviePreview
 import com.movietime.movie.home.presentation.model.HighlightedItem
 import com.movietime.movie.home.presentation.model.toHighlightedItem
@@ -18,9 +18,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MoviesViewModel @Inject constructor(
-    private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
-    private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase,
-    private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase
+    private val popularMoviesUseCase: PopularMoviesUseCase,
+    private val topRatedMoviesUseCase: TopRatedMoviesUseCase,
+    private val upcomingMoviesUseCase: UpcomingMoviesUseCase
 ): ViewModel() {
     sealed interface MoviesUiState{
         object Loading: MoviesUiState
@@ -32,98 +32,58 @@ class MoviesViewModel @Inject constructor(
         ): MoviesUiState
     }
 
-    private val popularListState = ListState().apply {
-        onLoadPage = { page ->
-            viewModelScope.launch {
-                getPopularMoviesUseCase(page)
-                    .onCompletion { this@apply.finishLoading() }
-                    .catch { it.printStackTrace() }
-                    .map { popularMovies ->
-                        popularMovies.map(MoviePreview::toHighlightedItem)
-                    }
-                    .collectLatest { popularItems ->
-                        popularMovies.getAndUpdate{ currentList ->
-                            currentList + popularItems
-                        }
-                    }
+    private val popularListState = ListState { page ->
+        loadPage(this){popularMoviesUseCase.loadPage(page)}
+    }
+
+    private val topRatedListState = ListState { page ->
+        loadPage(this){topRatedMoviesUseCase.loadPage(page)}
+    }
+
+    private val upcomingListState = ListState { page ->
+        loadPage(this){upcomingMoviesUseCase.loadPage(page)}
+    }
+
+    private fun loadPage(state: ListState, pageLoader: suspend ()->Unit){
+        viewModelScope.launch {
+            try {
+                pageLoader()
+            }catch(e: Exception){
+                //todo handle error
+            } finally{
+                state.finishLoading()
             }
         }
     }
 
-    private val popularMovies: MutableStateFlow<List<HighlightedItem>> by lazy {
+    val uiState: StateFlow<MoviesUiState> by lazy {
         popularListState.refresh()
-        MutableStateFlow(emptyList())
-    }
-
-    private val topRatedListState = ListState().apply {
-        onLoadPage = { page ->
-            viewModelScope.launch {
-                getTopRatedMoviesUseCase(page)
-                    .onCompletion { this@apply.finishLoading() }
-                    .catch { it.printStackTrace() }
-                    .map { topRatedPage ->
-                        topRatedPage.map(MoviePreview::toPosterItem)
-                    }
-                    .collectLatest { topRateItems ->
-                        topRatedMovies.getAndUpdate{ currentList ->
-                            currentList + topRateItems
-                        }
-                    }
-            }
-        }
-    }
-
-    private val topRatedMovies: MutableStateFlow<List<PosterItem>> by lazy {
         topRatedListState.refresh()
-        MutableStateFlow(emptyList())
-    }
-
-    private val upcomingListState = ListState().apply {
-        onLoadPage = { page ->
-            viewModelScope.launch {
-                getUpcomingMoviesUseCase(page)
-                    .onCompletion { this@apply.finishLoading() }
-                    .catch { it.printStackTrace() }
-                    .map { upcomingPage ->
-                        upcomingPage.map(MoviePreview::toPosterItem)
-                    }
-                    .collectLatest { upcomingItems ->
-                        upcomingMovies.getAndUpdate{ currentList ->
-                            currentList + upcomingItems
-                        }
-                    }
-            }
-        }
-    }
-
-    private val upcomingMovies: MutableStateFlow<List<PosterItem>> by lazy {
         upcomingListState.refresh()
-        MutableStateFlow(emptyList())
-    }
-
-    val uiState: StateFlow<MoviesUiState> = combine(
-        popularMovies,
-        topRatedMovies,
-        upcomingMovies
-    ) { popularMovies, topRatedMovies, upcomingMovies ->
-        if(popularMovies.isEmpty() || topRatedMovies.isEmpty() || upcomingMovies.isEmpty()){
+        combine(
+            popularMoviesUseCase.popularMovies.map { it.map(MoviePreview::toHighlightedItem) },
+            topRatedMoviesUseCase.topRatedMovies.map { it.map(MoviePreview::toPosterItem) },
+            upcomingMoviesUseCase.upcomingMovies.map { it.map(MoviePreview::toPosterItem) }
+        ) { popularMovies, topRatedMovies, upcomingMovies ->
+            if(popularMovies.isEmpty() || topRatedMovies.isEmpty() || upcomingMovies.isEmpty()){
+                MoviesUiState.Loading
+            } else {
+                val movieDetailUiState: MoviesUiState = MoviesUiState.Content(
+                    popularMovies,
+                    topRatedMovies,
+                    upcomingMovies
+                )
+                movieDetailUiState
+            }
+        }.catch { throwable ->
+            throwable.printStackTrace()
+            emit(MoviesUiState.Error)
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
             MoviesUiState.Loading
-        } else {
-            val movieDetailUiState: MoviesUiState = MoviesUiState.Content(
-                popularMovies,
-                topRatedMovies,
-                upcomingMovies
-            )
-            movieDetailUiState
-        }
-    }.catch { throwable ->
-        throwable.printStackTrace()
-        emit(MoviesUiState.Error)
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        MoviesUiState.Loading
-    )
+        )
+    }
 
     fun onTopRatedMoviesThreshold(){
         topRatedListState.thresholdReached()
