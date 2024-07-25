@@ -6,6 +6,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.*
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
+import com.movietime.tvshow.detail.ui.TvShowDetailRoute
 import com.movietime.tvshow.home.ui.TvShowHome
 
 sealed class TvShowDestinations(val route: String) {
@@ -65,6 +66,20 @@ fun NavGraphBuilder.tvShowsGraph(
             TvShowHome{ tvShowId ->
                 navigateToRoute("${TvShowDestinations.DETAIL.route}/$tvShowId")
             }
+        }
+
+        composable(
+            route = "${TvShowDestinations.DETAIL.route}/{${TvShowDestinations.DETAIL.PARAM_TV_SHOW_ID}}",
+            arguments = listOf(
+                navArgument(TvShowDestinations.DETAIL.PARAM_TV_SHOW_ID) { type = NavType.IntType }
+            )
+        ) {
+            TvShowDetailRoute(
+                onTvShowSelected = { tvShowId ->
+                    navigateToRoute("${TvShowDestinations.DETAIL.route}/$tvShowId")
+                },
+                onBackNavigation = backNavigation
+            )
         }
     }
 }

@@ -1,7 +1,9 @@
 package com.movietime.data.tmdb.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
+@JsonIgnoreProperties("media_type")
 data class TmdbTvShowPreview(
     @JsonProperty("adult") val adult: Boolean,
     @JsonProperty("backdrop_path") val backdropPath: String?,

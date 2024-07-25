@@ -9,6 +9,8 @@ import com.movietime.domain.interactors.tvshow.GetOnTheAirTvShowsUseCase
 import com.movietime.domain.interactors.tvshow.GetPopularTvShowsUseCase
 import com.movietime.domain.interactors.tvshow.GetTopRatedTvShowsUseCase
 import com.movietime.domain.model.TvShowPreview
+import com.movietime.tvshow.detail.presentation.model.toHighlightedItem
+import com.movietime.tvshow.detail.presentation.model.toPosterItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

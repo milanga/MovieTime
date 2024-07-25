@@ -1,8 +1,7 @@
-package com.movietime.tvshow.home.presentation
+package com.movietime.tvshow.detail.presentation.model
 
 import com.movietime.core.views.highlight.model.HighlightedItem
 import com.movietime.core.views.poster.model.PosterItem
-import com.movietime.domain.model.MoviePreview
 import com.movietime.domain.model.TvShowPreview
 
 fun TvShowPreview.toPosterItem() =  PosterItem(
