@@ -1,0 +1,28 @@
+plugins {
+    id 'kotlin-kapt'
+}
+apply from: "../../android-library-config.gradle"
+apply plugin: 'kotlin-android'
+
+android {
+    namespace 'com.movietime.data.tmdb'
+}
+
+dependencies {
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidxLifecycleVersion"
+
+    //Networking
+    //  Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-jackson:$retrofitVersion"
+
+    //DI
+    implementation "com.google.dagger:hilt-android:$daggerHiltVersion"
+    kapt "com.google.dagger:hilt-compiler:$daggerHiltVersion"
+
+    implementation "androidx.core:core-ktx:$androidxCoreVersion"
+
+    implementation project(':movie:domain')
+    
+}

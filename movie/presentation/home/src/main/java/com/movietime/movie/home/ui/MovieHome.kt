@@ -25,12 +25,12 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.placeholder.placeholder
 import com.movietime.core.views.ListSection
+import com.movietime.core.views.highlight.HighlightedItemView
 import com.movietime.core.views.model.PosterItem
 import com.movietime.main.views.SectionTitle
 import com.movietime.movie.home.R
 import com.movietime.movie.home.presentation.MoviesViewModel
 import com.movietime.movie.home.presentation.model.HighlightedItem
-import com.movietime.movie.home.ui.highlight.HighlightedItem
 import kotlin.math.absoluteValue
 
 
@@ -180,7 +180,7 @@ private fun Highlighted(
             if (popularMovies.size - page < threshold) {
                 onScrollThresholdReached.invoke()
             }
-            HighlightedItem(
+            HighlightedItemView(
                 modifier = Modifier
                     .graphicsLayer {
                         val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
