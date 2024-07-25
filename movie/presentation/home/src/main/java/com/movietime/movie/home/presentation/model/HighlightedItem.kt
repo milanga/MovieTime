@@ -13,8 +13,8 @@ data class HighlightedItem(
 
 fun MoviePreview.toHighlightedItem() = HighlightedItem(
     id,
-    backdropPath,
-    posterPath,
+    backdropUrl,
+    posterUrl,
     title,
     overview,
     "%.1f".format(rating)

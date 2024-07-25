@@ -11,7 +11,7 @@ data class UiMovieDetail(
 
 fun MovieDetail.toUiMovieDetail(): UiMovieDetail =
     UiMovieDetail(
-        backdropPath,
+        backdropUrl,
         overview,
         tagline.orEmpty(),
         title

@@ -2,7 +2,7 @@ package com.movietime.data.tmdb.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class TmdbLastEpisodeToAir(
+data class TmdbEpisode(
     @JsonProperty("id") val id: Int,
     @JsonProperty("name") val name: String,
     @JsonProperty("overview") val overview: String,

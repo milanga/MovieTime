@@ -2,7 +2,7 @@ package com.movietime.domain.model
 
 data class MovieDetail(
     val adult: Boolean,
-    val backdropPath: String,
+    val backdropUrl: String,
     val budget: Int,
     val genres: List<Genre>,
     val homepage: String?,
@@ -12,7 +12,7 @@ data class MovieDetail(
     val originalTitle: String,
     val overview: String,
     val popularity: Double,
-    val posterPath: String,
+    val posterUrl: String,
     val productionCompanies: List<Company>,
     val productionCountries: List<Country>,
     val releaseDate: String,
