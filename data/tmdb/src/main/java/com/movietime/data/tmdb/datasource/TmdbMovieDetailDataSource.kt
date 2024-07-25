@@ -4,10 +4,10 @@ import com.movietime.data.tmdb.service.MovieDetailService
 import com.movietime.data.tmdb.mappers.MovieDetailMapper
 import com.movietime.data.tmdb.mappers.MoviePreviewMapper
 import com.movietime.data.tmdb.mappers.VideoMapper
-import com.movietime.movie.domain.model.MovieDetail
-import com.movietime.movie.domain.model.MoviePreview
-import com.movietime.movie.domain.model.Video
-import com.movietime.movie.domain.repository.MovieDetailDataSource
+import com.movietime.domain.model.MovieDetail
+import com.movietime.domain.model.MoviePreview
+import com.movietime.domain.model.Video
+import com.movietime.domain.repository.MovieDetailDataSource
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Named

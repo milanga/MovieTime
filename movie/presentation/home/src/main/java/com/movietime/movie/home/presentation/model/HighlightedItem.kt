@@ -1,6 +1,6 @@
 package com.movietime.movie.home.presentation.model
 
-import com.movietime.movie.domain.model.MoviePreview
+import com.movietime.domain.model.MoviePreview
 
 data class HighlightedItem(
     val id: Int,

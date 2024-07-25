@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
 import com.movietime.core.views.model.PosterItem
 import com.movietime.movie.detail.presentation.model.toPosterItem
-import com.movietime.movie.domain.interactors.GetPopularMoviesUseCase
-import com.movietime.movie.domain.interactors.GetTopRatedMoviesUseCase
-import com.movietime.movie.domain.interactors.GetUpcomingMoviesUseCase
-import com.movietime.movie.domain.model.MoviePreview
+import com.movietime.domain.interactors.GetPopularMoviesUseCase
+import com.movietime.domain.interactors.GetTopRatedMoviesUseCase
+import com.movietime.domain.interactors.GetUpcomingMoviesUseCase
+import com.movietime.domain.model.MoviePreview
 import com.movietime.movie.home.presentation.model.HighlightedItem
 import com.movietime.movie.home.presentation.model.toHighlightedItem
 import dagger.hilt.android.lifecycle.HiltViewModel

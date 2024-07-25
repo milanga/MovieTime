@@ -1,7 +1,7 @@
 package com.movietime.data.tmdb.mappers
 
 import com.movietime.data.tmdb.model.TmdbVideo
-import com.movietime.movie.domain.model.Video
+import com.movietime.domain.model.Video
 
 
 object VideoMapper {

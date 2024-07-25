@@ -3,7 +3,7 @@ package com.movietime.data.tmdb.mappers
 import com.movietime.data.tmdb.di.BackdropBaseUrl
 import com.movietime.data.tmdb.di.PosterBaseUrl
 import com.movietime.data.tmdb.model.TmdbMovieDetail
-import com.movietime.movie.domain.model.MovieDetail
+import com.movietime.domain.model.MovieDetail
 import javax.inject.Inject
 
 class MovieDetailMapper @Inject constructor(

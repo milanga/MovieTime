@@ -36,6 +36,6 @@ dependencies {
     implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:$youtubePlayerVersion"
     implementation project(':core:presentation')
 
-    implementation project(':movie:domain')
+    implementation project(':domain')
     implementation project(':core:views')
 }

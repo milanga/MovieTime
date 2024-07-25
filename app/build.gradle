@@ -88,7 +88,7 @@ dependencies {
     implementation project(":core:networking")
     implementation project(':core:presentation')
     implementation project(":movie:presentation:home")
-    implementation project(':movie:domain')
+    implementation project(':domain')
     implementation project(':data:tmdb')
     implementation project(":movie:presentation:detail")
     implementation project(":home:presentation")

@@ -45,6 +45,7 @@ class RemoteMovieDetailRepository @AssistedInject constructor(
 }
 
 @AssistedFactory
-interface RemoteMovieDetailRepositoryFactory: MovieDetailRepositoryFactory {
+interface RemoteMovieDetailRepositoryFactory:
+    MovieDetailRepositoryFactory {
     override fun create(movieId: Int): RemoteMovieDetailRepository
 }

@@ -3,7 +3,7 @@ package com.movietime.data.tmdb.di
 import com.movietime.data.tmdb.datasource.TmdbMoviesDataSource
 import com.movietime.data.tmdb.service.MoviesService
 import com.movietime.data.tmdb.mappers.MoviePreviewMapper
-import com.movietime.movie.domain.repository.MoviesDataSource
+import com.movietime.domain.repository.MoviesDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

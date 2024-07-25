@@ -1,6 +1,6 @@
 package com.movietime.movie.detail.presentation.model
 
-import com.movietime.movie.domain.model.MovieDetail
+import com.movietime.domain.model.MovieDetail
 
 data class UiMovieDetail(
     val backdropPath: String,

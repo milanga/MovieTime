@@ -1,7 +1,7 @@
 package com.movietime.data.tmdb.mappers
 
 import com.movietime.data.tmdb.model.TmdbCompany
-import com.movietime.movie.domain.model.Company
+import com.movietime.domain.model.Company
 
 
 object CompanyMapper {

@@ -3,8 +3,8 @@ package com.movietime.data.tmdb.datasource
 import com.movietime.data.tmdb.service.MoviesService
 import com.movietime.data.tmdb.mappers.MoviePreviewMapper
 import com.movietime.data.tmdb.model.TmdbMoviesResponse
-import com.movietime.movie.domain.model.MoviePreview
-import com.movietime.movie.domain.repository.MoviesDataSource
+import com.movietime.domain.model.MoviePreview
+import com.movietime.domain.repository.MoviesDataSource
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Named
