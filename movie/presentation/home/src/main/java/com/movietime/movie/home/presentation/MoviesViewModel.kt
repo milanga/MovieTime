@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
 import com.movietime.core.views.model.PosterItem
 import com.movietime.movie.detail.presentation.model.toPosterItem
-import com.movietime.domain.interactors.GetPopularMoviesUseCase
-import com.movietime.domain.interactors.GetTopRatedMoviesUseCase
-import com.movietime.domain.interactors.GetUpcomingMoviesUseCase
+import com.movietime.domain.interactors.movie.GetPopularMoviesUseCase
+import com.movietime.domain.interactors.movie.GetTopRatedMoviesUseCase
+import com.movietime.domain.interactors.movie.GetUpcomingMoviesUseCase
 import com.movietime.domain.model.MoviePreview
 import com.movietime.movie.home.presentation.model.HighlightedItem
 import com.movietime.movie.home.presentation.model.toHighlightedItem

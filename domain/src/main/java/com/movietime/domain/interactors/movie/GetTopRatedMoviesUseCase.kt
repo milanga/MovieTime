@@ -1,4 +1,4 @@
-package com.movietime.domain.interactors
+package com.movietime.domain.interactors.movie
 
 import javax.inject.Inject
 

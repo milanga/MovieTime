@@ -7,7 +7,7 @@ import com.movietime.data.tmdb.mappers.VideoMapper
 import com.movietime.domain.model.MovieDetail
 import com.movietime.domain.model.MoviePreview
 import com.movietime.domain.model.Video
-import com.movietime.domain.repository.MovieDetailDataSource
+import com.movietime.domain.repository.movie.MovieDetailDataSource
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Named

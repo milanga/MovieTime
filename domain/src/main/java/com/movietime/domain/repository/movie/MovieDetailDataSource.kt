@@ -1,4 +1,4 @@
-package com.movietime.domain.repository
+package com.movietime.domain.repository.movie
 
 import com.movietime.domain.model.MovieDetail
 import com.movietime.domain.model.MoviePreview

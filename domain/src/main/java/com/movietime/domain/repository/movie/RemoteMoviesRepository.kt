@@ -1,6 +1,6 @@
-package com.movietime.domain.repository
+package com.movietime.domain.repository.movie
 
-import com.movietime.domain.interactors.MoviesRepository
+import com.movietime.domain.interactors.movie.MoviesRepository
 import com.movietime.domain.model.MoviePreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

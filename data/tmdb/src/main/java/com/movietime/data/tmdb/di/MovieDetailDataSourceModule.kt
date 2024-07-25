@@ -8,7 +8,7 @@ import com.movietime.data.tmdb.mappers.GenreMapper
 import com.movietime.data.tmdb.mappers.LanguageMapper
 import com.movietime.data.tmdb.mappers.MovieDetailMapper
 import com.movietime.data.tmdb.mappers.VideoMapper
-import com.movietime.domain.repository.MovieDetailDataSource
+import com.movietime.domain.repository.movie.MovieDetailDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

@@ -1,7 +1,7 @@
-package com.movietime.domain.repository
+package com.movietime.domain.repository.movie
 
-import com.movietime.domain.interactors.MovieDetailRepository
-import com.movietime.domain.interactors.MovieDetailRepositoryFactory
+import com.movietime.domain.interactors.movie.MovieDetailRepository
+import com.movietime.domain.interactors.movie.MovieDetailRepositoryFactory
 import com.movietime.domain.model.MovieDetail
 import com.movietime.domain.model.MoviePreview
 import com.movietime.domain.model.Video

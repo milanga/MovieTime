@@ -8,10 +8,10 @@ import com.movietime.movie.detail.presentation.model.MovieDetailUiState
 import com.movietime.movie.detail.presentation.model.toPosterItem
 import com.movietime.movie.detail.presentation.model.toUiMovieDetail
 import com.movietime.movie.detail.presentation.model.toUiVideo
-import com.movietime.domain.interactors.GetMovieDetailUseCaseFactory
-import com.movietime.domain.interactors.GetMovieRecommendationsUseCaseFactory
-import com.movietime.domain.interactors.GetMovieVideosUseCaseFactory
-import com.movietime.domain.interactors.MovieDetailRepositoryFactory
+import com.movietime.domain.interactors.movie.GetMovieDetailUseCaseFactory
+import com.movietime.domain.interactors.movie.GetMovieRecommendationsUseCaseFactory
+import com.movietime.domain.interactors.movie.GetMovieVideosUseCaseFactory
+import com.movietime.domain.interactors.movie.MovieDetailRepositoryFactory
 import com.movietime.domain.model.MovieDetail
 import com.movietime.domain.model.MoviePreview
 import com.movietime.domain.model.Video

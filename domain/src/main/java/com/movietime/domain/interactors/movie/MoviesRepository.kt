@@ -1,4 +1,4 @@
-package com.movietime.domain.interactors
+package com.movietime.domain.interactors.movie
 
 import com.movietime.domain.model.MoviePreview
 import kotlinx.coroutines.flow.Flow
