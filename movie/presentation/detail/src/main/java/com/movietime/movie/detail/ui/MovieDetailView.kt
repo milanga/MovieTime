@@ -1,6 +1,5 @@
 package com.movietime.movie.detail.ui
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -11,28 +10,17 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -41,9 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -56,6 +41,7 @@ import com.movietime.core.views.overview.Overview
 import com.movietime.core.views.poster.ListSection
 import com.movietime.core.views.poster.model.PosterItem
 import com.movietime.core.views.tagline.Tagline
+import com.movietime.core.views.topbar.TopBar
 import com.movietime.core.views.video.VideoView
 import com.movietime.main.views.SectionTitle
 import com.movietime.movie.detail.R
@@ -135,64 +121,6 @@ private fun MovieDetailView(uiState: MovieDetailUiState, onMovieSelected: (id: I
             )
         }
     }
-}
-
-@ExperimentalMaterial3Api
-@Composable
-private fun TopBar(
-    showTopAppBar: Boolean,
-    title: String,
-    onBackNavigation: () -> Unit,
-    onIconWidthChanged: (Int) -> Unit,
-    onAppBarHeightChanged: (Int) -> Unit
-) {
-    val backgroundAlpha by animateFloatAsState(targetValue = if (showTopAppBar) 1f else 0f)
-    val statusHeight = with(LocalDensity.current) { WindowInsets.statusBars.getTop(this).toDp() }
-    val topBarHeight = 64.dp
-    val appBarBackgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
-    Box {
-        Surface(
-            color = appBarBackgroundColor,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(topBarHeight + statusHeight)
-                .graphicsLayer { alpha = backgroundAlpha }
-        ) {}
-
-        TopAppBar(
-            title = {
-                if (showTopAppBar) {
-                    Text(title)
-                }
-            },
-            colors = TopAppBarDefaults.smallTopAppBarColors(Color.Transparent),
-            navigationIcon = {
-                IconButton(
-                    onClick = { onBackNavigation() },
-                    modifier = Modifier
-                        .background(
-                            color = appBarBackgroundColor.copy(alpha = 0.4f),
-                            shape = CircleShape
-                        )
-                        .onSizeChanged { size ->
-                            onIconWidthChanged(size.width)
-                        }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .onSizeChanged { size ->
-                    onAppBarHeightChanged(size.height)
-                }
-        )
-    }
-
 }
 
 @ExperimentalMaterial3Api
