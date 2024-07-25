@@ -23,7 +23,7 @@ internal class CollapsibleTitleTransitionHelper(
             fraction = transitionRatio()
         )
 
-    fun calculateCollapsibleTitleTranslation() =
+    fun calculateCollapsibleTitleTranslationX() =
         lerp(
             start = 0f,
             stop = finalTranslation - scaleTranslation,

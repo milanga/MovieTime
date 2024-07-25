@@ -22,11 +22,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.lerp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.google.accompanist.placeholder.placeholder
-import com.movietime.movie.detail.ui.collapsibleBackddropTitle.CollapsibleTitleTransitionHelper
 
 internal data class CollapsableConfig(val finalTransitionOffset: Int, val finalTranslation: Float, val finalFontSize: TextUnit)
 
@@ -161,12 +159,12 @@ private fun CollapsibleTitle(
                     )
                 )
             )
-            .padding(top = 14.dp, start = 16.dp, bottom = 7.dp, end = 16.dp)
+            .padding(top = 14.dp, start = 16.dp, end = 16.dp)
             .graphicsLayer {
                 val scale = transitionHelper.calculateCollapsibleTitleScale()
                 scaleX = scale
                 scaleY = scale
-                translationX = transitionHelper.calculateCollapsibleTitleTranslation()
+                translationX = transitionHelper.calculateCollapsibleTitleTranslationX()
             }
             .onSizeChanged {
                 onWidthChanged(it.width)
