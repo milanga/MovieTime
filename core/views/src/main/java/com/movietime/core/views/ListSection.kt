@@ -13,7 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import com.movietime.core.views.model.PosterItem
+import com.movietime.core.views.poster.model.PosterItem
 import com.movietime.views.PosterItemView
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.launch
@@ -24,14 +24,14 @@ import kotlin.math.ceil
 fun ListSection(
     modifier: Modifier = Modifier,
     posterList: List<PosterItem> = emptyList(),
-    onMovieSelected: (id: Int) -> Unit = {},
+    onItemSelected: (id: Int) -> Unit = {},
     onScrollThresholdReached: () -> Unit = {},
     loading: Boolean = false
 ) {
     if (loading) {
         LoadingList(modifier)
     } else {
-        PosterList(posterList, onMovieSelected, modifier, onScrollThresholdReached)
+        PosterList(posterList, onItemSelected, modifier, onScrollThresholdReached)
     }
 }
 

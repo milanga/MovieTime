@@ -1,6 +1,6 @@
 package com.movietime.movie.detail.presentation.model
 
-import com.movietime.core.views.model.PosterItem
+import com.movietime.core.views.poster.model.PosterItem
 
 sealed interface MovieDetailUiState {
     object Error : MovieDetailUiState

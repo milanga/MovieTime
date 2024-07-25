@@ -1,4 +1,4 @@
-package com.movietime.core.views.model
+package com.movietime.core.views.poster.model
 
 data class PosterItem(
     val id: Int,

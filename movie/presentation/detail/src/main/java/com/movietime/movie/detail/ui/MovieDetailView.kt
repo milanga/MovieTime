@@ -26,7 +26,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.placeholder.material.placeholder
 import com.movietime.core.views.ListSection
-import com.movietime.core.views.model.PosterItem
+import com.movietime.core.views.poster.model.PosterItem
 import com.movietime.main.views.SectionTitle
 import com.movietime.movie.detail.R
 import com.movietime.movie.detail.presentation.MovieDetailViewModel
@@ -237,7 +237,7 @@ private fun DetailContent(
             item {
                 ListSection(
                     posterList = movieRecommendations,
-                    onMovieSelected = onMovieSelected,
+                    onItemSelected = onMovieSelected,
                     modifier = Modifier
                         .padding(
                             WindowInsets.navigationBars

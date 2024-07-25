@@ -3,14 +3,14 @@ package com.movietime.movie.home.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
-import com.movietime.core.views.model.PosterItem
+import com.movietime.core.views.poster.model.PosterItem
 import com.movietime.movie.detail.presentation.model.toPosterItem
 import com.movietime.domain.interactors.movie.GetPopularMoviesUseCase
 import com.movietime.domain.interactors.movie.GetTopRatedMoviesUseCase
 import com.movietime.domain.interactors.movie.GetUpcomingMoviesUseCase
 import com.movietime.domain.model.MoviePreview
-import com.movietime.movie.home.presentation.model.HighlightedItem
-import com.movietime.movie.home.presentation.model.toHighlightedItem
+import com.movietime.core.views.highlight.model.HighlightedItem
+import com.movietime.movie.detail.presentation.model.toHighlightedItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
