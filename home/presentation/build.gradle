@@ -26,4 +26,5 @@ dependencies {
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanistVersion"
 
     implementation project(':movie:presentation:home')
+    implementation project(':tvshow:presentation:home')
 }

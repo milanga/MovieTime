@@ -1,7 +1,7 @@
 package com.movietime.data.tmdb.mappers
 
-import com.movietime.data.tmdb.di.BackdropBaseUrl
-import com.movietime.data.tmdb.di.PosterBaseUrl
+import com.movietime.data.tmdb.di.baseurls.BackdropBaseUrl
+import com.movietime.data.tmdb.di.baseurls.PosterBaseUrl
 import com.movietime.data.tmdb.model.TmdbTvShowDetail
 import com.movietime.domain.model.TvShowDetail
 import javax.inject.Inject

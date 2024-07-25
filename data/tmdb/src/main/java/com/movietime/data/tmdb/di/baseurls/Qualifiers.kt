@@ -1,4 +1,4 @@
-package com.movietime.data.tmdb.di
+package com.movietime.data.tmdb.di.baseurls
 
 import javax.inject.Qualifier
 

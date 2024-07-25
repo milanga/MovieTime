@@ -1,8 +1,7 @@
-package com.movietime.data.tmdb.di
+package com.movietime.data.tmdb.di.movie
 
 import com.movietime.data.tmdb.datasource.TmdbMoviesDataSource
 import com.movietime.data.tmdb.service.MoviesService
-import com.movietime.data.tmdb.mappers.MoviePreviewMapper
 import com.movietime.domain.repository.movie.MoviesDataSource
 import dagger.Binds
 import dagger.Module
@@ -30,22 +29,5 @@ abstract class MoviesRemoteSourceModule {
         fun provideMoviesService(retrofit: Retrofit): MoviesService {
             return retrofit.create(MoviesService::class.java)
         }
-
-        @Provides
-        @Reusable
-        fun provideMoviePreviewMapper(
-            @BackdropBaseUrl backdropBaseUrl: String,
-            @PosterBaseUrl posterBaseUrl: String
-        ): MoviePreviewMapper = MoviePreviewMapper(posterBaseUrl, backdropBaseUrl)
-
-        @Provides
-        @Reusable
-        @BackdropBaseUrl
-        fun provideBackdropImageBaseUrl(): String = "http://image.tmdb.org/t/p/original"
-
-        @Provides
-        @Reusable
-        @PosterBaseUrl
-        fun providePosterImageBaseUrl(): String = "http://image.tmdb.org/t/p/w500"
     }
 }

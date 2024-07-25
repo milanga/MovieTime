@@ -25,17 +25,18 @@ import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.movietime.home.presentation.R
 import com.movietime.movie.home.navigation.moviesGraph
+import com.movietime.tvshow.home.navigation.tvShowsGraph
 
 sealed class NavSection(val route: String, @StringRes val title: Int, val icon: ImageVector) {
     companion object{
         const val HomeSectionsRoute = "home/sections"
     }
     object Movies : NavSection("$HomeSectionsRoute/movies", R.string.movies, Icons.Filled.Movie)
-    object Series : NavSection("$HomeSectionsRoute/series", R.string.series, Icons.Filled.Tv)
+    object TvShows : NavSection("$HomeSectionsRoute/tvShows", R.string.tv_shows, Icons.Filled.Tv)
     object Search : NavSection("$HomeSectionsRoute/search", R.string.profile, Icons.Filled.Person)
 }
 
-val homeSections = listOf(NavSection.Movies, NavSection.Series, NavSection.Search)
+val homeSections = listOf(NavSection.Movies, NavSection.TvShows, NavSection.Search)
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -53,11 +54,7 @@ fun Home(){
         AnimatedNavHost(navController, startDestination = NavSection.Movies.route, modifier = Modifier.padding(contentPadding)) {
             moviesGraph(NavSection.Movies.route, {navController.popBackStack()}){route ->  navController.navigate(route)}
 
-            navigation(route = NavSection.Series.route, startDestination = "series/home"){
-                composable("series/home") {
-                    Surface(Modifier.fillMaxSize()) {}
-                }
-            }
+            tvShowsGraph(NavSection.TvShows.route, {navController.popBackStack()}){ route ->  navController.navigate(route)}
 
             navigation(route = NavSection.Search.route, startDestination = "search/home"){
                 composable("search/home") {
