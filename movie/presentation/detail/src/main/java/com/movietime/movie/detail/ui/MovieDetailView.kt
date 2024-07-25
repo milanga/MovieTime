@@ -2,42 +2,67 @@ package com.movietime.movie.detail.ui
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.consumedWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.surfaceColorAtElevation
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.accompanist.placeholder.material.placeholder
-import com.movietime.core.views.ListSection
+import com.movietime.core.views.collapsibleBackddropTitle.CollapsableConfig
+import com.movietime.core.views.collapsibleBackddropTitle.CollapsibleBackdropTitle
+import com.movietime.core.views.overview.Overview
+import com.movietime.core.views.poster.ListSection
 import com.movietime.core.views.poster.model.PosterItem
+import com.movietime.core.views.tagline.Tagline
+import com.movietime.core.views.video.VideoView
 import com.movietime.main.views.SectionTitle
 import com.movietime.movie.detail.R
 import com.movietime.movie.detail.presentation.MovieDetailViewModel
 import com.movietime.movie.detail.presentation.model.MovieDetailUiState
 import com.movietime.movie.detail.presentation.model.UiMovieDetail
 import com.movietime.movie.detail.presentation.model.UiVideo
-import com.movietime.movie.detail.ui.collapsibleBackddropTitle.CollapsableConfig
-import com.movietime.movie.detail.ui.collapsibleBackddropTitle.CollapsibleBackdropTitle
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -263,72 +288,5 @@ private fun DetailErrorScreen(
     }
 }
 
-@Composable
-private fun VideoView(
-    videoKey: String = "",
-    loading: Boolean = false
-){
-    val lifecycleOwner = LocalLifecycleOwner.current
-    AndroidView(
-        { context ->
-            YouTubePlayerView(context).apply {
-                lifecycleOwner.lifecycle.addObserver(this)
-                enableAutomaticInitialization = false
-                initialize(object : AbstractYouTubePlayerListener() {
-                    override fun onReady(youTubePlayer: YouTubePlayer) {
-                        youTubePlayer.cueVideo(videoKey, 0f)
-                    }
-                })
-            }
-        }, modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp, top = 8.dp)
-            .fillMaxWidth()
-            .placeholder(
-                loading,
-                MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)
-            )
-    )
-}
 
-@Composable
-private fun Tagline(
-    tagline: String = "",
-    loading: Boolean = false
-) {
-    Text(
-        text = tagline,
-        style = MaterialTheme.typography.titleSmall,
-        color = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier
-            .padding(top = 8.dp, start = 16.dp, end = 16.dp)
-            .fillMaxWidth()
-            .placeholder(
-                loading,
-                MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)
-            )
-    )
-}
 
-@Composable
-private fun Overview(
-    overview: String,
-    loading: Boolean = false
-) {
-    val loadingModifier = if(loading){
-        Modifier.height(140.dp)
-    } else {
-        Modifier
-    }
-    Text(
-        text = overview,
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurface,
-        modifier = loadingModifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .placeholder(
-                loading,
-                MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)
-            )
-    )
-}

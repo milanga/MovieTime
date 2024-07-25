@@ -32,10 +32,8 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:$daggerHiltVersion"
     kapt "androidx.hilt:hilt-compiler:$hiltVersion"
     implementation "androidx.hilt:hilt-navigation-compose:$hiltNavigationCompose"
-    // Youtube player
-    implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:$youtubePlayerVersion"
-    implementation project(':core:presentation')
 
     implementation project(':domain')
     implementation project(':core:views')
+    implementation project(':core:presentation')
 }

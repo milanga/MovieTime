@@ -1,4 +1,4 @@
-package com.movietime.movie.detail.ui.collapsibleBackddropTitle
+package com.movietime.core.views.collapsibleBackddropTitle
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,11 +26,11 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.google.accompanist.placeholder.placeholder
 
-internal data class CollapsableConfig(val finalTransitionOffset: Int, val finalTranslation: Float, val finalFontSize: TextUnit)
+data class CollapsableConfig(val finalTransitionOffset: Int, val finalTranslation: Float, val finalFontSize: TextUnit)
 
 @Composable
 @OptIn(coil.annotation.ExperimentalCoilApi::class)
-internal fun CollapsibleBackdropTitle(
+fun CollapsibleBackdropTitle(
     backdropUrl: String = "",
     title: String = "",
     titleStyle: TextStyle = MaterialTheme.typography.displaySmall,

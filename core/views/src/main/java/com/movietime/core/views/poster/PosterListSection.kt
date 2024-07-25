@@ -1,4 +1,4 @@
-package com.movietime.core.views
+package com.movietime.core.views.poster
 
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.layout.PaddingValues

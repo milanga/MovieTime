@@ -1,4 +1,4 @@
-package com.movietime.movie.detail.ui.collapsibleBackddropTitle
+package com.movietime.core.views.collapsibleBackddropTitle
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.ui.util.lerp

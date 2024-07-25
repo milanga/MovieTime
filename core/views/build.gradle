@@ -18,5 +18,7 @@ dependencies {
     //Accompanist
     implementation "com.google.accompanist:accompanist-placeholder-material:$accompanistVersion"
     implementation "com.google.accompanist:accompanist-pager:$accompanistVersion"
-
+    // Youtube player
+    implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:$youtubePlayerVersion"
+    implementation project(':core:presentation')
 }

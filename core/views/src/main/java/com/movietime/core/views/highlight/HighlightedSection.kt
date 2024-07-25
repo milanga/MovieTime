@@ -1,4 +1,4 @@
-package com.movietime.core.views
+package com.movietime.core.views.highlight
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
@@ -16,7 +16,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.placeholder.placeholder
-import com.movietime.core.views.highlight.HighlightedItemView
 import com.movietime.core.views.highlight.model.HighlightedItem
 import kotlin.math.absoluteValue
 import androidx.compose.ui.util.lerp
