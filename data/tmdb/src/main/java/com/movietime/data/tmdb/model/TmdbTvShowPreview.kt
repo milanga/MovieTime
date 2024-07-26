@@ -17,6 +17,6 @@ data class TmdbTvShowPreview(
     @JsonProperty("poster_path") val posterPath: String?,
     @JsonProperty("first_air_date") val firstAirDate: String,
     @JsonProperty("name") val name: String,
-    @JsonProperty("vote_average") val voteAverage: Double,
+    @JsonProperty("vote_average") val voteAverage: Float,
     @JsonProperty("vote_count") val voteCount: Int
 )

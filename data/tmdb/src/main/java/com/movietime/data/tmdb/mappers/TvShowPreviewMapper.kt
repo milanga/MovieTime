@@ -2,6 +2,7 @@ package com.movietime.data.tmdb.mappers
 
 import com.movietime.data.tmdb.di.baseurls.BackdropBaseUrl
 import com.movietime.data.tmdb.di.baseurls.PosterBaseUrl
+import com.movietime.data.tmdb.model.TmdbGenericPreview
 import com.movietime.data.tmdb.model.TmdbTvShowPreview
 import com.movietime.domain.model.TvShowPreview
 import javax.inject.Inject
@@ -28,6 +29,26 @@ class TvShowPreviewMapper @Inject constructor(
             name = tmdbTvShowPreview.name,
             voteAverage = tmdbTvShowPreview.voteAverage,
             voteCount = tmdbTvShowPreview.voteCount
+        )
+    }
+
+    fun map(tmdbGenericPreview: TmdbGenericPreview): TvShowPreview {
+        require(tmdbGenericPreview.mediaType == "tv")
+        return TvShowPreview(
+            adult = tmdbGenericPreview.adult!!,
+            backdropUrl = tmdbGenericPreview.backdropPath?.let{ backdropPath -> "$backdropBaseUrl${backdropPath}" } ?: "",
+            genreIds = tmdbGenericPreview.genreIds!!,
+            id = tmdbGenericPreview.id,
+            originCountry = tmdbGenericPreview.originCountry,
+            originalLanguage = tmdbGenericPreview.originalLanguage!!,
+            originalName = tmdbGenericPreview.originalName!!,
+            overview = tmdbGenericPreview.overview!!,
+            popularity = tmdbGenericPreview.popularity!!,
+            posterUrl = tmdbGenericPreview.posterPath?.let{ posterPath -> "$posterBaseUrl${posterPath}" } ?: "",
+            firstAirDate = tmdbGenericPreview.firstAirDate,
+            name = tmdbGenericPreview.name!!,
+            voteAverage = tmdbGenericPreview.rating!!,
+            voteCount = tmdbGenericPreview.voteCount!!
         )
     }
 

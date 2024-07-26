@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Tv
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -33,7 +34,7 @@ sealed class NavSection(val route: String, @StringRes val title: Int, val icon: 
     }
     object Movies : NavSection("$HomeSectionsRoute/movies", R.string.movies, Icons.Filled.Movie)
     object TvShows : NavSection("$HomeSectionsRoute/tvShows", R.string.tv_shows, Icons.Filled.Tv)
-    object Search : NavSection("$HomeSectionsRoute/search", R.string.profile, Icons.Filled.Person)
+    object Search : NavSection("$HomeSectionsRoute/search", R.string.search, Icons.Filled.Search)
 }
 
 val homeSections = listOf(NavSection.Movies, NavSection.TvShows, NavSection.Search)

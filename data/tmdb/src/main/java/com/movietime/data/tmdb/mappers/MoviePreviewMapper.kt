@@ -2,6 +2,7 @@ package com.movietime.data.tmdb.mappers
 
 import com.movietime.data.tmdb.di.baseurls.BackdropBaseUrl
 import com.movietime.data.tmdb.di.baseurls.PosterBaseUrl
+import com.movietime.data.tmdb.model.TmdbGenericPreview
 import com.movietime.data.tmdb.model.TmdbMoviePreview
 import com.movietime.domain.model.MoviePreview
 import javax.inject.Inject
@@ -28,6 +29,26 @@ class MoviePreviewMapper @Inject constructor(
             tmdbMoviePreview.releaseDate,
             tmdbMoviePreview.adult,
             tmdbMoviePreview.video
+        )
+    }
+
+    fun map(tmdbGenericPreview: TmdbGenericPreview): MoviePreview {
+        require(tmdbGenericPreview.mediaType == "movie")
+        return MoviePreview(
+            tmdbGenericPreview.title!!,
+            tmdbGenericPreview.originalTitle!!,
+            tmdbGenericPreview.originalLanguage!!,
+            tmdbGenericPreview.id,
+            tmdbGenericPreview.posterPath?.let{ posterPath -> "$posterBaseUrl${posterPath}" } ?: "",
+            tmdbGenericPreview.backdropPath?.let{ backdropPath -> "$backdropBaseUrl${backdropPath}" } ?: "",
+            tmdbGenericPreview.rating!!,
+            tmdbGenericPreview.voteCount!!,
+            tmdbGenericPreview.popularity!!,
+            tmdbGenericPreview.overview!!,
+            tmdbGenericPreview.genreIds!!,
+            tmdbGenericPreview.releaseDate,
+            tmdbGenericPreview.adult!!,
+            tmdbGenericPreview.video!!
         )
     }
 }

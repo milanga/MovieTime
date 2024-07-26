@@ -13,6 +13,6 @@ data class TvShowPreview(
     val posterUrl: String,
     val firstAirDate: String,
     val name: String,
-    val voteAverage: Double,
+    val voteAverage: Float,
     val voteCount: Int
-)
+): MediaPreview
