@@ -14,7 +14,7 @@ import retrofit2.Retrofit
 
 @InstallIn(SingletonComponent::class)
 @Module
-abstract class MoviesRemoteSourceModule {
+abstract class MoviesDataSourceModule {
 
     @Binds
     @Reusable

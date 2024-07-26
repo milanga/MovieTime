@@ -55,6 +55,7 @@ class MoviesViewModel @Inject constructor(
             try {
                 fetchFunction()
             } catch (e: Exception) {
+                e.printStackTrace()
                 //todo handle error
             } finally {
                 listState.finishLoading()

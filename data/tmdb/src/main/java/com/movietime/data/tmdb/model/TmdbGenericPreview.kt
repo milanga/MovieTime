@@ -29,6 +29,6 @@ data class TmdbGenericPreview(
     @JsonProperty("known_for_department") val knownForDepartment: String?,
     @JsonProperty("profile_path") val profilePath: String?,
     @JsonProperty("known_for") val knownFor: List<TmdbGenericPreview>?,
-    @JsonProperty("origin_country") val originCountry: List<String>,
-    @JsonProperty("first_air_date") val firstAirDate: String
+    @JsonProperty("origin_country") val originCountry: List<String>?,
+    @JsonProperty("first_air_date") val firstAirDate: String?
 )

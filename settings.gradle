@@ -18,4 +18,5 @@ include ':data:tmdb'
 include 'domain'
 include ':tvshow:presentation:home'
 include ':tvshow:presentation:detail'
+include ':search:presentation:home'
 

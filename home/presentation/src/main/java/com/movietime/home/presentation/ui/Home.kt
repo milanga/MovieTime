@@ -26,6 +26,7 @@ import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.movietime.home.presentation.R
 import com.movietime.movie.home.navigation.moviesGraph
+import com.movietime.search.home.navigation.searchGraph
 import com.movietime.tvshow.home.navigation.tvShowsGraph
 
 sealed class NavSection(val route: String, @StringRes val title: Int, val icon: ImageVector) {
@@ -57,13 +58,7 @@ fun Home(){
 
             tvShowsGraph(NavSection.TvShows.route, {navController.popBackStack()}){ route ->  navController.navigate(route)}
 
-            navigation(route = NavSection.Search.route, startDestination = "search/home"){
-                composable("search/home") {
-                    Surface(Modifier.fillMaxSize()) {}
-                }
-            }
-
-
+            searchGraph(NavSection.Search.route, {navController.popBackStack()}){ route ->  navController.navigate(route)}
         }
     }
 }

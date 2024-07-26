@@ -1,7 +1,7 @@
 package com.movietime.domain.model
 
 data class PersonPreview(
-    val id: Int,
+    override val id: Int,
     val name: String,
     val originalName: String,
     val mediaType: String,
@@ -11,4 +11,7 @@ data class PersonPreview(
     val knownForDepartment: String,
     val profileUrl: String?,
     val knownFor: List<MediaPreview>
-): GenericPreview
+): GenericPreview {
+    override val posterUrl: String
+        get() = profileUrl ?: ""
+}

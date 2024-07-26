@@ -2,9 +2,9 @@ package com.movietime.data.tmdb.service
 
 import com.movietime.data.tmdb.model.TmdbSearchResponse
 import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface SearchService {
     @GET("search/multi")
-    suspend fun search(@Path("query") query: String, @Path("query") page: Int = 1): TmdbSearchResponse
+    suspend fun search(@Query("query") query: String, @Query("page") page: Int = 1): TmdbSearchResponse
 }
