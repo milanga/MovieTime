@@ -13,5 +13,5 @@ data class Episode(
     val runtime: Int,
     val seasonNumber: Int,
     val showId: Int,
-    val stillPath: String
+    val stillPath: String?
 )

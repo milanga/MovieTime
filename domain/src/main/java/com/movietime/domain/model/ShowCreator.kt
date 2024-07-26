@@ -6,5 +6,5 @@ data class ShowCreator(
     val name: String,
     val originalName: String,
     val gender: Int,
-    val profilePath: String
+    val profilePath: String?
 )

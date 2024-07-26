@@ -8,6 +8,6 @@ data class TmdbShowCreator(
     @JsonProperty("name") val name: String,
     @JsonProperty("original_name") val originalName: String,
     @JsonProperty("gender") val gender: Int,
-    @JsonProperty("profile_path") val profilePath: String
+    @JsonProperty("profile_path") val profilePath: String?
 )
 

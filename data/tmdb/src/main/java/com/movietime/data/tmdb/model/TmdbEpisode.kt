@@ -15,5 +15,5 @@ data class TmdbEpisode(
     @JsonProperty("runtime") val runtime: Int,
     @JsonProperty("season_number") val seasonNumber: Int,
     @JsonProperty("show_id") val showId: Int,
-    @JsonProperty("still_path") val stillPath: String
+    @JsonProperty("still_path") val stillPath: String?
 )

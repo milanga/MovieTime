@@ -1,7 +1,7 @@
 package com.movietime.domain.model
 
 data class Season(
-    val airDate: String,
+    val airDate: String?,
     val episodeCount: Int,
     val id: Int,
     val name: String,
