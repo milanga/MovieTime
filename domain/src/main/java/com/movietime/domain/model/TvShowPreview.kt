@@ -9,7 +9,7 @@ data class TvShowPreview(
     val originalLanguage: String,
     val originalName: String,
     val overview: String,
-    val popularity: Double,
+    val popularity: Float,
     val posterUrl: String,
     val firstAirDate: String,
     val name: String,

@@ -13,7 +13,7 @@ data class TmdbTvShowPreview(
     @JsonProperty("original_language") val originalLanguage: String,
     @JsonProperty("original_name") val originalName: String,
     @JsonProperty("overview") val overview: String,
-    @JsonProperty("popularity") val popularity: Double,
+    @JsonProperty("popularity") val popularity: Float,
     @JsonProperty("poster_path") val posterPath: String?,
     @JsonProperty("first_air_date") val firstAirDate: String,
     @JsonProperty("name") val name: String,

@@ -2,6 +2,7 @@ package com.movietime.data.tmdb.mappers
 
 import com.movietime.data.tmdb.di.baseurls.BackdropBaseUrl
 import com.movietime.data.tmdb.di.baseurls.PosterBaseUrl
+import com.movietime.data.tmdb.model.MEDIA_TYPE_MOVIE
 import com.movietime.data.tmdb.model.TmdbGenericPreview
 import com.movietime.data.tmdb.model.TmdbMoviePreview
 import com.movietime.domain.model.MoviePreview
@@ -33,7 +34,7 @@ class MoviePreviewMapper @Inject constructor(
     }
 
     fun map(tmdbGenericPreview: TmdbGenericPreview): MoviePreview {
-        require(tmdbGenericPreview.mediaType == "movie")
+        require(tmdbGenericPreview.mediaType == MEDIA_TYPE_MOVIE)
         return MoviePreview(
             tmdbGenericPreview.title!!,
             tmdbGenericPreview.originalTitle!!,

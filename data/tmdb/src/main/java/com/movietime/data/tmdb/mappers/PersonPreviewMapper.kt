@@ -1,6 +1,7 @@
 package com.movietime.data.tmdb.mappers
 
 import com.movietime.data.tmdb.di.baseurls.PosterBaseUrl
+import com.movietime.data.tmdb.model.MEDIA_TYPE_PERSON
 import com.movietime.data.tmdb.model.TmdbGenericPreview
 import com.movietime.data.tmdb.model.TmdbPersonPreview
 import com.movietime.domain.model.PersonPreview
@@ -27,12 +28,12 @@ class PersonPreviewMapper @Inject constructor(
     }
 
     fun map(tmdbGenericPreview: TmdbGenericPreview): PersonPreview {
-        require(tmdbGenericPreview.mediaType == "person")
+        require(tmdbGenericPreview.mediaType == MEDIA_TYPE_PERSON)
         return PersonPreview(
             tmdbGenericPreview.id,
             tmdbGenericPreview.name!!,
             tmdbGenericPreview.originalName!!,
-            tmdbGenericPreview.mediaType!!,
+            tmdbGenericPreview.mediaType,
             tmdbGenericPreview.adult!!,
             tmdbGenericPreview.popularity!!,
             tmdbGenericPreview.gender!!,
