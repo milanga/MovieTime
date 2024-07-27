@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,13 +25,11 @@ class SearchViewModel @Inject constructor(
         ): SearchUiState
     }
 
-    private val currentSearchList = mutableListOf<PosterItem>()
-    private val _searchUiState = MutableStateFlow<SearchUiState>(SearchUiState.Content(currentSearchList))
+    private val _searchUiState = MutableStateFlow<SearchUiState>(SearchUiState.Content(emptyList()))
     val searchUiState: StateFlow<SearchUiState> = _searchUiState
 
     private val searchResultListState = SearchListState(
         { query ->
-            currentSearchList.clear()
             _searchUiState.value = SearchUiState.Loading
             fetchList(this) { searchUseCase.search(query) }
         }, {
@@ -41,8 +40,16 @@ class SearchViewModel @Inject constructor(
     private fun fetchList(listState: SearchListState, fetchFunction: suspend ()->List<GenericPreview>){
         viewModelScope.launch {
             try {
-                currentSearchList.addAll(fetchFunction().map(GenericPreview::toPosterItem))
-                _searchUiState.value = SearchUiState.Content(currentSearchList)
+                val result = fetchFunction().map(GenericPreview::toPosterItem)
+                _searchUiState.getAndUpdate { uiState ->
+                    SearchUiState.Content(
+                        if(uiState is SearchUiState.Content){
+                            uiState.searchResult + result
+                        }else{
+                            result
+                        }
+                    )
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
                 _searchUiState.value = SearchUiState.Error

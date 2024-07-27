@@ -1,7 +1,6 @@
 package com.movietime.domain.model
 
-import android.provider.MediaStore.Audio.Media
-import java.util.*
+import java.util.Date
 
 data class MoviePreview(
     val title: String,
@@ -10,7 +9,7 @@ data class MoviePreview(
     override val id: Int,
     override val posterUrl: String,
     val backdropUrl: String,
-    val rating: Float,
+    override val rating: Float,
     val voteCount: Int,
     val popularity: Float,
     val overview: String,
@@ -18,4 +17,7 @@ data class MoviePreview(
     val releaseDate: Date?,
     val adult: Boolean,
     val video: Boolean,
-): MediaPreview
+): MediaPreview {
+    override val mediaType: MediaType
+        get() = MediaType.Movie
+}

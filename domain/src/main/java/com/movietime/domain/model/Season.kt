@@ -6,7 +6,7 @@ data class Season(
     val id: Int,
     val name: String,
     val overview: String,
-    val posterPath: String,
+    val posterPath: String?,
     val seasonNumber: Int,
     val voteAverage: Double
 )

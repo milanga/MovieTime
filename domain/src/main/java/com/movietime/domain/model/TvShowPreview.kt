@@ -13,6 +13,9 @@ data class TvShowPreview(
     override val posterUrl: String,
     val firstAirDate: String,
     val name: String,
-    val voteAverage: Float,
+    override val rating: Float,
     val voteCount: Int
-): MediaPreview
+): MediaPreview {
+    override val mediaType: MediaType
+        get() = MediaType.TvShow
+}

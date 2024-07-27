@@ -28,7 +28,7 @@ class TvShowPreviewMapper @Inject constructor(
             posterUrl = tmdbTvShowPreview.posterPath?.let{ posterPath -> "$posterBaseUrl${posterPath}" } ?: "",
             firstAirDate = tmdbTvShowPreview.firstAirDate,
             name = tmdbTvShowPreview.name,
-            voteAverage = tmdbTvShowPreview.voteAverage,
+            rating = tmdbTvShowPreview.voteAverage,
             voteCount = tmdbTvShowPreview.voteCount
         )
     }
@@ -48,7 +48,7 @@ class TvShowPreviewMapper @Inject constructor(
             posterUrl = tmdbGenericPreview.posterPath?.let{ posterPath -> "$posterBaseUrl${posterPath}" } ?: "",
             firstAirDate = tmdbGenericPreview.firstAirDate!!,
             name = tmdbGenericPreview.name!!,
-            voteAverage = tmdbGenericPreview.rating!!,
+            rating = tmdbGenericPreview.rating!!,
             voteCount = tmdbGenericPreview.voteCount!!
         )
     }

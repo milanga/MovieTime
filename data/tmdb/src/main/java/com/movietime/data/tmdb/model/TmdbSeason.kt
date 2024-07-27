@@ -8,7 +8,7 @@ data class TmdbSeason(
     @JsonProperty("id") val id: Int,
     @JsonProperty("name") val name: String,
     @JsonProperty("overview") val overview: String,
-    @JsonProperty("poster_path") val posterPath: String,
+    @JsonProperty("poster_path") val posterPath: String?,
     @JsonProperty("season_number") val seasonNumber: Int,
     @JsonProperty("vote_average") val voteAverage: Double
 )

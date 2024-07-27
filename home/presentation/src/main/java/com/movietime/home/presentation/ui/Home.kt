@@ -2,7 +2,9 @@ package com.movietime.home.presentation.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -42,7 +44,7 @@ val homeSections = listOf(NavSection.Movies, NavSection.TvShows, NavSection.Sear
 
 @OptIn(
     ExperimentalMaterial3Api::class,
-    ExperimentalAnimationApi::class
+    ExperimentalAnimationApi::class, ExperimentalLayoutApi::class
 )
 @Composable
 fun Home(){
@@ -53,7 +55,13 @@ fun Home(){
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { contentPadding ->
-        AnimatedNavHost(navController, startDestination = NavSection.Movies.route, modifier = Modifier.padding(contentPadding)) {
+        AnimatedNavHost(
+            navController,
+            startDestination = NavSection.Movies.route,
+            modifier = Modifier
+                .padding(contentPadding)
+                .consumedWindowInsets(contentPadding)
+        ) {
             moviesGraph(NavSection.Movies.route, {navController.popBackStack()}){route ->  navController.navigate(route)}
 
             tvShowsGraph(NavSection.TvShows.route, {navController.popBackStack()}){ route ->  navController.navigate(route)}
