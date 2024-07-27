@@ -1,6 +1,7 @@
 package com.movietime.data.tmdb.di.tvshow
 
 import com.movietime.data.tmdb.datasource.TmdbTvShowDetailDataSource
+import com.movietime.data.tmdb.di.network.NetworkModule.Companion.TMDB_RETROFIT
 import com.movietime.data.tmdb.service.TvShowDetailService
 import com.movietime.domain.repository.tvshow.TvShowDetailDataSource
 import dagger.Binds
@@ -10,6 +11,7 @@ import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
+import javax.inject.Named
 
 
 @InstallIn(SingletonComponent::class)
@@ -26,7 +28,7 @@ abstract class TvShowDetailDataSourceModule {
 
         @Provides
         @Reusable
-        fun provideTvShowDetailService(retrofit: Retrofit): TvShowDetailService {
+        fun provideTvShowDetailService(@Named(TMDB_RETROFIT) retrofit: Retrofit): TvShowDetailService {
             return retrofit.create(TvShowDetailService::class.java)
         }
     }

@@ -1,4 +1,4 @@
-package com.movietime.core.networking
+package com.movietime.data.tmdb.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Response

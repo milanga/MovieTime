@@ -6,6 +6,9 @@ apply plugin: 'kotlin-android'
 
 android {
     namespace 'com.movietime.data.tmdb'
+    defaultConfig {
+        buildConfigField "String", "TMDB_API_KEY", project.properties["TMDB_API_KEY"]
+    }
 }
 
 dependencies {
@@ -16,6 +19,10 @@ dependencies {
     //  Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-jackson:$retrofitVersion"
+    //  Okhttp
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+    implementation "androidx.core:core-ktx:$androidxCoreVersion"
 
     //DI
     implementation "com.google.dagger:hilt-android:$daggerHiltVersion"
