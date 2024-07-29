@@ -28,13 +28,11 @@ class TvShowDetailViewModel @Inject constructor(
     getTvShowDetailUseCaseFactory: GetTvShowDetailUseCaseFactory,
     getTvShowVideosUseCaseFactory: GetTvShowVideosUseCaseFactory,
     movieDetailRepositoryFactory: TvShowDetailRepositoryFactory,
-    private val getAuthorizationRedirectUri: GetAuthorizationRedirectUri
 ) : ViewModel() {
     private val repository = movieDetailRepositoryFactory.create(savedStateHandle["paramTvShowId"]!!)
     private val getTvShowDetailUseCase = getTvShowDetailUseCaseFactory.create(repository)
     private val getTvShowRecommendationsUseCase = getTvShowRecommendationsUseCaseFactory.create(repository)
     private val getTvShowVideosUseCase = getTvShowVideosUseCaseFactory.create(repository)
-    private val _redirectUser = MutableStateFlow<String?>(null)
 
     private val recommendationsListState = ListState({
         fetchRecommendations { getTvShowRecommendationsUseCase.refresh() }
@@ -62,13 +60,11 @@ class TvShowDetailViewModel @Inject constructor(
             getTvShowDetailUseCase.tvShowDetail.map(TvShowDetail::toUiTvShowDetail),
             getTvShowVideosUseCase.tvShowVideos.map { it.map(Video::toUiVideo) },
             getTvShowRecommendationsUseCase.recommendedTvShows.map{ it.map(TvShowPreview::toPosterItem) },
-            _redirectUser
-        ) { tvShowDetail, videos, recommendations, redirectUser ->
+        ) { tvShowDetail, videos, recommendations ->
             val tvShowDetailUiState: TvShowDetailUiState = TvShowDetailUiState.Content(
                 tvShowDetail,
                 videos,
-                recommendations,
-                redirectUser
+                recommendations
             )
             tvShowDetailUiState
         }.catch { throwable ->
@@ -94,11 +90,6 @@ class TvShowDetailViewModel @Inject constructor(
     }
 
     fun addToWatchList() {
-        _redirectUser.value = getAuthorizationRedirectUri()
-    }
-
-    fun userRedirected() {
-        _redirectUser.value = null
     }
 
 }
