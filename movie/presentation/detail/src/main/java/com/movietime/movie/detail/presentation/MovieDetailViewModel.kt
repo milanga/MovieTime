@@ -9,6 +9,7 @@ import com.movietime.movie.detail.presentation.model.toPosterItem
 import com.movietime.movie.detail.presentation.model.toUiMovieDetail
 import com.movietime.movie.detail.presentation.model.toUiVideo
 import com.movietime.domain.interactors.movie.GetMovieDetailUseCaseFactory
+import com.movietime.domain.interactors.movie.GetMovieIdsUseCaseFactory
 import com.movietime.domain.interactors.movie.GetMovieRecommendationsUseCaseFactory
 import com.movietime.domain.interactors.movie.GetMovieVideosUseCaseFactory
 import com.movietime.domain.interactors.movie.MovieDetailRepositoryFactory
@@ -26,12 +27,15 @@ class MovieDetailViewModel @Inject constructor(
     getMovieRecommendationsUseCaseFactory: GetMovieRecommendationsUseCaseFactory,
     getMovieDetailUseCaseFactory: GetMovieDetailUseCaseFactory,
     getMovieVideosUseCaseFactory: GetMovieVideosUseCaseFactory,
-    movieDetailRepositoryFactory: MovieDetailRepositoryFactory
+    movieDetailRepositoryFactory: MovieDetailRepositoryFactory,
+    getMovieIdsUseCaseFactory: GetMovieIdsUseCaseFactory
 ) : ViewModel() {
     private val repository = movieDetailRepositoryFactory.create(savedStateHandle["paramMovieId"]!!)
     private val getMovieDetailUseCase = getMovieDetailUseCaseFactory.create(repository)
     private val getMovieRecommendationsUseCase = getMovieRecommendationsUseCaseFactory.create(repository)
     private val getMovieVideosUseCase = getMovieVideosUseCaseFactory.create(repository)
+    private val getMovieIdsUseCase = getMovieIdsUseCaseFactory.create(repository)
+
 
     private val recommendationsListState = ListState({
         fetchRecommendations { getMovieRecommendationsUseCase.refresh() }

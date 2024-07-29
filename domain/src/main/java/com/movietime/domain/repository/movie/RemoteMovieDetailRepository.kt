@@ -3,6 +3,7 @@ package com.movietime.domain.repository.movie
 import com.movietime.domain.interactors.movie.MovieDetailRepository
 import com.movietime.domain.interactors.movie.MovieDetailRepositoryFactory
 import com.movietime.domain.model.MovieDetail
+import com.movietime.domain.model.MovieIds
 import com.movietime.domain.model.MoviePreview
 import com.movietime.domain.model.Video
 import dagger.assisted.Assisted
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class RemoteMovieDetailRepository @AssistedInject constructor(
     private val remoteDetailDataSource: MovieDetailDataSource,
+    private val movieIdsDataSource: MovieIdsDataSource,
     @Assisted private val movieId: Int
 ): MovieDetailRepository {
     private var recommendationsPage = 1
@@ -27,9 +29,17 @@ class RemoteMovieDetailRepository @AssistedInject constructor(
     private val _movieVideos = MutableSharedFlow<List<Video>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     override val movieVideos: Flow<List<Video>> = _movieVideos
 
+    private val _movieIds = MutableSharedFlow<MovieIds>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    override val movieIds: Flow<MovieIds> = _movieIds
+
     override suspend fun fetchMovieDetail() {
         _movieDetail.emit(remoteDetailDataSource.getMovieDetail(movieId))
     }
+
+    override suspend fun fetchMovieIds(imdbId: String) {
+        _movieIds.emit(movieIdsDataSource.getMovieIds(imdbId))
+    }
+
     override suspend fun fetchMovieVideos() {
         _movieVideos.emit(remoteDetailDataSource.getMovieVideos(movieId))
     }
