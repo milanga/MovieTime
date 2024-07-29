@@ -28,4 +28,5 @@ dependencies {
     implementation project(':movie:presentation:home')
     implementation project(':tvshow:presentation:home')
     implementation project(':search:presentation:home')
+    implementation project(':auth:presentation')
 }

@@ -15,6 +15,8 @@ import androidx.compose.material.icons.filled.Tv
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -26,9 +28,12 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.movietime.auth.AuthDialog
 import com.movietime.home.presentation.R
 import com.movietime.movie.home.navigation.moviesGraph
+import com.movietime.search.home.navigation.SearchDestinations
 import com.movietime.search.home.navigation.searchGraph
+import com.movietime.search.home.ui.SearchHome
 import com.movietime.tvshow.home.navigation.tvShowsGraph
 
 sealed class NavSection(val route: String, @StringRes val title: Int, val icon: ImageVector) {
@@ -38,6 +43,7 @@ sealed class NavSection(val route: String, @StringRes val title: Int, val icon: 
     object Movies : NavSection("$HomeSectionsRoute/movies", R.string.movies, Icons.Filled.Movie)
     object TvShows : NavSection("$HomeSectionsRoute/tvShows", R.string.tv_shows, Icons.Filled.Tv)
     object Search : NavSection("$HomeSectionsRoute/search", R.string.search, Icons.Filled.Search)
+    object Profile : NavSection("$HomeSectionsRoute/profile", R.string.profile, Icons.Filled.Person)
 }
 
 val homeSections = listOf(NavSection.Movies, NavSection.TvShows, NavSection.Search)
@@ -102,6 +108,18 @@ private fun BottomBar(
                 alwaysShowLabel = true,
             )
         }
+
+        val showDialog = remember { mutableStateOf(false) }
+        if (showDialog.value) {
+            AuthDialog{ showDialog.value = false }
+        }
+        NavigationBarItem(
+            selected = false,
+            onClick = { showDialog.value = true },
+            icon = { Icon(imageVector = Icons.Filled.Person, contentDescription = null) },
+            label = { Text(stringResource(R.string.profile)) },
+            alwaysShowLabel = true,
+        )
     }
 }
 

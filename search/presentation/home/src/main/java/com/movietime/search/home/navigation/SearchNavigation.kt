@@ -71,19 +71,5 @@ fun NavGraphBuilder.searchGraph(
                 onPersonSelected = { }
             )
         }
-
-//        composable(
-//            route = "${SearchDestinations.MOVIE_DETAIL.route}/{${SearchDestinations.MOVIE_DETAIL.PARAM_MOVIE_ID}}",
-//            arguments = listOf(
-//                navArgument(MovieDestinations.DETAIL.PARAM_MOVIE_ID) { type = NavType.IntType }
-//            )
-//        ) {
-//            MovieDetailRoute(
-//                onMovieSelected = { movieId ->
-//                    navigateToRoute("${MovieDestinations.DETAIL.route}/$movieId")
-//                },
-//                onBackNavigation = backNavigation
-//            )
-//        }
     }
 }

@@ -24,8 +24,7 @@
 
         <activity
             android:exported="true"
-            android:name="com.movietime.auth.AuthCallbackActivity"
-            tools:node="replace">
+            android:name="com.movietime.auth.AuthCallbackActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
