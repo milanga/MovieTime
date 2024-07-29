@@ -89,6 +89,9 @@ dependencies {
     implementation project(":movie:presentation:home")
     implementation project(':domain')
     implementation project(':data:tmdb')
+    implementation project(':data:trakt')
+    implementation project(':data:local')
     implementation project(":movie:presentation:detail")
     implementation project(":home:presentation")
+    implementation project(":auth:presentation")
 }

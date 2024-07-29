@@ -1,0 +1,18 @@
+plugins {
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+apply from: "../../android-library-config.gradle"
+apply plugin: 'kotlin-android'
+
+android {
+    namespace 'com.movietime.auth'
+}
+
+dependencies {
+    //DI
+    implementation "com.google.dagger:hilt-android:$daggerHiltVersion"
+    kapt "com.google.dagger:hilt-compiler:$daggerHiltVersion"
+
+    implementation project(':domain')
+}

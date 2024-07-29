@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.twotone.List
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -35,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -70,13 +70,23 @@ fun TvShowDetailRoute(
     TvShowDetailView(
         uiState = uiState,
         onTvShowSelected = onTvShowSelected,
-        onBackNavigation = {onBackNavigation()}
-    ){viewModel.onRecommendationsThreshold()}
+        onBackNavigation = {onBackNavigation()},
+        onRecommendationsThresholdReached = {viewModel.onRecommendationsThreshold()},
+        onAddToWatchList = {viewModel.addToWatchList()},
+        onUserRedirected = {viewModel.userRedirected()}
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-private fun TvShowDetailView(uiState: TvShowDetailUiState, onTvShowSelected: (id: Int) -> Unit, onBackNavigation: () -> Unit, onRecommendationsThresholdReached: () -> Unit){
+private fun TvShowDetailView(
+    uiState: TvShowDetailUiState,
+    onTvShowSelected: (id: Int) -> Unit,
+    onBackNavigation: () -> Unit,
+    onRecommendationsThresholdReached: () -> Unit,
+    onAddToWatchList: () -> Unit,
+    onUserRedirected: () -> Unit,
+){
     val listState = rememberLazyListState()
     var appBarHeight by remember { mutableStateOf(0) }
     var iconWidth by remember { mutableStateOf(0) }
@@ -94,7 +104,6 @@ private fun TvShowDetailView(uiState: TvShowDetailUiState, onTvShowSelected: (id
             uiState.tvShowDetail.title
         } else
             ""
-
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -103,7 +112,9 @@ private fun TvShowDetailView(uiState: TvShowDetailUiState, onTvShowSelected: (id
             TopBar(showAppBarTitle, title, onBackNavigation, {iconWidth = it}, {appBarHeight = it})
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
+            FloatingActionButton(onClick = {
+                onAddToWatchList()
+            }) {
                 Icon(Icons.Filled.List, "Add to watchlist")
             }
         }
@@ -119,7 +130,9 @@ private fun TvShowDetailView(uiState: TvShowDetailUiState, onTvShowSelected: (id
                 listState = listState,
                 onTvShowSelected = onTvShowSelected,
                 collapsableTitleConfig = CollapsableConfig(appBarHeight, iconWidth - appBarHorizontalPadding, MaterialTheme.typography.titleLarge.fontSize),
-                modifier = Modifier.consumedWindowInsets(padding)
+                modifier = Modifier.consumedWindowInsets(padding),
+                redirectUser = uiState.redirectUser,
+                onUserRedirected = onUserRedirected,
             ) {
                 onRecommendationsThresholdReached()
             }
@@ -144,8 +157,16 @@ private fun DetailContent(
     onTvShowSelected: (id: Int) -> Unit = {},
     collapsableTitleConfig: CollapsableConfig,
     loading: Boolean = false,
+    redirectUser: String? = null,
+    onUserRedirected: () -> Unit = {},
     onRecommendationsThresholdReached: () -> Unit = {}
 ){
+    //todo move this to another place and use chrometabs
+    if(redirectUser != null){
+        val uriHandler = LocalUriHandler.current
+        uriHandler.openUri(redirectUser)
+        onUserRedirected()
+    }
     LazyColumn(
         state = listState,
         modifier = modifier

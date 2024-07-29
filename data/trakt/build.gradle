@@ -1,0 +1,39 @@
+plugins {
+    id 'kotlin-kapt'
+}
+apply from: "../../android-library-config.gradle"
+apply plugin: 'kotlin-android'
+
+android {
+    namespace 'com.movietime.data.trakt'
+    defaultConfig {
+        buildConfigField "String", "TRAKT_CLIENT_ID", project.properties["TRAKT_CLIENT_ID"]
+        buildConfigField "String", "TRAKT_CLIENT_SECRET", project.properties["TRAKT_CLIENT_SECRET"]
+    }
+}
+
+dependencies {
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidxLifecycleVersion"
+
+    //Networking
+    //  Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-jackson:$retrofitVersion"
+    //  Okhttp
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+    implementation "androidx.core:core-ktx:$androidxCoreVersion"
+
+    //DI
+    implementation "com.google.dagger:hilt-android:$daggerHiltVersion"
+    kapt "com.google.dagger:hilt-compiler:$daggerHiltVersion"
+
+    implementation "androidx.core:core-ktx:$androidxCoreVersion"
+
+    //Oauth
+//    implementation 'net.openid:appauth:0.11.1'
+
+    implementation project(':domain')
+    
+}

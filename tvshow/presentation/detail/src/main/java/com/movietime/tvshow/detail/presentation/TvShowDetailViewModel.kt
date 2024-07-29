@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
+import com.movietime.domain.interactors.auth.GetAuthorizationRedirectUri
 import com.movietime.domain.interactors.tvshow.GetTvShowDetailUseCaseFactory
 import com.movietime.domain.interactors.tvshow.GetTvShowRecommendationsUseCaseFactory
 import com.movietime.domain.interactors.tvshow.GetTvShowVideosUseCaseFactory
@@ -26,12 +27,14 @@ class TvShowDetailViewModel @Inject constructor(
     getTvShowRecommendationsUseCaseFactory: GetTvShowRecommendationsUseCaseFactory,
     getTvShowDetailUseCaseFactory: GetTvShowDetailUseCaseFactory,
     getTvShowVideosUseCaseFactory: GetTvShowVideosUseCaseFactory,
-    movieDetailRepositoryFactory: TvShowDetailRepositoryFactory
+    movieDetailRepositoryFactory: TvShowDetailRepositoryFactory,
+    private val getAuthorizationRedirectUri: GetAuthorizationRedirectUri
 ) : ViewModel() {
     private val repository = movieDetailRepositoryFactory.create(savedStateHandle["paramTvShowId"]!!)
     private val getTvShowDetailUseCase = getTvShowDetailUseCaseFactory.create(repository)
     private val getTvShowRecommendationsUseCase = getTvShowRecommendationsUseCaseFactory.create(repository)
     private val getTvShowVideosUseCase = getTvShowVideosUseCaseFactory.create(repository)
+    private val _redirectUser = MutableStateFlow<String?>(null)
 
     private val recommendationsListState = ListState({
         fetchRecommendations { getTvShowRecommendationsUseCase.refresh() }
@@ -58,12 +61,14 @@ class TvShowDetailViewModel @Inject constructor(
         combine(
             getTvShowDetailUseCase.tvShowDetail.map(TvShowDetail::toUiTvShowDetail),
             getTvShowVideosUseCase.tvShowVideos.map { it.map(Video::toUiVideo) },
-            getTvShowRecommendationsUseCase.recommendedTvShows.map{ it.map(TvShowPreview::toPosterItem) }
-        ) { tvShowDetail, videos, recommendations ->
+            getTvShowRecommendationsUseCase.recommendedTvShows.map{ it.map(TvShowPreview::toPosterItem) },
+            _redirectUser
+        ) { tvShowDetail, videos, recommendations, redirectUser ->
             val tvShowDetailUiState: TvShowDetailUiState = TvShowDetailUiState.Content(
                 tvShowDetail,
                 videos,
-                recommendations
+                recommendations,
+                redirectUser
             )
             tvShowDetailUiState
         }.catch { throwable ->
@@ -86,6 +91,14 @@ class TvShowDetailViewModel @Inject constructor(
 
     fun onRecommendationsThreshold() {
         recommendationsListState.thresholdReached()
+    }
+
+    fun addToWatchList() {
+        _redirectUser.value = getAuthorizationRedirectUri()
+    }
+
+    fun userRedirected() {
+        _redirectUser.value = null
     }
 
 }
