@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
+import com.movietime.domain.interactors.movie.AddMovieToWatchlistUseCase
 import com.movietime.movie.detail.presentation.model.MovieDetailUiState
 import com.movietime.movie.detail.presentation.model.toPosterItem
 import com.movietime.movie.detail.presentation.model.toUiMovieDetail
@@ -28,13 +29,13 @@ class MovieDetailViewModel @Inject constructor(
     getMovieDetailUseCaseFactory: GetMovieDetailUseCaseFactory,
     getMovieVideosUseCaseFactory: GetMovieVideosUseCaseFactory,
     movieDetailRepositoryFactory: MovieDetailRepositoryFactory,
-    getMovieIdsUseCaseFactory: GetMovieIdsUseCaseFactory
+    private val addMovieToWatchlistUseCase: AddMovieToWatchlistUseCase
 ) : ViewModel() {
-    private val repository = movieDetailRepositoryFactory.create(savedStateHandle["paramMovieId"]!!)
+    private val movieId: Int = savedStateHandle["paramMovieId"]!!
+    private val repository = movieDetailRepositoryFactory.create(movieId)
     private val getMovieDetailUseCase = getMovieDetailUseCaseFactory.create(repository)
     private val getMovieRecommendationsUseCase = getMovieRecommendationsUseCaseFactory.create(repository)
     private val getMovieVideosUseCase = getMovieVideosUseCaseFactory.create(repository)
-    private val getMovieIdsUseCase = getMovieIdsUseCaseFactory.create(repository)
 
 
     private val recommendationsListState = ListState({
@@ -89,6 +90,12 @@ class MovieDetailViewModel @Inject constructor(
 
     fun onRecommendationsThreshold() {
         recommendationsListState.thresholdReached()
+    }
+
+    fun addToWatchlist() {
+        viewModelScope.launch {
+            addMovieToWatchlistUseCase(movieId)
+        }
     }
 
 }

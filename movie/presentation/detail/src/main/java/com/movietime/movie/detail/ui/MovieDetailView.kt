@@ -17,7 +17,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -65,13 +69,21 @@ fun MovieDetailRoute(
     MovieDetailView(
         uiState = uiState,
         onMovieSelected = onMovieSelected,
-        onBackNavigation = {onBackNavigation()}
-    ){viewModel.onRecommendationsThreshold()}
+        onBackNavigation = {onBackNavigation()},
+        onRecommendationsThresholdReached = {viewModel.onRecommendationsThreshold()},
+        onAddToWatchlist = { viewModel.addToWatchlist() }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-private fun MovieDetailView(uiState: MovieDetailUiState, onMovieSelected: (id: Int) -> Unit, onBackNavigation: () -> Unit, onRecommendationsThresholdReached: () -> Unit){
+private fun MovieDetailView(
+    uiState: MovieDetailUiState,
+    onMovieSelected: (id: Int) -> Unit,
+    onBackNavigation: () -> Unit,
+    onRecommendationsThresholdReached: () -> Unit,
+    onAddToWatchlist: () -> Unit
+){
     val listState = rememberLazyListState()
     var appBarHeight by remember { mutableStateOf(0) }
     var iconWidth by remember { mutableStateOf(0) }
@@ -96,6 +108,11 @@ private fun MovieDetailView(uiState: MovieDetailUiState, onMovieSelected: (id: I
             .background(MaterialTheme.colorScheme.surface),
         topBar = {
             TopBar(showAppBarTitle, title, onBackNavigation, {iconWidth = it}, {appBarHeight = it})
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = { onAddToWatchlist() }) {
+                Icon(Icons.Default.List, contentDescription = stringResource(R.string.add_to_watchlist))
+            }
         }
     ) { padding ->
         when (uiState) {

@@ -6,9 +6,9 @@ import com.movietime.domain.model.MovieIds
 object MovieIdsMapper {
     fun map(traktIds: TraktIds): MovieIds =
         MovieIds(
-            traktIds.trakt,
-            traktIds.slug,
-            traktIds.imdb,
-            traktIds.tmdb
+            traktIds.trakt!!,
+            traktIds.slug!!,
+            traktIds.imdb!!,
+            traktIds.tmdb!!
         )
 }

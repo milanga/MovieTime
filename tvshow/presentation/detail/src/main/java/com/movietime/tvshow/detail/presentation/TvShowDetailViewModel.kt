@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
 import com.movietime.domain.interactors.auth.GetAuthorizationRedirectUri
+import com.movietime.domain.interactors.movie.AddTvShowToWatchlistUseCase
 import com.movietime.domain.interactors.tvshow.GetTvShowDetailUseCaseFactory
 import com.movietime.domain.interactors.tvshow.GetTvShowRecommendationsUseCaseFactory
 import com.movietime.domain.interactors.tvshow.GetTvShowVideosUseCaseFactory
@@ -28,8 +29,10 @@ class TvShowDetailViewModel @Inject constructor(
     getTvShowDetailUseCaseFactory: GetTvShowDetailUseCaseFactory,
     getTvShowVideosUseCaseFactory: GetTvShowVideosUseCaseFactory,
     movieDetailRepositoryFactory: TvShowDetailRepositoryFactory,
+    private val addTvShowToWatchlistUseCase: AddTvShowToWatchlistUseCase
 ) : ViewModel() {
-    private val repository = movieDetailRepositoryFactory.create(savedStateHandle["paramTvShowId"]!!)
+    private val tvShowDetailId: Int = savedStateHandle["paramTvShowId"]!!
+    private val repository = movieDetailRepositoryFactory.create(tvShowDetailId)
     private val getTvShowDetailUseCase = getTvShowDetailUseCaseFactory.create(repository)
     private val getTvShowRecommendationsUseCase = getTvShowRecommendationsUseCaseFactory.create(repository)
     private val getTvShowVideosUseCase = getTvShowVideosUseCaseFactory.create(repository)
@@ -90,6 +93,9 @@ class TvShowDetailViewModel @Inject constructor(
     }
 
     fun addToWatchList() {
+        viewModelScope.launch {
+            addTvShowToWatchlistUseCase(tvShowDetailId)
+        }
     }
 
 }
