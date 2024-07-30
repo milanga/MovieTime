@@ -2,7 +2,7 @@ package com.movietime.data.trakt.di.movie
 
 import com.movietime.data.trakt.datasources.TraktMovieIdsDataSource
 import com.movietime.data.trakt.di.network.NetworkModule.Companion.TRAKT_RETROFIT
-import com.movietime.data.trakt.mappers.MovieIdsMapper
+import com.movietime.data.trakt.mappers.MediaIdsMapper
 import com.movietime.data.trakt.service.MovieService
 import com.movietime.domain.repository.movie.MovieIdsDataSource
 import dagger.Binds
@@ -28,6 +28,6 @@ abstract class MovieModule {
         }
 
         @Provides
-        fun provideMovieIdsMapper() = MovieIdsMapper
+        fun provideMovieIdsMapper() = MediaIdsMapper
     }
 }

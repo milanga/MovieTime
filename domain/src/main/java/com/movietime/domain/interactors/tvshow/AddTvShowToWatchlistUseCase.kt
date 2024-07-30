@@ -1,4 +1,4 @@
-package com.movietime.domain.interactors.movie
+package com.movietime.domain.interactors.tvshow
 
 import com.movietime.domain.repository.watchlist.WatchlistRepository
 import javax.inject.Inject

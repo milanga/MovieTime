@@ -1,5 +1,6 @@
 package com.movietime.domain.repository.watchlist
 
+import com.movietime.domain.model.MediaIds
 import javax.inject.Inject
 
 class WatchlistRepository @Inject constructor(
@@ -11,5 +12,9 @@ class WatchlistRepository @Inject constructor(
 
     suspend fun addTvShowToWatchlist(tmdbID: Int) {
         watchlistDataSource.addTvShowToWatchlist(tmdbID)
+    }
+
+    suspend fun getMovieWatchlistIds(): List<MediaIds> {
+        return watchlistDataSource.getMovieWatchlistIds()
     }
 }

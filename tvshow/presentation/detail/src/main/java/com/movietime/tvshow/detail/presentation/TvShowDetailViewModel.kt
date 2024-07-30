@@ -4,8 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
-import com.movietime.domain.interactors.auth.GetAuthorizationRedirectUri
-import com.movietime.domain.interactors.movie.AddTvShowToWatchlistUseCase
+import com.movietime.domain.interactors.tvshow.AddTvShowToWatchlistUseCase
 import com.movietime.domain.interactors.tvshow.GetTvShowDetailUseCaseFactory
 import com.movietime.domain.interactors.tvshow.GetTvShowRecommendationsUseCaseFactory
 import com.movietime.domain.interactors.tvshow.GetTvShowVideosUseCaseFactory
