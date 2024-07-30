@@ -1,8 +1,8 @@
 package com.movietime.domain.di
 
-import com.movietime.domain.interactors.movie.MovieDetailRepositoryFactory
+import com.movietime.domain.interactors.movie.MovieDetailRepository
 import com.movietime.domain.interactors.movie.MoviesRepository
-import com.movietime.domain.repository.movie.RemoteMovieDetailRepositoryFactory
+import com.movietime.domain.repository.movie.RemoteMovieDetailRepository
 import com.movietime.domain.repository.movie.RemoteMoviesRepository
 import dagger.Binds
 import dagger.Module
@@ -17,7 +17,7 @@ abstract class MovieModule {
 
     @Binds
     @Reusable
-    abstract fun bindMovieDetailRepositoryFactory(remoteMovieDetailRepositoryFactory: RemoteMovieDetailRepositoryFactory): MovieDetailRepositoryFactory
+    abstract fun bindMovieDetailRepository(remoteMovieDetailRepository: RemoteMovieDetailRepository): MovieDetailRepository
 
     @Binds
     @Reusable

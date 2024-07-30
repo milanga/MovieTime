@@ -1,18 +1,9 @@
 package com.movietime.domain.interactors.movie
 
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import javax.inject.Inject
 
-class GetMovieDetailUseCase @AssistedInject constructor(
-    @Assisted private val movieDetailRepository: MovieDetailRepository
+class GetMovieDetailUseCase @Inject constructor(
+    private val movieDetailRepository: MovieDetailRepository
 ) {
-    val movieDetail = movieDetailRepository.movieDetail
-
-    suspend fun fetchMovieDetail() = movieDetailRepository.fetchMovieDetail()
-}
-
-@AssistedFactory
-interface GetMovieDetailUseCaseFactory {
-    fun create(movieDetailRepository: MovieDetailRepository): GetMovieDetailUseCase
+    operator fun invoke(tmdbMovieId: Int) = movieDetailRepository.getMovieDetail(tmdbMovieId)
 }

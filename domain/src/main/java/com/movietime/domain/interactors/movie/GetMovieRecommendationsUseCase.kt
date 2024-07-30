@@ -1,19 +1,34 @@
 package com.movietime.domain.interactors.movie
 
+import com.movietime.domain.model.MoviePreview
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-class GetMovieRecommendationsUseCase @AssistedInject constructor(
-    @Assisted private val movieDetailRepository: MovieDetailRepository
+class GetMovieRecommendationsUseCase @Inject constructor(
+    private val movieDetailRepository: MovieDetailRepository
 ) {
-    val recommendedMovies = movieDetailRepository.recommendedMovies
+    private var recommendationsPage = 1
+    private val _recommendedMovies = MutableStateFlow<List<MoviePreview>>(emptyList())
+    val recommendedMovies : StateFlow<List<MoviePreview>> = _recommendedMovies
 
-    suspend fun refresh() = movieDetailRepository.refreshRecommendations()
-    suspend fun fetchMore() = movieDetailRepository.fetchMoreRecommendations()
-}
+    /**
+     * Get the first page of recommendations given a movie id.
+     */
+    suspend fun refresh(tmdbMovieId: Int) {
+        recommendationsPage = 1
+        _recommendedMovies.value = movieDetailRepository.getRecommendations(tmdbMovieId, recommendationsPage).first()
+    }
 
-@AssistedFactory
-interface GetMovieRecommendationsUseCaseFactory {
-    fun create(movieDetailRepository: MovieDetailRepository): GetMovieRecommendationsUseCase
+    /**
+     * Get the following page of recommendations given a movie id.
+     */
+    suspend fun fetchMore(tmdbMovieId: Int) {
+        recommendationsPage++
+        _recommendedMovies.value = _recommendedMovies.value.plus(movieDetailRepository.getRecommendations(tmdbMovieId, recommendationsPage).first())
+    }
 }

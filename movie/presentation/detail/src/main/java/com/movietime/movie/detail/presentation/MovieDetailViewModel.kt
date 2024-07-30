@@ -5,43 +5,40 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
 import com.movietime.domain.interactors.movie.AddMovieToWatchlistUseCase
+import com.movietime.domain.interactors.movie.GetMovieDetailUseCase
+import com.movietime.domain.interactors.movie.GetMovieRecommendationsUseCase
+import com.movietime.domain.interactors.movie.GetMovieVideosUseCase
+import com.movietime.domain.model.MovieDetail
+import com.movietime.domain.model.MoviePreview
+import com.movietime.domain.model.Video
 import com.movietime.movie.detail.presentation.model.MovieDetailUiState
 import com.movietime.movie.detail.presentation.model.toPosterItem
 import com.movietime.movie.detail.presentation.model.toUiMovieDetail
 import com.movietime.movie.detail.presentation.model.toUiVideo
-import com.movietime.domain.interactors.movie.GetMovieDetailUseCaseFactory
-import com.movietime.domain.interactors.movie.GetMovieIdsUseCaseFactory
-import com.movietime.domain.interactors.movie.GetMovieRecommendationsUseCaseFactory
-import com.movietime.domain.interactors.movie.GetMovieVideosUseCaseFactory
-import com.movietime.domain.interactors.movie.MovieDetailRepositoryFactory
-import com.movietime.domain.model.MovieDetail
-import com.movietime.domain.model.MoviePreview
-import com.movietime.domain.model.Video
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    getMovieRecommendationsUseCaseFactory: GetMovieRecommendationsUseCaseFactory,
-    getMovieDetailUseCaseFactory: GetMovieDetailUseCaseFactory,
-    getMovieVideosUseCaseFactory: GetMovieVideosUseCaseFactory,
-    movieDetailRepositoryFactory: MovieDetailRepositoryFactory,
+    private val getMovieRecommendationsUseCase: GetMovieRecommendationsUseCase,
+    private val getMovieDetailUseCase: GetMovieDetailUseCase,
+    private val getMovieVideosUseCase: GetMovieVideosUseCase,
     private val addMovieToWatchlistUseCase: AddMovieToWatchlistUseCase
 ) : ViewModel() {
     private val movieId: Int = savedStateHandle["paramMovieId"]!!
-    private val repository = movieDetailRepositoryFactory.create(movieId)
-    private val getMovieDetailUseCase = getMovieDetailUseCaseFactory.create(repository)
-    private val getMovieRecommendationsUseCase = getMovieRecommendationsUseCaseFactory.create(repository)
-    private val getMovieVideosUseCase = getMovieVideosUseCaseFactory.create(repository)
-
 
     private val recommendationsListState = ListState({
-        fetchRecommendations { getMovieRecommendationsUseCase.refresh() }
+        fetchRecommendations { getMovieRecommendationsUseCase.refresh(movieId) }
     },{
-        fetchRecommendations { getMovieRecommendationsUseCase.fetchMore() }
+        fetchRecommendations { getMovieRecommendationsUseCase.fetchMore(movieId) }
     })
 
     private fun fetchRecommendations(fetchFunction: suspend ()->Unit){
@@ -58,10 +55,10 @@ class MovieDetailViewModel @Inject constructor(
 
     // UI state exposed to the UI
     val uiState: StateFlow<MovieDetailUiState> by lazy {
-        initializeData()
+        recommendationsListState.refresh()
         combine(
-            getMovieDetailUseCase.movieDetail.map(MovieDetail::toUiMovieDetail),
-            getMovieVideosUseCase.movieVideos.map { it.map(Video::toUiVideo) },
+            getMovieDetailUseCase(movieId).map(MovieDetail::toUiMovieDetail),
+            getMovieVideosUseCase(movieId).map { it.map(Video::toUiVideo) },
             getMovieRecommendationsUseCase.recommendedMovies.map{ it.map(MoviePreview::toPosterItem) }
         ) { movieDetail, videos, recommendations ->
             val movieDetailUiState: MovieDetailUiState = MovieDetailUiState.Content(
@@ -78,14 +75,6 @@ class MovieDetailViewModel @Inject constructor(
             SharingStarted.WhileSubscribed(5_000),
             MovieDetailUiState.Loading
         )
-    }
-
-    private fun initializeData() {
-        recommendationsListState.refresh()
-        viewModelScope.launch {
-            getMovieDetailUseCase.fetchMovieDetail()
-            getMovieVideosUseCase.fetchMovieVideos()
-        }
     }
 
     fun onRecommendationsThreshold() {

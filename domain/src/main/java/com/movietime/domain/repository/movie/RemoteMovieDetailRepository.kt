@@ -1,61 +1,31 @@
 package com.movietime.domain.repository.movie
 
 import com.movietime.domain.interactors.movie.MovieDetailRepository
-import com.movietime.domain.interactors.movie.MovieDetailRepositoryFactory
-import com.movietime.domain.model.MovieDetail
 import com.movietime.domain.model.MediaIds
+import com.movietime.domain.model.MovieDetail
 import com.movietime.domain.model.MoviePreview
 import com.movietime.domain.model.Video
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class RemoteMovieDetailRepository @AssistedInject constructor(
+class RemoteMovieDetailRepository @Inject constructor(
     private val remoteDetailDataSource: MovieDetailDataSource,
     private val movieIdsDataSource: MovieIdsDataSource,
-    @Assisted private val movieId: Int
 ): MovieDetailRepository {
-    private var recommendationsPage = 1
-    private val _recommendedMovies = MutableStateFlow<List<MoviePreview>>(emptyList())
-    override val recommendedMovies: Flow<List<MoviePreview>> = _recommendedMovies
-
-    private val _movieDetail = MutableSharedFlow<MovieDetail>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
-    override val movieDetail: Flow<MovieDetail> = _movieDetail
-
-    private val _movieVideos = MutableSharedFlow<List<Video>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
-    override val movieVideos: Flow<List<Video>> = _movieVideos
-
-    private val _movieIds = MutableSharedFlow<MediaIds>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
-    override val movieIds: Flow<MediaIds> = _movieIds
-
-    override suspend fun fetchMovieDetail() {
-        _movieDetail.emit(remoteDetailDataSource.getMovieDetail(movieId))
+    override fun getMovieDetail(tmdbMovieId: Int): Flow<MovieDetail> {
+        return flow { emit(remoteDetailDataSource.getMovieDetail(tmdbMovieId)) }
     }
 
-    override suspend fun fetchMovieIds(imdbId: String) {
-        _movieIds.emit(movieIdsDataSource.getMovieIds(imdbId))
+    override fun getMovieIds(imdbMovieId: String): Flow<MediaIds> {
+        return flow { emit(movieIdsDataSource.getMovieIds(imdbMovieId)) }
     }
 
-    override suspend fun fetchMovieVideos() {
-        _movieVideos.emit(remoteDetailDataSource.getMovieVideos(movieId))
+    override  fun getMovieVideos(tmdbMovieId: Int): Flow<List<Video>> {
+        return flow { emit(remoteDetailDataSource.getMovieVideos(tmdbMovieId)) }
     }
 
-    override suspend fun refreshRecommendations() {
-        recommendationsPage = 1
-        _recommendedMovies.emit(remoteDetailDataSource.getMovieRecommendations(movieId, recommendationsPage))
+    override fun getRecommendations(tmdbMovieId: Int, page: Int): Flow<List<MoviePreview>> {
+        return flow { emit(remoteDetailDataSource.getMovieRecommendations(tmdbMovieId, page)) }
     }
-    override suspend fun fetchMoreRecommendations() {
-        recommendationsPage++
-        _recommendedMovies.emit(_recommendedMovies.value.plus(remoteDetailDataSource.getMovieRecommendations(movieId, recommendationsPage)))
-    }
-}
-
-@AssistedFactory
-interface RemoteMovieDetailRepositoryFactory:
-    MovieDetailRepositoryFactory {
-    override fun create(movieId: Int): RemoteMovieDetailRepository
 }

@@ -1,23 +1,9 @@
 package com.movietime.domain.interactors.movie
 
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.singleOrNull
+import javax.inject.Inject
 
-class GetMovieIdsUseCase @AssistedInject constructor(
-    @Assisted private val movieDetailRepository: MovieDetailRepository
+class GetMovieIdsUseCase @Inject constructor(
+    private val movieDetailRepository: MovieDetailRepository
 ) {
-    val movieIds = movieDetailRepository.movieIds
-
-    suspend fun fetchMovieIds() {
-        movieDetailRepository.movieDetail.singleOrNull()?.imdbId?.let { imdbId ->
-            movieDetailRepository.fetchMovieIds(imdbId)
-        }
-    }
-}
-
-@AssistedFactory
-interface GetMovieIdsUseCaseFactory {
-    fun create(movieDetailRepository: MovieDetailRepository): GetMovieIdsUseCase
+    operator fun invoke(imdbMovieId: String) = movieDetailRepository.getMovieIds(imdbMovieId)
 }
