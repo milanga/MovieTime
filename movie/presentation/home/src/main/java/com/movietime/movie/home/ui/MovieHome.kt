@@ -55,6 +55,7 @@ private fun MovieHome(
             popularMovies = uiState.popularMovies,
             topRatedMovies = uiState.topRatedMovies,
             upcomingMovies = uiState.upcomingMovies,
+            moviesWatchlist = uiState.moviesWatchlist,
             onMovieSelected = onMovieSelected,
             onTopRatedMoviesThresholdReached = onTopRatedMoviesThresholdReached,
             onUpcomingMoviesThresholdReached = onUpcomingMoviesThresholdReached,
@@ -74,6 +75,7 @@ private fun Content(
     popularMovies: List<HighlightedItem> = emptyList(),
     topRatedMovies: List<PosterItem> = emptyList(),
     upcomingMovies: List<PosterItem> = emptyList(),
+    moviesWatchlist: List<HighlightedItem> = emptyList(),
     onMovieSelected: (id: Int) -> Unit = {},
     loading: Boolean = false,
     onTopRatedMoviesThresholdReached: () -> Unit = {},
@@ -136,6 +138,24 @@ private fun Content(
                     onScrollThresholdReached = onUpcomingMoviesThresholdReached,
                     modifier = Modifier.padding(top = 8.dp),
                     loading = loading
+                )
+            }
+
+            item {
+                SectionTitle(
+                    stringResource(R.string.watchlist_title),
+                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                    loading = loading
+                )
+            }
+
+            item {
+                HighlightedSection(
+                    highlightedList = moviesWatchlist,
+                    onItemSelected = onMovieSelected,
+                    onScrollThresholdReached = {},
+                    loading = loading,
+                    modifier = Modifier.padding(top = 8.dp),
                 )
             }
         }

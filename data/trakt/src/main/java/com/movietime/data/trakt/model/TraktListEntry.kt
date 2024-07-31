@@ -9,8 +9,8 @@ data class TraktListEntry(
     @JsonProperty("listed_at") val listedAt: String,
     @JsonProperty("notes") val notes: String?,
     @JsonProperty("type") val type: String,
-    @JsonProperty("episode") val episode: Episode,
-    @JsonProperty("show") val show: TraktMediaDetail,
-    @JsonProperty("season") val season: TraktSeason,
-    @JsonProperty("movie") val movie: TraktMediaDetail
+    @JsonProperty("episode") val episode: Episode?,
+    @JsonProperty("show") val show: TraktMediaDetail?,
+    @JsonProperty("season") val season: TraktSeason?,
+    @JsonProperty("movie") val movie: TraktMediaDetail?
 )

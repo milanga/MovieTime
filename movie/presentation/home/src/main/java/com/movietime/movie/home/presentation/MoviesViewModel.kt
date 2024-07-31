@@ -10,6 +10,8 @@ import com.movietime.domain.interactors.movie.GetTopRatedMoviesUseCase
 import com.movietime.domain.interactors.movie.GetUpcomingMoviesUseCase
 import com.movietime.domain.model.MoviePreview
 import com.movietime.core.views.highlight.model.HighlightedItem
+import com.movietime.domain.interactors.movie.GetMoviesWatchlistUseCase
+import com.movietime.domain.model.MovieDetail
 import com.movietime.movie.detail.presentation.model.toHighlightedItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -20,7 +22,8 @@ import javax.inject.Inject
 class MoviesViewModel @Inject constructor(
     private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
     private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase,
-    private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase
+    private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
+    private val getMoviesWatchlistUseCase: GetMoviesWatchlistUseCase
 ): ViewModel() {
     sealed interface MoviesUiState{
         object Loading: MoviesUiState
@@ -28,7 +31,8 @@ class MoviesViewModel @Inject constructor(
         data class Content(
             val popularMovies: List<HighlightedItem>,
             val topRatedMovies: List<PosterItem>,
-            val upcomingMovies: List<PosterItem>
+            val upcomingMovies: List<PosterItem>,
+            val moviesWatchlist: List<HighlightedItem>
         ): MoviesUiState
     }
 
@@ -70,15 +74,17 @@ class MoviesViewModel @Inject constructor(
         combine(
             getPopularMoviesUseCase.popularMovies.map { it.map(MoviePreview::toHighlightedItem) },
             getTopRatedMoviesUseCase.topRatedMovies.map { it.map(MoviePreview::toPosterItem) },
-            getUpcomingMoviesUseCase.upcomingMovies.map { it.map(MoviePreview::toPosterItem) }
-        ) { popularMovies, topRatedMovies, upcomingMovies ->
+            getUpcomingMoviesUseCase.upcomingMovies.map { it.map(MoviePreview::toPosterItem) },
+            getMoviesWatchlistUseCase().map { it.map(MovieDetail::toHighlightedItem) }
+        ) { popularMovies, topRatedMovies, upcomingMovies, moviesWatchlist ->
             if(popularMovies.isEmpty() || topRatedMovies.isEmpty() || upcomingMovies.isEmpty()){
                 MoviesUiState.Loading
             } else {
                 val movieDetailUiState: MoviesUiState = MoviesUiState.Content(
                     popularMovies,
                     topRatedMovies,
-                    upcomingMovies
+                    upcomingMovies,
+                    moviesWatchlist
                 )
                 movieDetailUiState
             }

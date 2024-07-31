@@ -23,13 +23,14 @@ import androidx.compose.ui.util.lerp
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HighlightedSection(
+    modifier: Modifier = Modifier,
     highlightedList: List<HighlightedItem> = listOf(),
     onItemSelected: (id: Int) -> Unit = {},
     onScrollThresholdReached: () -> Unit = {},
     threshold: Int = 5,
     loading: Boolean = false
 ) {
-    val modifier = if(loading){
+    val defaultModifier = if(loading){
         Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
@@ -42,7 +43,7 @@ fun HighlightedSection(
     }
     HorizontalPager(
         count = highlightedList.size,
-        modifier = modifier,
+        modifier = modifier.then(defaultModifier),
         contentPadding = PaddingValues(horizontal = 16.dp)
     ) { page ->
         if (highlightedList.size - page < threshold) {

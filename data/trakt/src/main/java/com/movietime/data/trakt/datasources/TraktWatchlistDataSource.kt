@@ -29,12 +29,12 @@ class TraktWatchlistDataSource @Inject constructor(
 
     override suspend fun getMovieWatchlistIds(): List<MediaIds> {
         return watchlistService.getWatchlist("movies", "rank")
-            .map { mediaIdsMapper.map(it.movie.ids) }
+            .map { mediaIdsMapper.map(it.movie!!.ids) }
     }
 
     override suspend fun getTvShowWatchlistIds(): List<MediaIds> {
         return watchlistService.getWatchlist("shows", "rank")
-            .map { mediaIdsMapper.map(it.show.ids) }
+            .map { mediaIdsMapper.map(it.show!!.ids) }
     }
 
     private fun traktMediaDetail(tmdbID: Int): TraktMediaDetail =
