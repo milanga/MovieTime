@@ -19,4 +19,8 @@ class WatchlistRepository @Inject constructor(
     fun getMovieWatchlistIds(): Flow<List<MediaIds>> {
         return flow { emit(watchlistDataSource.getMovieWatchlistIds()) }
     }
+
+    fun getTvShowWatchlistIds(): Flow<List<MediaIds>> {
+        return flow { emit(watchlistDataSource.getTvShowWatchlistIds()) }
+    }
 }

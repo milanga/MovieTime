@@ -153,7 +153,6 @@ private fun Content(
                 HighlightedSection(
                     highlightedList = moviesWatchlist,
                     onItemSelected = onMovieSelected,
-                    onScrollThresholdReached = {},
                     loading = loading,
                     modifier = Modifier.padding(top = 8.dp),
                 )

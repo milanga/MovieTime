@@ -5,9 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
 import com.movietime.core.views.poster.model.PosterItem
 import com.movietime.core.views.highlight.model.HighlightedItem
+import com.movietime.domain.interactors.movie.GetTvShowsWatchlistUseCase
 import com.movietime.domain.interactors.tvshow.GetOnTheAirTvShowsUseCase
 import com.movietime.domain.interactors.tvshow.GetPopularTvShowsUseCase
 import com.movietime.domain.interactors.tvshow.GetTopRatedTvShowsUseCase
+import com.movietime.domain.model.TvShowDetail
 import com.movietime.domain.model.TvShowPreview
 import com.movietime.tvshow.detail.presentation.model.toHighlightedItem
 import com.movietime.tvshow.detail.presentation.model.toPosterItem
@@ -20,7 +22,8 @@ import javax.inject.Inject
 class TvShowsViewModel @Inject constructor(
     private val getPopularTvShowsUseCase: GetPopularTvShowsUseCase,
     private val getTopRatedTvShowsUseCase: GetTopRatedTvShowsUseCase,
-    private val getOnTheAirTvShowsUseCase: GetOnTheAirTvShowsUseCase
+    private val getOnTheAirTvShowsUseCase: GetOnTheAirTvShowsUseCase,
+    private val getWatchlistTvShowsUseCase: GetTvShowsWatchlistUseCase
 ): ViewModel() {
     sealed interface TvShowsUiState{
         object Loading: TvShowsUiState
@@ -28,7 +31,8 @@ class TvShowsViewModel @Inject constructor(
         data class Content(
             val popularTvShows: List<HighlightedItem>,
             val topRatedTvShows: List<PosterItem>,
-            val onTheAirTvShows: List<PosterItem>
+            val onTheAirTvShows: List<PosterItem>,
+            val watchlistTvShows: List<HighlightedItem>
         ): TvShowsUiState
     }
 
@@ -70,15 +74,17 @@ class TvShowsViewModel @Inject constructor(
         combine(
             getPopularTvShowsUseCase.popularTvShows.map { it.map(TvShowPreview::toHighlightedItem) },
             getTopRatedTvShowsUseCase.topRatedTvShows.map { it.map(TvShowPreview::toPosterItem) },
-            getOnTheAirTvShowsUseCase.onTheAirTvShows.map { it.map(TvShowPreview::toPosterItem) }
-        ) { popularTvShows, topRatedTvShows, onTheAirTvShows ->
-            if(popularTvShows.isEmpty() || topRatedTvShows.isEmpty() || onTheAirTvShows.isEmpty()){
+            getOnTheAirTvShowsUseCase.onTheAirTvShows.map { it.map(TvShowPreview::toPosterItem) },
+            getWatchlistTvShowsUseCase().map { it.map(TvShowDetail::toHighlightedItem) }
+        ) { popularTvShows, topRatedTvShows, onTheAirTvShows, watchlistTvShows ->
+            if(popularTvShows.isEmpty() || topRatedTvShows.isEmpty() || onTheAirTvShows.isEmpty() || watchlistTvShows.isEmpty()){
                 TvShowsUiState.Loading
             } else {
                 val tvShowUiState: TvShowsUiState = TvShowsUiState.Content(
                     popularTvShows,
                     topRatedTvShows,
-                    onTheAirTvShows
+                    onTheAirTvShows,
+                    watchlistTvShows
                 )
                 tvShowUiState
             }

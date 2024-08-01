@@ -5,10 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
 import com.movietime.domain.interactors.tvshow.AddTvShowToWatchlistUseCase
-import com.movietime.domain.interactors.tvshow.GetTvShowDetailUseCaseFactory
-import com.movietime.domain.interactors.tvshow.GetTvShowRecommendationsUseCaseFactory
-import com.movietime.domain.interactors.tvshow.GetTvShowVideosUseCaseFactory
-import com.movietime.domain.interactors.tvshow.TvShowDetailRepositoryFactory
+import com.movietime.domain.interactors.tvshow.GetTvShowDetailUseCase
+import com.movietime.domain.interactors.tvshow.GetTvShowRecommendationsUseCase
+import com.movietime.domain.interactors.tvshow.GetTvShowVideosUseCase
 import com.movietime.domain.model.TvShowDetail
 import com.movietime.domain.model.TvShowPreview
 import com.movietime.domain.model.Video
@@ -17,29 +16,29 @@ import com.movietime.tvshow.detail.presentation.model.toPosterItem
 import com.movietime.tvshow.detail.presentation.model.toUiTvShowDetail
 import com.movietime.tvshow.detail.presentation.model.toUiVideo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TvShowDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    getTvShowRecommendationsUseCaseFactory: GetTvShowRecommendationsUseCaseFactory,
-    getTvShowDetailUseCaseFactory: GetTvShowDetailUseCaseFactory,
-    getTvShowVideosUseCaseFactory: GetTvShowVideosUseCaseFactory,
-    movieDetailRepositoryFactory: TvShowDetailRepositoryFactory,
+    private val getTvShowRecommendationsUseCase: GetTvShowRecommendationsUseCase,
+    private val getTvShowDetailUseCase: GetTvShowDetailUseCase,
+    private val getTvShowVideosUseCase: GetTvShowVideosUseCase,
     private val addTvShowToWatchlistUseCase: AddTvShowToWatchlistUseCase
 ) : ViewModel() {
     private val tvShowDetailId: Int = savedStateHandle["paramTvShowId"]!!
-    private val repository = movieDetailRepositoryFactory.create(tvShowDetailId)
-    private val getTvShowDetailUseCase = getTvShowDetailUseCaseFactory.create(repository)
-    private val getTvShowRecommendationsUseCase = getTvShowRecommendationsUseCaseFactory.create(repository)
-    private val getTvShowVideosUseCase = getTvShowVideosUseCaseFactory.create(repository)
 
     private val recommendationsListState = ListState({
-        fetchRecommendations { getTvShowRecommendationsUseCase.refresh() }
+        fetchRecommendations { getTvShowRecommendationsUseCase.refresh(tvShowDetailId) }
     },{
-        fetchRecommendations { getTvShowRecommendationsUseCase.fetchMore() }
+        fetchRecommendations { getTvShowRecommendationsUseCase.fetchMore(tvShowDetailId) }
     })
 
     private fun fetchRecommendations(fetchFunction: suspend ()->Unit){
@@ -57,10 +56,10 @@ class TvShowDetailViewModel @Inject constructor(
 
     // UI state exposed to the UI
     val uiState: StateFlow<TvShowDetailUiState> by lazy {
-        initializeData()
+        recommendationsListState.refresh()
         combine(
-            getTvShowDetailUseCase.tvShowDetail.map(TvShowDetail::toUiTvShowDetail),
-            getTvShowVideosUseCase.tvShowVideos.map { it.map(Video::toUiVideo) },
+            getTvShowDetailUseCase(tvShowDetailId).map(TvShowDetail::toUiTvShowDetail),
+            getTvShowVideosUseCase(tvShowDetailId).map { it.map(Video::toUiVideo) },
             getTvShowRecommendationsUseCase.recommendedTvShows.map{ it.map(TvShowPreview::toPosterItem) },
         ) { tvShowDetail, videos, recommendations ->
             val tvShowDetailUiState: TvShowDetailUiState = TvShowDetailUiState.Content(
@@ -77,14 +76,6 @@ class TvShowDetailViewModel @Inject constructor(
             SharingStarted.WhileSubscribed(5_000),
             TvShowDetailUiState.Loading
         )
-    }
-
-    private fun initializeData() {
-        recommendationsListState.refresh()
-        viewModelScope.launch {
-            getTvShowDetailUseCase.fetchTvShowDetail()
-            getTvShowVideosUseCase.fetchTvShowVideos()
-        }
     }
 
     fun onRecommendationsThreshold() {

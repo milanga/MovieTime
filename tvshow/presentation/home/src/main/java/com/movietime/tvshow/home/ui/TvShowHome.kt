@@ -60,6 +60,7 @@ private fun TvShowHome(
             popularTvShows = uiState.popularTvShows,
             topRatedTvShows = uiState.topRatedTvShows,
             upcomingTvShows = uiState.onTheAirTvShows,
+            watchListTvShows = uiState.watchlistTvShows,
             onTvShowSelected = onTvShowSelected,
             onTopRatedTvShowsThresholdReached = onTopRatedTvShowsThresholdReached,
             onUpcomingTvShowsThresholdReached = onOnTheAirTvShowsThresholdReached,
@@ -79,6 +80,7 @@ private fun Content(
     popularTvShows: List<HighlightedItem> = emptyList(),
     topRatedTvShows: List<PosterItem> = emptyList(),
     upcomingTvShows: List<PosterItem> = emptyList(),
+    watchListTvShows: List<HighlightedItem> = emptyList(),
     onTvShowSelected: (id: Int) -> Unit = {},
     loading: Boolean = false,
     onTopRatedTvShowsThresholdReached: () -> Unit = {},
@@ -141,6 +143,24 @@ private fun Content(
                     onScrollThresholdReached = onUpcomingTvShowsThresholdReached,
                     modifier = Modifier.padding(top = 8.dp),
                     loading = loading
+                )
+            }
+
+
+            item {
+                SectionTitle(
+                    stringResource(R.string.watachlist_title),
+                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                    loading = loading
+                )
+            }
+
+            item {
+                HighlightedSection(
+                    highlightedList = watchListTvShows,
+                    onItemSelected = onTvShowSelected,
+                    loading = loading,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
         }

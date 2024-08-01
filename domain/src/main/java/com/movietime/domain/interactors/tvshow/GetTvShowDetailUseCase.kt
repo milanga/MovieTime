@@ -1,18 +1,9 @@
 package com.movietime.domain.interactors.tvshow
 
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import javax.inject.Inject
 
-class GetTvShowDetailUseCase @AssistedInject constructor(
-    @Assisted private val tvShowDetailRepository: TvShowDetailRepository
+class GetTvShowDetailUseCase @Inject constructor(
+    private val tvShowDetailRepository: TvShowDetailRepository
 ) {
-    val tvShowDetail = tvShowDetailRepository.tvShowDetail
-
-    suspend fun fetchTvShowDetail() = tvShowDetailRepository.fetchTvShowDetail()
-}
-
-@AssistedFactory
-interface GetTvShowDetailUseCaseFactory {
-    fun create(tvShowDetailRepository: TvShowDetailRepository): GetTvShowDetailUseCase
+    operator fun invoke(tmdbTvShowId: Int) = tvShowDetailRepository.getTvShowDetail(tmdbTvShowId)
 }

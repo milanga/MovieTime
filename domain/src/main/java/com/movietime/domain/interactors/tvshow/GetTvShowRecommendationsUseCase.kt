@@ -1,19 +1,31 @@
 package com.movietime.domain.interactors.tvshow
 
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.movietime.domain.model.TvShowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-class GetTvShowRecommendationsUseCase @AssistedInject constructor(
-    @Assisted private val tvShowDetailRepository: TvShowDetailRepository
+class GetTvShowRecommendationsUseCase @Inject constructor(
+    private val tvShowDetailRepository: TvShowDetailRepository
 ) {
-    val recommendedTvShows = tvShowDetailRepository.recommendedTvShows
+    private var recommendationsPage = 1
+    private val _recommendedTvShows = MutableStateFlow<List<TvShowPreview>>(emptyList())
+    val recommendedTvShows : StateFlow<List<TvShowPreview>> = _recommendedTvShows
 
-    suspend fun refresh() = tvShowDetailRepository.refreshRecommendations()
-    suspend fun fetchMore() = tvShowDetailRepository.fetchMoreRecommendations()
-}
+    /**
+     * Get the first page of recommendations given a movie id.
+     */
+    suspend fun refresh(tmdbTvShowId: Int) {
+        recommendationsPage = 1
+        _recommendedTvShows.value = tvShowDetailRepository.getRecommendations(tmdbTvShowId, recommendationsPage).first()
+    }
 
-@AssistedFactory
-interface GetTvShowRecommendationsUseCaseFactory {
-    fun create(tvShowDetailRepository: TvShowDetailRepository): GetTvShowRecommendationsUseCase
+    /**
+     * Get the following page of recommendations given a movie id.
+     */
+    suspend fun fetchMore(tmdbTvShowId: Int) {
+        recommendationsPage++
+        _recommendedTvShows.value = _recommendedTvShows.value.plus(tvShowDetailRepository.getRecommendations(tmdbTvShowId, recommendationsPage).first())
+    }
 }
