@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -34,7 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -72,7 +70,7 @@ fun TvShowDetailRoute(
         onTvShowSelected = onTvShowSelected,
         onBackNavigation = {onBackNavigation()},
         onRecommendationsThresholdReached = {viewModel.onRecommendationsThreshold()},
-        onAddToWatchList = {viewModel.addToWatchList()},
+        onAddToWatchList = {viewModel.toggleTvShowFromWatchList()},
     )
 }
 
@@ -110,10 +108,24 @@ private fun TvShowDetailView(
             TopBar(showAppBarTitle, title, onBackNavigation, {iconWidth = it}, {appBarHeight = it})
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                onAddToWatchList()
-            }) {
-                Icon(Icons.Filled.List, "Add to watchlist")
+            if (uiState is TvShowDetailUiState.Content) {
+                FloatingActionButton(
+                    onClick = {
+                        onAddToWatchList()
+                    },
+                    containerColor = if (uiState.isTvShowInWatchlist) {
+                        MaterialTheme.colorScheme.secondary
+                    } else {
+                        MaterialTheme.colorScheme.primary
+                    }
+                ) {
+                    val watchlistIcon = if (uiState.isTvShowInWatchlist) {
+                        R.drawable.playlist_check
+                    } else {
+                        R.drawable.playlist_add
+                    }
+                    Icon(painterResource(watchlistIcon), "Add to watchlist")
+                }
             }
         }
     ) { padding ->

@@ -8,6 +8,7 @@ sealed interface TvShowDetailUiState {
     data class Content(
         val tvShowDetail: UiTvShowDetail,
         val tvShowVideos: List<UiVideo>,
-        val tvShowRecommendations: List<PosterItem>
+        val tvShowRecommendations: List<PosterItem>,
+        val isTvShowInWatchlist: Boolean
     ) : TvShowDetailUiState
 }

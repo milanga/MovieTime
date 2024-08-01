@@ -16,6 +16,14 @@ class WatchlistRepository @Inject constructor(
         watchlistDataSource.addTvShowToWatchlist(tmdbID)
     }
 
+    suspend fun removeMovieFromWatchlist(tmdbID: Int) {
+        watchlistDataSource.removeMovieFromWatchlist(tmdbID)
+    }
+
+    suspend fun removeTvShowFromWatchlist(tmdbID: Int) {
+        watchlistDataSource.removeTvShowFromWatchlist(tmdbID)
+    }
+
     fun getMovieWatchlistIds(): Flow<List<MediaIds>> {
         return flow { emit(watchlistDataSource.getMovieWatchlistIds()) }
     }

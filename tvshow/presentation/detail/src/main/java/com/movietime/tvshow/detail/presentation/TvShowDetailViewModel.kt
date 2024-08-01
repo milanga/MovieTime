@@ -4,10 +4,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
-import com.movietime.domain.interactors.tvshow.AddTvShowToWatchlistUseCase
+import com.movietime.domain.interactors.tvshow.ToggleTvShowFromWatchlistUseCase
 import com.movietime.domain.interactors.tvshow.GetTvShowDetailUseCase
 import com.movietime.domain.interactors.tvshow.GetTvShowRecommendationsUseCase
 import com.movietime.domain.interactors.tvshow.GetTvShowVideosUseCase
+import com.movietime.domain.interactors.tvshow.IsTvShowInWatchlistUseCase
 import com.movietime.domain.model.TvShowDetail
 import com.movietime.domain.model.TvShowPreview
 import com.movietime.domain.model.Video
@@ -31,7 +32,8 @@ class TvShowDetailViewModel @Inject constructor(
     private val getTvShowRecommendationsUseCase: GetTvShowRecommendationsUseCase,
     private val getTvShowDetailUseCase: GetTvShowDetailUseCase,
     private val getTvShowVideosUseCase: GetTvShowVideosUseCase,
-    private val addTvShowToWatchlistUseCase: AddTvShowToWatchlistUseCase
+    private val toggleTvShowFromWatchlistUseCase: ToggleTvShowFromWatchlistUseCase,
+    private val isTvShowInWatchlistUseCase: IsTvShowInWatchlistUseCase
 ) : ViewModel() {
     private val tvShowDetailId: Int = savedStateHandle["paramTvShowId"]!!
 
@@ -61,11 +63,13 @@ class TvShowDetailViewModel @Inject constructor(
             getTvShowDetailUseCase(tvShowDetailId).map(TvShowDetail::toUiTvShowDetail),
             getTvShowVideosUseCase(tvShowDetailId).map { it.map(Video::toUiVideo) },
             getTvShowRecommendationsUseCase.recommendedTvShows.map{ it.map(TvShowPreview::toPosterItem) },
-        ) { tvShowDetail, videos, recommendations ->
+            isTvShowInWatchlistUseCase(tvShowDetailId)
+        ) { tvShowDetail, videos, recommendations, isTvShowInWatchList ->
             val tvShowDetailUiState: TvShowDetailUiState = TvShowDetailUiState.Content(
                 tvShowDetail,
                 videos,
-                recommendations
+                recommendations,
+                isTvShowInWatchList
             )
             tvShowDetailUiState
         }.catch { throwable ->
@@ -82,9 +86,9 @@ class TvShowDetailViewModel @Inject constructor(
         recommendationsListState.thresholdReached()
     }
 
-    fun addToWatchList() {
+    fun toggleTvShowFromWatchList() {
         viewModelScope.launch {
-            addTvShowToWatchlistUseCase(tvShowDetailId)
+            toggleTvShowFromWatchlistUseCase(tvShowDetailId)
         }
     }
 

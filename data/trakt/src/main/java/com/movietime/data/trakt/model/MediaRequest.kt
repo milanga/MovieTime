@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-data class AddToWatchListRequest(
+data class MediaRequest(
     @field:JsonProperty("movies")
     val movieIds: List<TraktMediaDetail>? = null,
     @field:JsonProperty("shows")

@@ -1,7 +1,7 @@
 package com.movietime.data.trakt.datasources
 
 import com.movietime.data.trakt.mappers.MediaIdsMapper
-import com.movietime.data.trakt.model.AddToWatchListRequest
+import com.movietime.data.trakt.model.MediaRequest
 import com.movietime.data.trakt.model.TraktIds
 import com.movietime.data.trakt.model.TraktMediaDetail
 import com.movietime.data.trakt.service.WatchlistService
@@ -14,17 +14,31 @@ class TraktWatchlistDataSource @Inject constructor(
     private val mediaIdsMapper: MediaIdsMapper
 ): WatchlistDataSource {
     override suspend fun addMovieToWatchlist(tmdbID: Int) {
-        val addToWatchListRequest = AddToWatchListRequest(
+        val addToWatchListRequest = MediaRequest(
             movieIds = listOf(traktMediaDetail(tmdbID))
         )
         watchlistService.addToWatchlist(addToWatchListRequest)
     }
 
+    override suspend fun removeMovieFromWatchlist(tmdbID: Int) {
+        val removeFromWatchListRequest = MediaRequest(
+            movieIds = listOf(traktMediaDetail(tmdbID))
+        )
+        watchlistService.removeFromWatchlist(removeFromWatchListRequest)
+    }
+
     override suspend fun addTvShowToWatchlist(tmdbID: Int) {
-        val addToWatchListRequest = AddToWatchListRequest(
+        val addToWatchListRequest = MediaRequest(
             tvShowIds = listOf(traktMediaDetail(tmdbID))
         )
         watchlistService.addToWatchlist(addToWatchListRequest)
+    }
+
+    override suspend fun removeTvShowFromWatchlist(tmdbID: Int) {
+        val removeFromWatchListRequest = MediaRequest(
+            tvShowIds = listOf(traktMediaDetail(tmdbID))
+        )
+        watchlistService.removeFromWatchlist(removeFromWatchListRequest)
     }
 
     override suspend fun getMovieWatchlistIds(): List<MediaIds> {
