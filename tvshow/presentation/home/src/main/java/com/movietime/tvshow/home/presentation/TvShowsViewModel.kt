@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
 import com.movietime.core.views.poster.model.PosterItem
 import com.movietime.core.views.highlight.model.HighlightedItem
-import com.movietime.domain.interactors.movie.GetTvShowsWatchlistUseCase
+import com.movietime.domain.interactors.tvshow.GetTvShowsWatchlistUseCase
 import com.movietime.domain.interactors.tvshow.GetOnTheAirTvShowsUseCase
 import com.movietime.domain.interactors.tvshow.GetPopularTvShowsUseCase
 import com.movietime.domain.interactors.tvshow.GetTopRatedTvShowsUseCase

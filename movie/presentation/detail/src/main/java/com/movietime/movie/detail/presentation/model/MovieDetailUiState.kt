@@ -8,6 +8,7 @@ sealed interface MovieDetailUiState {
     data class Content(
         val movieDetail: UiMovieDetail,
         val movieVideos: List<UiVideo>,
-        val movieRecommendations: List<PosterItem>
+        val movieRecommendations: List<PosterItem>,
+        val isMovieInWatchlist: Boolean
     ) : MovieDetailUiState
 }

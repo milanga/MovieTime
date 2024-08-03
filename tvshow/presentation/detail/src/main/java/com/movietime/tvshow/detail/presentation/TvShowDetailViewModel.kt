@@ -88,7 +88,12 @@ class TvShowDetailViewModel @Inject constructor(
 
     fun toggleTvShowFromWatchList() {
         viewModelScope.launch {
-            toggleTvShowFromWatchlistUseCase(tvShowDetailId)
+            try {
+                toggleTvShowFromWatchlistUseCase(tvShowDetailId)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                //todo handle error
+            }
         }
     }
 

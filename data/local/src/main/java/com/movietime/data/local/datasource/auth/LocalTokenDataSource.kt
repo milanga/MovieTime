@@ -1,4 +1,4 @@
-package com.movietime.data.local.auth
+package com.movietime.data.local.datasource.auth
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "tokenDS")
 
-// Maybe I could move to proto data store in the future
+// Maybe I could move to local_media_ids.proto data store in the future
 class LocalTokenDataSource @Inject constructor(
     @ApplicationContext
     private val context: Context,

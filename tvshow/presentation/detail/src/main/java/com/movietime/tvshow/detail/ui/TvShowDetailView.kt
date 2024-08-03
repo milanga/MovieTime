@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.movietime.core.views.WatchlistFab
 import com.movietime.core.views.collapsibleBackddropTitle.CollapsableConfig
 import com.movietime.core.views.collapsibleBackddropTitle.CollapsibleBackdropTitle
 import com.movietime.core.views.overview.Overview
@@ -70,7 +71,7 @@ fun TvShowDetailRoute(
         onTvShowSelected = onTvShowSelected,
         onBackNavigation = {onBackNavigation()},
         onRecommendationsThresholdReached = {viewModel.onRecommendationsThreshold()},
-        onAddToWatchList = {viewModel.toggleTvShowFromWatchList()},
+        onToggleWatchList = {viewModel.toggleTvShowFromWatchList()},
     )
 }
 
@@ -81,7 +82,7 @@ private fun TvShowDetailView(
     onTvShowSelected: (id: Int) -> Unit,
     onBackNavigation: () -> Unit,
     onRecommendationsThresholdReached: () -> Unit,
-    onAddToWatchList: () -> Unit
+    onToggleWatchList: () -> Unit
 ){
     val listState = rememberLazyListState()
     var appBarHeight by remember { mutableStateOf(0) }
@@ -109,23 +110,10 @@ private fun TvShowDetailView(
         },
         floatingActionButton = {
             if (uiState is TvShowDetailUiState.Content) {
-                FloatingActionButton(
-                    onClick = {
-                        onAddToWatchList()
-                    },
-                    containerColor = if (uiState.isTvShowInWatchlist) {
-                        MaterialTheme.colorScheme.secondary
-                    } else {
-                        MaterialTheme.colorScheme.primary
-                    }
-                ) {
-                    val watchlistIcon = if (uiState.isTvShowInWatchlist) {
-                        R.drawable.playlist_check
-                    } else {
-                        R.drawable.playlist_add
-                    }
-                    Icon(painterResource(watchlistIcon), "Add to watchlist")
-                }
+                WatchlistFab(
+                    onClick = onToggleWatchList,
+                    add = !uiState.isTvShowInWatchlist
+                )
             }
         }
     ) { padding ->

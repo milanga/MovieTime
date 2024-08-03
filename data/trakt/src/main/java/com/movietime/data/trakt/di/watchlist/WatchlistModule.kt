@@ -16,6 +16,7 @@ import javax.inject.Named
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class WatchlistModule {
+    @Named("TRAKT_WATCHLIST_DATA_SOURCE")
     @Binds
     abstract fun bindWatchlistDataSource(traktWatchlistDataSource: TraktWatchlistDataSource): WatchlistDataSource
 

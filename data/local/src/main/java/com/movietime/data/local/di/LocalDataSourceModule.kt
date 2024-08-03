@@ -1,7 +1,7 @@
 package com.movietime.data.local.di
 
 import com.google.gson.Gson
-import com.movietime.data.local.auth.LocalTokenDataSource
+import com.movietime.data.local.datasource.auth.LocalTokenDataSource
 import com.movietime.domain.repository.oauth.SavableTokenDataSource
 import dagger.Binds
 import dagger.Module

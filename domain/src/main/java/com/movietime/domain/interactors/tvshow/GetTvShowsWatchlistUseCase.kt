@@ -1,6 +1,5 @@
-package com.movietime.domain.interactors.movie
+package com.movietime.domain.interactors.tvshow
 
-import com.movietime.domain.interactors.tvshow.TvShowDetailRepository
 import com.movietime.domain.model.TvShowDetail
 import com.movietime.domain.repository.watchlist.WatchlistRepository
 import kotlinx.coroutines.FlowPreview

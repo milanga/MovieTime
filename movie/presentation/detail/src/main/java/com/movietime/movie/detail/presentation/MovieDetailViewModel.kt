@@ -8,6 +8,8 @@ import com.movietime.domain.interactors.movie.AddMovieToWatchlistUseCase
 import com.movietime.domain.interactors.movie.GetMovieDetailUseCase
 import com.movietime.domain.interactors.movie.GetMovieRecommendationsUseCase
 import com.movietime.domain.interactors.movie.GetMovieVideosUseCase
+import com.movietime.domain.interactors.movie.IsMovieInWatchlistUseCase
+import com.movietime.domain.interactors.movie.ToggleMovieFromWatchlistUseCase
 import com.movietime.domain.model.MovieDetail
 import com.movietime.domain.model.MoviePreview
 import com.movietime.domain.model.Video
@@ -31,7 +33,8 @@ class MovieDetailViewModel @Inject constructor(
     private val getMovieRecommendationsUseCase: GetMovieRecommendationsUseCase,
     private val getMovieDetailUseCase: GetMovieDetailUseCase,
     private val getMovieVideosUseCase: GetMovieVideosUseCase,
-    private val addMovieToWatchlistUseCase: AddMovieToWatchlistUseCase
+    private val toggleMovieFromWatchlistUseCase: ToggleMovieFromWatchlistUseCase,
+    private val isMovieInWatchlistUseCase: IsMovieInWatchlistUseCase
 ) : ViewModel() {
     private val movieId: Int = savedStateHandle["paramMovieId"]!!
 
@@ -59,12 +62,14 @@ class MovieDetailViewModel @Inject constructor(
         combine(
             getMovieDetailUseCase(movieId).map(MovieDetail::toUiMovieDetail),
             getMovieVideosUseCase(movieId).map { it.map(Video::toUiVideo) },
-            getMovieRecommendationsUseCase.recommendedMovies.map{ it.map(MoviePreview::toPosterItem) }
-        ) { movieDetail, videos, recommendations ->
+            getMovieRecommendationsUseCase.recommendedMovies.map{ it.map(MoviePreview::toPosterItem) },
+            isMovieInWatchlistUseCase(movieId)
+        ) { movieDetail, videos, recommendations, isMovieInWatchlist ->
             val movieDetailUiState: MovieDetailUiState = MovieDetailUiState.Content(
                 movieDetail,
                 videos,
-                recommendations
+                recommendations,
+                isMovieInWatchlist
             )
             movieDetailUiState
         }.catch { throwable ->
@@ -81,9 +86,14 @@ class MovieDetailViewModel @Inject constructor(
         recommendationsListState.thresholdReached()
     }
 
-    fun addToWatchlist() {
+    fun toggleWatchlist() {
         viewModelScope.launch {
-            addMovieToWatchlistUseCase(movieId)
+            try {
+                toggleMovieFromWatchlistUseCase(movieId)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                //todo handle error
+            }
         }
     }
 

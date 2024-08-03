@@ -17,11 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -39,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.movietime.core.views.WatchlistFab
 import com.movietime.core.views.collapsibleBackddropTitle.CollapsableConfig
 import com.movietime.core.views.collapsibleBackddropTitle.CollapsibleBackdropTitle
 import com.movietime.core.views.overview.Overview
@@ -71,7 +68,7 @@ fun MovieDetailRoute(
         onMovieSelected = onMovieSelected,
         onBackNavigation = {onBackNavigation()},
         onRecommendationsThresholdReached = {viewModel.onRecommendationsThreshold()},
-        onAddToWatchlist = { viewModel.addToWatchlist() }
+        onToggleWatchlist = { viewModel.toggleWatchlist() }
     )
 }
 
@@ -82,7 +79,7 @@ private fun MovieDetailView(
     onMovieSelected: (id: Int) -> Unit,
     onBackNavigation: () -> Unit,
     onRecommendationsThresholdReached: () -> Unit,
-    onAddToWatchlist: () -> Unit
+    onToggleWatchlist: () -> Unit
 ){
     val listState = rememberLazyListState()
     var appBarHeight by remember { mutableStateOf(0) }
@@ -110,8 +107,11 @@ private fun MovieDetailView(
             TopBar(showAppBarTitle, title, onBackNavigation, {iconWidth = it}, {appBarHeight = it})
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { onAddToWatchlist() }) {
-                Icon(Icons.Default.List, contentDescription = stringResource(R.string.add_to_watchlist))
+            if (uiState is MovieDetailUiState.Content) {
+                WatchlistFab(
+                    onClick = onToggleWatchlist,
+                    add = !uiState.isMovieInWatchlist
+                )
             }
         }
     ) { padding ->

@@ -7,6 +7,8 @@ import com.movietime.data.trakt.model.TraktMediaDetail
 import com.movietime.data.trakt.service.WatchlistService
 import com.movietime.domain.model.MediaIds
 import com.movietime.domain.repository.watchlist.WatchlistDataSource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class TraktWatchlistDataSource @Inject constructor(
@@ -41,14 +43,26 @@ class TraktWatchlistDataSource @Inject constructor(
         watchlistService.removeFromWatchlist(removeFromWatchListRequest)
     }
 
-    override suspend fun getMovieWatchlistIds(): List<MediaIds> {
-        return watchlistService.getWatchlist("movies", "rank")
-            .map { mediaIdsMapper.map(it.movie!!.ids) }
+    override fun getMovieWatchlistIds(): Flow<List<MediaIds>> {
+        return flow {
+            emit(watchlistService.getWatchlist("movies", "rank")
+                .map { mediaIdsMapper.map(it.movie!!.ids) })
+        }
     }
 
-    override suspend fun getTvShowWatchlistIds(): List<MediaIds> {
-        return watchlistService.getWatchlist("shows", "rank")
-            .map { mediaIdsMapper.map(it.show!!.ids) }
+    override fun getTvShowWatchlistIds(): Flow<List<MediaIds>> {
+        return flow {
+            emit(watchlistService.getWatchlist("shows", "rank")
+                .map { mediaIdsMapper.map(it.show!!.ids) })
+        }
+    }
+
+    override fun setTvShowWatchlistIds(list: List<MediaIds>) {
+        // do nothing
+    }
+
+    override fun setMovieWatchlistIds(list: List<MediaIds>) {
+        // do nothing
     }
 
     private fun traktMediaDetail(tmdbID: Int): TraktMediaDetail =
