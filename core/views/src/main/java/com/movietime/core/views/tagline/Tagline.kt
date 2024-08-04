@@ -12,19 +12,21 @@ import com.google.accompanist.placeholder.material.placeholder
 
 @Composable
 fun Tagline(
+    modifier: Modifier = Modifier,
     tagline: String = "",
-    loading: Boolean = false
+    loading: Boolean = false,
 ) {
     Text(
         text = tagline,
         style = MaterialTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier
-            .padding(top = 8.dp, start = 16.dp, end = 16.dp)
-            .fillMaxWidth()
-            .placeholder(
-                loading,
-                MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)
-            )
+        modifier = modifier.then(
+            Modifier
+                .fillMaxWidth()
+                .placeholder(
+                    loading,
+                    MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)
+                )
+        )
     )
 }

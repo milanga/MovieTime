@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
@@ -18,8 +19,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -32,8 +31,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
@@ -41,9 +40,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.movietime.core.views.WatchlistFab
 import com.movietime.core.views.collapsibleBackddropTitle.CollapsableConfig
 import com.movietime.core.views.collapsibleBackddropTitle.CollapsibleBackdropTitle
+import com.movietime.core.views.detail.DetailRowData
+import com.movietime.core.views.detail.DetailSection
 import com.movietime.core.views.overview.Overview
 import com.movietime.core.views.poster.ListSection
+import com.movietime.core.views.poster.model.MediaType
 import com.movietime.core.views.poster.model.PosterItem
+import com.movietime.core.views.tag.TagSection
 import com.movietime.core.views.tagline.Tagline
 import com.movietime.core.views.topbar.TopBar
 import com.movietime.core.views.video.VideoView
@@ -71,7 +74,7 @@ fun TvShowDetailRoute(
         onTvShowSelected = onTvShowSelected,
         onBackNavigation = {onBackNavigation()},
         onRecommendationsThresholdReached = {viewModel.onRecommendationsThreshold()},
-        onToggleWatchList = {viewModel.toggleTvShowFromWatchList()},
+        onToggleWatchlist = {viewModel.toggleTvShowFromWatchList()},
     )
 }
 
@@ -82,7 +85,7 @@ private fun TvShowDetailView(
     onTvShowSelected: (id: Int) -> Unit,
     onBackNavigation: () -> Unit,
     onRecommendationsThresholdReached: () -> Unit,
-    onToggleWatchList: () -> Unit
+    onToggleWatchlist: () -> Unit
 ){
     val listState = rememberLazyListState()
     var appBarHeight by remember { mutableStateOf(0) }
@@ -111,7 +114,7 @@ private fun TvShowDetailView(
         floatingActionButton = {
             if (uiState is TvShowDetailUiState.Content) {
                 WatchlistFab(
-                    onClick = onToggleWatchList,
+                    onClick = onToggleWatchlist,
                     add = !uiState.isTvShowInWatchlist
                 )
             }
@@ -146,7 +149,7 @@ private fun TvShowDetailView(
 @Composable
 private fun DetailContent(
     modifier: Modifier = Modifier,
-    tvShowDetail: UiTvShowDetail = UiTvShowDetail("","","",""),
+    tvShowDetail: UiTvShowDetail = UiTvShowDetail(),
     tvShowVideos: List<UiVideo> = emptyList(),
     tvShowRecommendations: List<PosterItem> = emptyList(),
     listState: LazyListState,
@@ -164,7 +167,7 @@ private fun DetailContent(
 
         item{
             CollapsibleBackdropTitle(
-                backdropUrl = tvShowDetail.backdropPath,
+                backdropUrl = tvShowDetail.backdropUrl,
                 title = tvShowDetail.title,
                 collapsableConfig = collapsableTitleConfig,
                 listState = listState,
@@ -176,8 +179,12 @@ private fun DetailContent(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        item {
-            Overview(tvShowDetail.overview, loading)
+        item{
+            DetailSection(
+                tvShowDetail.posterUrl,
+                detailRowData(tvShowDetail),
+                Modifier.padding(horizontal = 16.dp)
+            )
         }
 
         item{
@@ -185,10 +192,44 @@ private fun DetailContent(
         }
 
         item {
+            TagSection(
+                tags = tvShowDetail.genres,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+        }
+
+        item {
+            SectionTitle(
+                stringResource(R.string.overview),
+                Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp),
+                loading
+            )
+        }
+
+        item {
             val tagline = tvShowDetail.tagline
             if (loading || tagline.isNotEmpty()) {
-                Tagline(tagline, loading)
+                Tagline(
+                    Modifier
+                        .padding(top = 2.dp, start = 16.dp, end = 16.dp),
+                    tagline,
+                    loading
+                )
             }
+        }
+
+        item{
+            Spacer(modifier = Modifier.height(4.dp))
+        }
+
+        item {
+            Overview(tvShowDetail.overview, loading)
+        }
+
+        item{
+            Spacer(modifier = Modifier.height(8.dp))
         }
 
         if(loading || tvShowVideos.isNotEmpty()) {
@@ -235,5 +276,66 @@ private fun DetailErrorScreen(
     }
 }
 
+@Composable
+private fun detailRowData(movieDetail: UiTvShowDetail): MutableList<DetailRowData> {
+    val detailRows = mutableListOf<DetailRowData>()
+    createDetailRow(
+        movieDetail.rating,
+        R.drawable.grade,
+        stringResource(R.string.rate)
+    )?.let { detailRows.add(it) }
+
+    createDetailRow(
+        movieDetail.duration,
+        R.drawable.clock,
+        stringResource(R.string.duration)
+    )?.let { detailRows.add(it) }
+
+    createDetailRow(
+        movieDetail.releaseDate,
+        R.drawable.event_coming,
+        stringResource(R.string.release_date)
+    )?.let { detailRows.add(it) }
+    return detailRows
+}
+
+@Preview
+@Composable
+private fun PreviewTvShowDetail(){
+    TvShowDetailView(
+        uiState = TvShowDetailUiState.Content(
+            UiTvShowDetail(
+                title = "Breaking Bad",
+                backdropUrl = "http://image.tmdb.org/t/p/original/avedvodAZUcwqevBfm8p4G2NziQ.jpg",
+                overview = "Imprisoned in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
+                tagline = "Fear can hold you prisoner. Hope can set you free.",
+                posterUrl = "url",
+                rating = "8.6",
+                releaseDate = "28-02-2024",
+                duration = "115",
+                genres = listOf("Action", "Comedy")
+            ),
+            tvShowVideos = listOf(UiVideo("pYmAy3H0s3Q")),
+            tvShowRecommendations = listOf(PosterItem(1, "http://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg", "9.8", MediaType.Movie)),
+            isTvShowInWatchlist = false
+        ),
+        onTvShowSelected = {},
+        onBackNavigation = {},
+        onRecommendationsThresholdReached = {},
+        onToggleWatchlist = {}
+    )
+}
+
+fun createDetailRow(
+    text: String?,
+    iconId: Int,
+    contentDescription: String
+): DetailRowData? {
+    return if(text.isNullOrBlank()){
+        null
+    } else {
+        DetailRowData(text, iconId, contentDescription)
+    }
+}
 
 

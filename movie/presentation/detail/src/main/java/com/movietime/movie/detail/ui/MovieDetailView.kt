@@ -226,7 +226,12 @@ private fun DetailContent(
         item {
             val tagline = movieDetail.tagline
             if (loading || tagline.isNotEmpty()) {
-                Tagline(tagline, loading)
+                Tagline(
+                    Modifier
+                        .padding(top = 2.dp, start = 16.dp, end = 16.dp),
+                    tagline,
+                    loading
+                )
             }
         }
 
