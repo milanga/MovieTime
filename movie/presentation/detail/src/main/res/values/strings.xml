@@ -1,4 +1,7 @@
 <resources>
     <string name="recommendations">Recommendations</string>
     <string name="add_to_watchlist">Add to watchlist</string>
+    <string name="release_date">Release date</string>
+    <string name="duration">duration</string>
+    <string name="rate">rate</string>
 </resources>

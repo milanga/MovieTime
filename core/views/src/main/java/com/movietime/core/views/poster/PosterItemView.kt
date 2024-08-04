@@ -1,4 +1,4 @@
-package com.movietime.views
+package com.movietime.core.views.poster
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

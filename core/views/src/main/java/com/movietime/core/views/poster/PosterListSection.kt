@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.movietime.core.views.poster.model.PosterItem
-import com.movietime.views.PosterItemView
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.launch
 import kotlin.math.ceil

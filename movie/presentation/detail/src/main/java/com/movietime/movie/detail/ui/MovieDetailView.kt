@@ -1,23 +1,32 @@
 package com.movietime.movie.detail.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,8 +38,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
@@ -38,9 +50,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.movietime.core.views.WatchlistFab
 import com.movietime.core.views.collapsibleBackddropTitle.CollapsableConfig
 import com.movietime.core.views.collapsibleBackddropTitle.CollapsibleBackdropTitle
+import com.movietime.core.views.detail.DetailRow
+import com.movietime.core.views.detail.DetailRowData
+import com.movietime.core.views.detail.DetailSection
 import com.movietime.core.views.overview.Overview
 import com.movietime.core.views.poster.ListSection
+import com.movietime.core.views.poster.PosterItemView
+import com.movietime.core.views.poster.model.MediaType
 import com.movietime.core.views.poster.model.PosterItem
+import com.movietime.core.views.tag.Tag
+import com.movietime.core.views.tag.TagSection
 import com.movietime.core.views.tagline.Tagline
 import com.movietime.core.views.topbar.TopBar
 import com.movietime.core.views.video.VideoView
@@ -144,7 +163,7 @@ private fun MovieDetailView(
 @Composable
 private fun DetailContent(
     modifier: Modifier = Modifier,
-    movieDetail: UiMovieDetail = UiMovieDetail("","","",""),
+    movieDetail: UiMovieDetail = UiMovieDetail(),
     movieVideos: List<UiVideo> = emptyList(),
     movieRecommendations: List<PosterItem> = emptyList(),
     listState: LazyListState,
@@ -162,7 +181,7 @@ private fun DetailContent(
 
         item{
             CollapsibleBackdropTitle(
-                backdropUrl = movieDetail.backdropPath,
+                backdropUrl = movieDetail.backdropUrl,
                 title = movieDetail.title,
                 collapsableConfig = collapsableTitleConfig,
                 listState = listState,
@@ -174,6 +193,47 @@ private fun DetailContent(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
+        item{
+            DetailSection(
+                movieDetail.posterUrl,
+                detailRowData(movieDetail),
+                Modifier.padding(horizontal = 16.dp)
+            )
+        }
+
+        item{
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
+        item {
+            TagSection(
+                tags = movieDetail.genres,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+        }
+
+        item {
+            SectionTitle(
+                "Overview",
+                Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp),
+                loading
+            )
+        }
+
+
+        item {
+            val tagline = movieDetail.tagline
+            if (loading || tagline.isNotEmpty()) {
+                Tagline(tagline, loading)
+            }
+        }
+
+        item{
+            Spacer(modifier = Modifier.height(4.dp))
+        }
+
         item {
             Overview(movieDetail.overview, loading)
         }
@@ -182,12 +242,6 @@ private fun DetailContent(
             Spacer(modifier = Modifier.height(8.dp))
         }
 
-        item {
-            val tagline = movieDetail.tagline
-            if (loading || tagline.isNotEmpty()) {
-                Tagline(tagline, loading)
-            }
-        }
 
         if(loading || movieVideos.isNotEmpty()) {
             item {
@@ -223,6 +277,29 @@ private fun DetailContent(
     }
 }
 
+@Composable
+private fun detailRowData(movieDetail: UiMovieDetail): MutableList<DetailRowData> {
+    val detailRows = mutableListOf<DetailRowData>()
+    createDetailRow(
+        movieDetail.rating,
+        R.drawable.grade,
+        stringResource(R.string.rate)
+    )?.let { detailRows.add(it) }
+
+    createDetailRow(
+        movieDetail.duration,
+        R.drawable.clock,
+        stringResource(R.string.duration)
+    )?.let { detailRows.add(it) }
+
+    createDetailRow(
+        movieDetail.releaseDate,
+        R.drawable.event_coming,
+        stringResource(R.string.release_date)
+    )?.let { detailRows.add(it) }
+    return detailRows
+}
+
 
 @Composable
 private fun DetailErrorScreen(
@@ -230,6 +307,45 @@ private fun DetailErrorScreen(
 ){
     Box(modifier = modifier.fillMaxSize()){
         Text("error", Modifier.align(Alignment.Center))
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewMovieDetail(){
+    MovieDetailView(
+        uiState = MovieDetailUiState.Content(
+            UiMovieDetail(
+                title = "The Shawshank Redemption",
+                backdropUrl = "http://image.tmdb.org/t/p/original/avedvodAZUcwqevBfm8p4G2NziQ.jpg",
+                overview = "Imprisoned in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
+                tagline = "Fear can hold you prisoner. Hope can set you free.",
+                posterUrl = "url",
+                rating = "8.6",
+                releaseDate = "28-02-2024",
+                duration = "115",
+                genres = listOf("Action", "Comedy")
+            ),
+            movieVideos = listOf(UiVideo("pYmAy3H0s3Q")),
+            movieRecommendations = listOf(PosterItem(1, "http://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg", "9.8", MediaType.Movie)),
+            isMovieInWatchlist = false
+        ),
+        onMovieSelected = {},
+        onBackNavigation = {},
+        onRecommendationsThresholdReached = {},
+        onToggleWatchlist = {}
+    )
+}
+
+fun createDetailRow(
+    text: String?,
+    iconId: Int,
+    contentDescription: String
+): DetailRowData? {
+    return if(text.isNullOrBlank()){
+        null
+    } else {
+        DetailRowData(text, iconId, contentDescription)
     }
 }
 

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.movietime.movie.home.ui.black75Opacity
-import com.movietime.views.PosterItemView
+import com.movietime.core.views.poster.PosterItemView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
