@@ -141,21 +141,23 @@ private fun Content(
                 )
             }
 
-            item {
-                SectionTitle(
-                    stringResource(R.string.watchlist_title),
-                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                    loading = loading
-                )
-            }
+            if(moviesWatchlist.isNotEmpty()) {
+                item {
+                    SectionTitle(
+                        stringResource(R.string.watchlist_title),
+                        Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                        loading = loading
+                    )
+                }
 
-            item {
-                HighlightedSection(
-                    highlightedList = moviesWatchlist,
-                    onItemSelected = onMovieSelected,
-                    loading = loading,
-                    modifier = Modifier.padding(top = 8.dp),
-                )
+                item {
+                    HighlightedSection(
+                        highlightedList = moviesWatchlist,
+                        onItemSelected = onMovieSelected,
+                        loading = loading,
+                        modifier = Modifier.padding(top = 8.dp),
+                    )
+                }
             }
         }
     }

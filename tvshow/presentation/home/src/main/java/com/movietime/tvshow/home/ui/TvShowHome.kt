@@ -146,22 +146,23 @@ private fun Content(
                 )
             }
 
+            if (watchListTvShows.isNotEmpty()) {
+                item {
+                    SectionTitle(
+                        stringResource(R.string.watachlist_title),
+                        Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                        loading = loading
+                    )
+                }
 
-            item {
-                SectionTitle(
-                    stringResource(R.string.watachlist_title),
-                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                    loading = loading
-                )
-            }
-
-            item {
-                HighlightedSection(
-                    highlightedList = watchListTvShows,
-                    onItemSelected = onTvShowSelected,
-                    loading = loading,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
+                item {
+                    HighlightedSection(
+                        highlightedList = watchListTvShows,
+                        onItemSelected = onTvShowSelected,
+                        loading = loading,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
             }
         }
     }

@@ -77,7 +77,7 @@ class TvShowsViewModel @Inject constructor(
             getOnTheAirTvShowsUseCase.onTheAirTvShows.map { it.map(TvShowPreview::toPosterItem) },
             getWatchlistTvShowsUseCase().map { it.map(TvShowDetail::toHighlightedItem) }
         ) { popularTvShows, topRatedTvShows, onTheAirTvShows, watchlistTvShows ->
-            if(popularTvShows.isEmpty() || topRatedTvShows.isEmpty() || onTheAirTvShows.isEmpty() || watchlistTvShows.isEmpty()){
+            if(popularTvShows.isEmpty() || topRatedTvShows.isEmpty() || onTheAirTvShows.isEmpty()){
                 TvShowsUiState.Loading
             } else {
                 val tvShowUiState: TvShowsUiState = TvShowsUiState.Content(

@@ -28,13 +28,18 @@ class LocalTokenDataSource @Inject constructor(
 
     override suspend fun saveToken(tokenInfo: TokenInfo) {
         context.dataStore.edit { tokenDS ->
+            tokenDS.remove(TOKEN_INFO_KEY)
             tokenDS[TOKEN_INFO_KEY] = gson.toJson(tokenInfo)
         }
     }
 
-    override suspend fun getToken(): TokenInfo? {
+    override fun getToken(): Flow<TokenInfo?> {
         return context.dataStore.data.map { preferences ->
-            gson.fromJson(preferences[TOKEN_INFO_KEY], TokenInfo::class.java)
-        }.firstOrNull()
+            if(preferences.contains(TOKEN_INFO_KEY)) {
+                gson.fromJson(preferences[TOKEN_INFO_KEY], TokenInfo::class.java)
+            } else {
+                null
+            }
+        }
     }
 }

@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.movietime.core.presentation.ListState
-import com.movietime.domain.interactors.movie.AddMovieToWatchlistUseCase
 import com.movietime.domain.interactors.movie.GetMovieDetailUseCase
 import com.movietime.domain.interactors.movie.GetMovieRecommendationsUseCase
 import com.movietime.domain.interactors.movie.GetMovieVideosUseCase

@@ -20,7 +20,7 @@ class TokenRepository @Inject constructor(
         }
     }
 
-    suspend fun getStoredToken(): TokenInfo? {
+    fun getStoredToken(): Flow<TokenInfo?> {
         return savableTokenDataSource.getToken()
     }
 }
