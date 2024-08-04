@@ -2,6 +2,7 @@ package com.movietime.data.trakt.di.auth
 
 import com.movietime.data.trakt.BuildConfig
 import com.movietime.data.trakt.di.network.NetworkModule.Companion.TRAKT_RETROFIT
+import com.movietime.data.trakt.di.network.NetworkModule.Companion.TRAKT_RETROFIT_AUTH
 import com.movietime.data.trakt.oauth.TraktAuthorizationUrlGenerator
 import com.movietime.data.trakt.oauth.TraktTokenDataSource
 import com.movietime.data.trakt.service.AuthService
@@ -46,7 +47,7 @@ abstract class AuthModule {
 
         @Provides
         @Reusable
-        fun provideAuthService(@Named(TRAKT_RETROFIT) retrofit: Retrofit): AuthService {
+        fun provideAuthService(@Named(TRAKT_RETROFIT_AUTH) retrofit: Retrofit): AuthService {
             return retrofit.create(AuthService::class.java)
         }
 

@@ -14,10 +14,13 @@ class TokenRepository @Inject constructor(
         }
     }
 
-    //todo refresh token
     suspend fun refreshToken(refreshToken: String): TokenInfo {
         return remoteTokenDataSource.refreshTraktToken(refreshToken).also {
             savableTokenDataSource.saveToken(it)
         }
+    }
+
+    suspend fun getStoredToken(): TokenInfo? {
+        return savableTokenDataSource.getToken()
     }
 }

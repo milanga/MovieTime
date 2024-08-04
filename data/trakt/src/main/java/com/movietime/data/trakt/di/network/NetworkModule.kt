@@ -20,6 +20,8 @@ class NetworkModule {
         private const val BASE_URL = "https://api.trakt.tv"
         private const val TRAKT_OK_HTTP_CLIENT = "TRAKT_OK_HTTP_CLIENT"
         const val TRAKT_RETROFIT = "TRAKT_RETROFIT"
+        private const val TRAKT_OK_HTTP_CLIENT_AUTH = "TRAKT_OK_HTTP_CLIENT_AUTH"
+        const val TRAKT_RETROFIT_AUTH = "TRAKT_RETROFIT_AUTH"
     }
 
     @Singleton
@@ -33,6 +35,30 @@ class NetworkModule {
             .baseUrl(BASE_URL)
             .addConverterFactory(JacksonConverterFactory.create())
             .client(httpClient)
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    @Named(TRAKT_RETROFIT_AUTH)
+    fun provideAuthRetrofit(
+        @Named(TRAKT_OK_HTTP_CLIENT_AUTH)
+        httpClient: OkHttpClient,
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(JacksonConverterFactory.create())
+            .client(httpClient)
+            .build()
+    }
+
+    @Provides
+    @Named(TRAKT_OK_HTTP_CLIENT_AUTH)
+    fun provideAuthHttpClient(
+        httpLoggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(httpLoggingInterceptor)
             .build()
     }
 
