@@ -33,8 +33,8 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:$daggerHiltVersion"
     kapt "androidx.hilt:hilt-compiler:$hiltVersion"
     implementation "androidx.hilt:hilt-navigation-compose:$hiltNavigationCompose"
-    implementation project(':core:presentation')
 
+    implementation project(':core:presentation')
     implementation project(':domain')
     implementation project(':core:views')
     implementation project(':movie:presentation:detail')
