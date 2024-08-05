@@ -54,7 +54,7 @@ fun PosterItemView(
 }
 
 @Composable
-private fun getCompleteModifier(
+internal fun getCompleteModifier(
     posterShape: RoundedCornerShape,
     modifier: Modifier,
     onClick: (() -> Unit)?,
@@ -77,7 +77,7 @@ private fun getCompleteModifier(
 }
 
 @Composable
-private fun Rate(
+internal fun Rate(
     rating: String,
     modifier: Modifier
 ){
@@ -101,7 +101,7 @@ private fun Rate(
 }
 
 @Composable
-private fun PosterImage(
+internal fun PosterImage(
     posterUrl: String,
     modifier: Modifier
 ){

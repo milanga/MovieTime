@@ -4,7 +4,8 @@ data class PosterItem(
     val id: Int,
     val posterUrl: String,
     val rating: String,
-    val mediaType: MediaType
+    val mediaType: MediaType,
+    val title: String = ""
 )
 
 sealed class MediaType {

@@ -5,4 +5,5 @@ interface GenericPreview {
     val posterUrl: String
     val rating: Float?
     val mediaType: MediaType
+    val title: String
 }

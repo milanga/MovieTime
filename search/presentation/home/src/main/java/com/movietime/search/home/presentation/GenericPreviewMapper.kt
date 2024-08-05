@@ -11,7 +11,8 @@ fun GenericPreview.toPosterItem() =  PosterItem(
     id,
     posterUrl,
     rating?.let{"%.1f".format(rating)}?:"",
-    mediaType.toViewMediaType()
+    mediaType.toViewMediaType(),
+    title
 )
 
 fun MediaType.toViewMediaType() = when (this) {

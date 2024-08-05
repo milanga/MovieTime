@@ -18,4 +18,6 @@ data class TvShowPreview(
 ): MediaPreview {
     override val mediaType: MediaType
         get() = MediaType.TvShow
+    override val title: String
+        get() = name
 }

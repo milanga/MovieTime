@@ -17,4 +17,6 @@ data class PersonPreview(
         get() = MediaType.Person
     override val rating: Float?
         get() = null
+    override val title: String
+        get() = name
 }

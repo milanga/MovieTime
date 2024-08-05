@@ -3,7 +3,7 @@ package com.movietime.domain.model
 import java.util.Date
 
 data class MoviePreview(
-    val title: String,
+    override val title: String,
     val originalTitle: String,
     val originalLanguage: String,
     override val id: Int,

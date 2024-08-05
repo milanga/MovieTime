@@ -1,8 +1,11 @@
 package com.movietime.search.home.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.movietime.core.views.poster.PosterExtendedView
 import com.movietime.core.views.poster.model.MediaType
 import com.movietime.search.home.presentation.SearchViewModel
 import com.movietime.core.views.poster.PosterItemView
@@ -55,7 +62,7 @@ fun SearchHome(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class,
+@OptIn(ExperimentalMaterial3Api::class,
     ExperimentalLayoutApi::class
 )
 @Composable
@@ -67,7 +74,6 @@ fun SearchHome(
     onPersonSelected: (id: Int) -> Unit,
     onSearchThresholdReached: () -> Unit,
 ) {
-
     Scaffold(
         topBar = {
             Surface(
@@ -102,6 +108,7 @@ fun SearchHome(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SearchResultView(
     uiState: SearchViewModel.SearchUiState.Content,
@@ -111,18 +118,23 @@ private fun SearchResultView(
     onPersonSelected: (id: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(modifier = modifier) {
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(2),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier
+    ) {
         itemsIndexed(items = uiState.searchResult) { index, posterItem ->
             if (uiState.searchResult.size - index < 5) {
                 onSearchThresholdReached()
             }
-            PosterItemView(
-                Modifier
-                    .padding(8.dp)
-                    .width(130.dp)
-                    .aspectRatio(0.67f),
+            PosterExtendedView(
                 posterItem.posterUrl,
                 posterItem.rating,
+                posterItem.title,
+                Modifier
+                    .fillMaxWidth(),
                 {
                     when (posterItem.mediaType) {
                         MediaType.Movie -> onMovieSelected(posterItem.id)
