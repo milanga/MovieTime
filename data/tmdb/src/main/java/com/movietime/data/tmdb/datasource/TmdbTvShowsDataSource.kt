@@ -28,6 +28,10 @@ class TmdbTvShowsDataSource @Inject constructor(
         getListOfTvShows(tvShowsService.onTheAirTvShows(page))
     }
 
+    override suspend fun getTrendingTvShows(page: Int): List<TvShowPreview> = withContext(coroutineContext) {
+        getListOfTvShows(tvShowsService.trendingTvShows(page = page))
+    }
+
     private fun getListOfTvShows(tmdbTvShowsResponse: TmdbTvShowsResponse): List<TvShowPreview> =
         tmdbTvShowsResponse.results.map { remoteTvShowPreview ->
             mapper.map(

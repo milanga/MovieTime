@@ -43,7 +43,8 @@ fun TvShowHome(
         onTvShowSelected = onTvShowSelected,
         onTopRatedTvShowsThresholdReached = {viewModel.onTopRatedTvShowsThreshold()},
         onOnTheAirTvShowsThresholdReached = {viewModel.onOnTheAirTvShowsThreshold()},
-        onPopularTvShowsThresholdReached = {viewModel.onPopularTvShowsThreshold()}
+        onPopularTvShowsThresholdReached = {viewModel.onPopularTvShowsThreshold()},
+        onTrendingTvShowsThresholdReached = {viewModel.onTrendingTvShowsThreshold()}
     )
 }
 @Composable
@@ -52,7 +53,8 @@ private fun TvShowHome(
     onTvShowSelected: (id: Int) -> Unit,
     onTopRatedTvShowsThresholdReached: () -> Unit,
     onOnTheAirTvShowsThresholdReached: () -> Unit,
-    onPopularTvShowsThresholdReached: () -> Unit
+    onPopularTvShowsThresholdReached: () -> Unit,
+    onTrendingTvShowsThresholdReached: () -> Unit
 ){
     when(uiState){
         is TvShowsViewModel.TvShowsUiState.Error -> ErrorScreen()
@@ -61,10 +63,12 @@ private fun TvShowHome(
             topRatedTvShows = uiState.topRatedTvShows,
             upcomingTvShows = uiState.onTheAirTvShows,
             watchListTvShows = uiState.watchlistTvShows,
+            trendingTvShows = uiState.trendingTvShows,
             onTvShowSelected = onTvShowSelected,
             onTopRatedTvShowsThresholdReached = onTopRatedTvShowsThresholdReached,
             onUpcomingTvShowsThresholdReached = onOnTheAirTvShowsThresholdReached,
-            onPopularTvShowsThresholdReached = onPopularTvShowsThresholdReached
+            onPopularTvShowsThresholdReached = onPopularTvShowsThresholdReached,
+            onTrendingTvShowsThresholdReached = onTrendingTvShowsThresholdReached
         )
         is TvShowsViewModel.TvShowsUiState.Loading -> Content(loading = true)
     }
@@ -77,15 +81,17 @@ private fun ErrorScreen() {
 
 @Composable
 private fun Content(
-    popularTvShows: List<HighlightedItem> = emptyList(),
+    popularTvShows: List<PosterItem> = emptyList(),
     topRatedTvShows: List<PosterItem> = emptyList(),
     upcomingTvShows: List<PosterItem> = emptyList(),
     watchListTvShows: List<HighlightedItem> = emptyList(),
+    trendingTvShows: List<PosterItem> = emptyList(),
     onTvShowSelected: (id: Int) -> Unit = {},
     loading: Boolean = false,
     onTopRatedTvShowsThresholdReached: () -> Unit = {},
     onUpcomingTvShowsThresholdReached: () -> Unit = {},
-    onPopularTvShowsThresholdReached: () -> Unit = {}
+    onPopularTvShowsThresholdReached: () -> Unit = {},
+    onTrendingTvShowsThresholdReached: () -> Unit = {}
 ){
     Box(Modifier.background(MaterialTheme.colorScheme.surface)) {
         Spacer(
@@ -101,11 +107,39 @@ private fun Content(
                 .background(Color.Transparent),
             contentPadding = PaddingValues(bottom = 16.dp, top = 40.dp)
         ) {
+            if (watchListTvShows.isNotEmpty()) {
+                item {
+                    SectionTitle(
+                        stringResource(R.string.watachlist_title),
+                        Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                        loading = loading
+                    )
+                }
+
+                item {
+                    HighlightedSection(
+                        highlightedList = watchListTvShows,
+                        onItemSelected = onTvShowSelected,
+                        loading = loading,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+            }
+
             item {
-                HighlightedSection(
-                    highlightedList = popularTvShows,
+                SectionTitle(
+                    stringResource(R.string.trending_title),
+                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                    loading = loading
+                )
+            }
+
+            item {
+                ListSection(
+                    posterList = trendingTvShows,
                     onItemSelected = onTvShowSelected,
-                    onScrollThresholdReached = onPopularTvShowsThresholdReached,
+                    onScrollThresholdReached = onTrendingTvShowsThresholdReached,
+                    modifier = Modifier.padding(top = 8.dp),
                     loading = loading
                 )
             }
@@ -130,6 +164,24 @@ private fun Content(
 
             item {
                 SectionTitle(
+                    stringResource(R.string.popular_title),
+                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                    loading = loading
+                )
+            }
+
+            item {
+                ListSection(
+                    posterList = popularTvShows,
+                    onItemSelected = onTvShowSelected,
+                    onScrollThresholdReached = onPopularTvShowsThresholdReached,
+                    modifier = Modifier.padding(top = 8.dp),
+                    loading = loading
+                )
+            }
+
+            item {
+                SectionTitle(
                     stringResource(R.string.on_the_air_title),
                     Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
                     loading = loading
@@ -144,25 +196,6 @@ private fun Content(
                     modifier = Modifier.padding(top = 8.dp),
                     loading = loading
                 )
-            }
-
-            if (watchListTvShows.isNotEmpty()) {
-                item {
-                    SectionTitle(
-                        stringResource(R.string.watachlist_title),
-                        Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                        loading = loading
-                    )
-                }
-
-                item {
-                    HighlightedSection(
-                        highlightedList = watchListTvShows,
-                        onItemSelected = onTvShowSelected,
-                        loading = loading,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                }
             }
         }
     }

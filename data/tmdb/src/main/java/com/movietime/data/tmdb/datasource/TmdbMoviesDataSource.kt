@@ -28,6 +28,10 @@ class TmdbMoviesDataSource @Inject constructor(
         getListOfMovies(moviesService.upcomingMovies(page))
     }
 
+    override suspend fun getTrendingMovies(page: Int): List<MoviePreview> = withContext(coroutineContext) {
+        getListOfMovies(moviesService.trendingMovies(page = page))
+    }
+
     private fun getListOfMovies(tmdbMoviesResponse: TmdbMoviesResponse): List<MoviePreview> =
         tmdbMoviesResponse.movies.map { remoteMoviePreview ->
             mapper.map(

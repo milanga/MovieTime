@@ -8,6 +8,8 @@ interface TvShowsRepository {
     val popularTvShows: Flow<List<TvShowPreview>>
     val topRatedTvShows: Flow<List<TvShowPreview>>
     val onTheAirTvShows: Flow<List<TvShowPreview>>
+    val trendingTvShows: Flow<List<TvShowPreview>>
+
     suspend fun refreshPopularTvShows()
     suspend fun fetchMorePopularTvShows()
 
@@ -16,4 +18,7 @@ interface TvShowsRepository {
 
     suspend fun refreshOnTheAirTvShows()
     suspend fun fetchMoreOnTheAirTvShows()
+
+    suspend fun refreshTrendingTvShows()
+    suspend fun fetchMoreTrendingTvShows()
 }

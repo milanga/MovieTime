@@ -8,6 +8,8 @@ interface MoviesRepository {
     val popularMovies: Flow<List<MoviePreview>>
     val topRatedMovies: Flow<List<MoviePreview>>
     val upcomingMovies: Flow<List<MoviePreview>>
+    val trendingMovies: Flow<List<MoviePreview>>
+
     suspend fun refreshPopularMovies()
     suspend fun fetchMorePopularMovies()
 
@@ -16,4 +18,7 @@ interface MoviesRepository {
 
     suspend fun refreshUpcomingMovies()
     suspend fun fetchMoreUpcomingMovies()
+
+    suspend fun refreshTrendingMovies()
+    suspend fun fetchMoreTrendingMovies()
 }

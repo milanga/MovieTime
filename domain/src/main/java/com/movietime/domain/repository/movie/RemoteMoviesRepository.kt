@@ -21,6 +21,10 @@ class RemoteMoviesRepository @Inject constructor(
     private val _upcomingMovies = MutableStateFlow<List<MoviePreview>>(emptyList())
     override val upcomingMovies: Flow<List<MoviePreview>> = _upcomingMovies
 
+    private var trendingMoviesPage = 1
+    private val _trendingMovies = MutableStateFlow<List<MoviePreview>>(emptyList())
+    override val trendingMovies: Flow<List<MoviePreview>> = _trendingMovies
+
     override suspend fun refreshPopularMovies() {
         popularMoviesPage = 1
         _popularMovies.emit(remoteDataSource.getPopularMovies(popularMoviesPage))
@@ -46,5 +50,14 @@ class RemoteMoviesRepository @Inject constructor(
     override suspend fun fetchMoreUpcomingMovies() {
         upcomingMoviesPage++
         _upcomingMovies.emit(_upcomingMovies.value.plus(remoteDataSource.getUpcomingMovies(upcomingMoviesPage)))
+    }
+
+    override suspend fun refreshTrendingMovies() {
+        trendingMoviesPage = 1
+        _trendingMovies.emit(remoteDataSource.getTrendingMovies(trendingMoviesPage))
+    }
+    override suspend fun fetchMoreTrendingMovies() {
+        trendingMoviesPage++
+        _trendingMovies.emit(_trendingMovies.value.plus(remoteDataSource.getTrendingMovies(trendingMoviesPage)))
     }
 }

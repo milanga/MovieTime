@@ -21,6 +21,10 @@ class RemoteTvShowsRepository @Inject constructor(
     private val _onTheAirTvShows = MutableStateFlow<List<TvShowPreview>>(emptyList())
     override val onTheAirTvShows: Flow<List<TvShowPreview>> = _onTheAirTvShows
 
+    private var trendingTvShowsPage = 1
+    private val _trendingTvShows = MutableStateFlow<List<TvShowPreview>>(emptyList())
+    override val trendingTvShows: Flow<List<TvShowPreview>> = _trendingTvShows
+
     override suspend fun refreshPopularTvShows() {
         popularTvShowsPage = 1
         _popularTvShows.emit(remoteDataSource.getPopularTvShows(popularTvShowsPage))
@@ -46,5 +50,15 @@ class RemoteTvShowsRepository @Inject constructor(
     override suspend fun fetchMoreOnTheAirTvShows() {
         onTheAirTvShowsPage++
         _onTheAirTvShows.emit(_onTheAirTvShows.value.plus(remoteDataSource.getOnTheAirTvShows(onTheAirTvShowsPage)))
+    }
+
+    override suspend fun refreshTrendingTvShows() {
+        trendingTvShowsPage = 1
+        _trendingTvShows.emit(remoteDataSource.getTrendingTvShows(trendingTvShowsPage))
+    }
+
+    override suspend fun fetchMoreTrendingTvShows() {
+        trendingTvShowsPage++
+        _trendingTvShows.emit(_trendingTvShows.value.plus(remoteDataSource.getTrendingTvShows(trendingTvShowsPage)))
     }
 }

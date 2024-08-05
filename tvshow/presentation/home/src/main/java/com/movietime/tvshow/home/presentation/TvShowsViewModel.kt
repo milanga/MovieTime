@@ -9,6 +9,7 @@ import com.movietime.domain.interactors.tvshow.GetTvShowsWatchlistUseCase
 import com.movietime.domain.interactors.tvshow.GetOnTheAirTvShowsUseCase
 import com.movietime.domain.interactors.tvshow.GetPopularTvShowsUseCase
 import com.movietime.domain.interactors.tvshow.GetTopRatedTvShowsUseCase
+import com.movietime.domain.interactors.tvshow.GetTrendingTvShowsUseCase
 import com.movietime.domain.model.TvShowDetail
 import com.movietime.domain.model.TvShowPreview
 import com.movietime.tvshow.detail.presentation.model.toHighlightedItem
@@ -23,16 +24,18 @@ class TvShowsViewModel @Inject constructor(
     private val getPopularTvShowsUseCase: GetPopularTvShowsUseCase,
     private val getTopRatedTvShowsUseCase: GetTopRatedTvShowsUseCase,
     private val getOnTheAirTvShowsUseCase: GetOnTheAirTvShowsUseCase,
-    private val getWatchlistTvShowsUseCase: GetTvShowsWatchlistUseCase
+    private val getWatchlistTvShowsUseCase: GetTvShowsWatchlistUseCase,
+    private val getTrendingTvShowsUseCase: GetTrendingTvShowsUseCase
 ): ViewModel() {
     sealed interface TvShowsUiState{
         object Loading: TvShowsUiState
         object Error: TvShowsUiState
         data class Content(
-            val popularTvShows: List<HighlightedItem>,
+            val popularTvShows: List<PosterItem>,
             val topRatedTvShows: List<PosterItem>,
             val onTheAirTvShows: List<PosterItem>,
-            val watchlistTvShows: List<HighlightedItem>
+            val watchlistTvShows: List<HighlightedItem>,
+            val trendingTvShows: List<PosterItem>
         ): TvShowsUiState
     }
 
@@ -54,6 +57,12 @@ class TvShowsViewModel @Inject constructor(
         fetchList(this) { getOnTheAirTvShowsUseCase.fetchMore() }
     })
 
+    private val trendingListState = ListState({
+        fetchList(this) { getTrendingTvShowsUseCase.refresh() }
+    },{
+        fetchList(this) { getTrendingTvShowsUseCase.fetchMore() }
+    })
+
     private fun fetchList(listState: ListState, fetchFunction: suspend ()->Unit){
         viewModelScope.launch {
             try {
@@ -71,20 +80,23 @@ class TvShowsViewModel @Inject constructor(
         popularListState.refresh()
         topRatedListState.refresh()
         onTheAirListState.refresh()
+        trendingListState.refresh()
         combine(
-            getPopularTvShowsUseCase.popularTvShows.map { it.map(TvShowPreview::toHighlightedItem) },
+            getPopularTvShowsUseCase.popularTvShows.map { it.map(TvShowPreview::toPosterItem) },
             getTopRatedTvShowsUseCase.topRatedTvShows.map { it.map(TvShowPreview::toPosterItem) },
             getOnTheAirTvShowsUseCase.onTheAirTvShows.map { it.map(TvShowPreview::toPosterItem) },
-            getWatchlistTvShowsUseCase().map { it.map(TvShowDetail::toHighlightedItem) }
-        ) { popularTvShows, topRatedTvShows, onTheAirTvShows, watchlistTvShows ->
-            if(popularTvShows.isEmpty() || topRatedTvShows.isEmpty() || onTheAirTvShows.isEmpty()){
+            getWatchlistTvShowsUseCase().map { it.map(TvShowDetail::toHighlightedItem) },
+            getTrendingTvShowsUseCase.trendingTvShows.map { it.map(TvShowPreview::toPosterItem) }
+        ) { popularTvShows, topRatedTvShows, onTheAirTvShows, watchlistTvShows, trendingTvShows ->
+            if(popularTvShows.isEmpty() || topRatedTvShows.isEmpty() || onTheAirTvShows.isEmpty() || trendingTvShows.isEmpty()) {
                 TvShowsUiState.Loading
             } else {
                 val tvShowUiState: TvShowsUiState = TvShowsUiState.Content(
                     popularTvShows,
                     topRatedTvShows,
                     onTheAirTvShows,
-                    watchlistTvShows
+                    watchlistTvShows,
+                    trendingTvShows
                 )
                 tvShowUiState
             }
@@ -108,5 +120,9 @@ class TvShowsViewModel @Inject constructor(
 
     fun onPopularTvShowsThreshold(){
         popularListState.thresholdReached()
+    }
+
+    fun onTrendingTvShowsThreshold(){
+        trendingListState.thresholdReached()
     }
 }

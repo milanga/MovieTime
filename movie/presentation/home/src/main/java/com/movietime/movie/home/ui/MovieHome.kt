@@ -38,7 +38,8 @@ fun MovieHome(
         onMovieSelected = onMovieSelected,
         onTopRatedMoviesThresholdReached = {viewModel.onTopRatedMoviesThreshold()},
         onUpcomingMoviesThresholdReached = {viewModel.onUpcomingMoviesThreshold()},
-        onPopularMoviesThresholdReached = {viewModel.onPopularMoviesThreshold()}
+        onPopularMoviesThresholdReached = {viewModel.onPopularMoviesThreshold()},
+        onTrendingMoviesThresholdReached = {viewModel.onTrendingMoviesThreshold()},
     )
 }
 @Composable
@@ -47,7 +48,8 @@ private fun MovieHome(
     onMovieSelected: (id: Int) -> Unit,
     onTopRatedMoviesThresholdReached: () -> Unit,
     onUpcomingMoviesThresholdReached: () -> Unit,
-    onPopularMoviesThresholdReached: () -> Unit
+    onPopularMoviesThresholdReached: () -> Unit,
+    onTrendingMoviesThresholdReached: () -> Unit
 ){
     when(uiState){
         is MoviesViewModel.MoviesUiState.Error -> ErrorScreen()
@@ -56,10 +58,12 @@ private fun MovieHome(
             topRatedMovies = uiState.topRatedMovies,
             upcomingMovies = uiState.upcomingMovies,
             moviesWatchlist = uiState.moviesWatchlist,
+            trendingMovies = uiState.trendingMovies,
             onMovieSelected = onMovieSelected,
             onTopRatedMoviesThresholdReached = onTopRatedMoviesThresholdReached,
             onUpcomingMoviesThresholdReached = onUpcomingMoviesThresholdReached,
-            onPopularMoviesThresholdReached = onPopularMoviesThresholdReached
+            onPopularMoviesThresholdReached = onPopularMoviesThresholdReached,
+            onTrendingMoviesThresholdReached = onTrendingMoviesThresholdReached
         )
         is MoviesViewModel.MoviesUiState.Loading -> Content(loading = true)
     }
@@ -72,15 +76,17 @@ private fun ErrorScreen() {
 
 @Composable
 private fun Content(
-    popularMovies: List<HighlightedItem> = emptyList(),
+    popularMovies: List<PosterItem> = emptyList(),
     topRatedMovies: List<PosterItem> = emptyList(),
     upcomingMovies: List<PosterItem> = emptyList(),
     moviesWatchlist: List<HighlightedItem> = emptyList(),
+    trendingMovies: List<PosterItem> = emptyList(),
     onMovieSelected: (id: Int) -> Unit = {},
     loading: Boolean = false,
     onTopRatedMoviesThresholdReached: () -> Unit = {},
     onUpcomingMoviesThresholdReached: () -> Unit = {},
-    onPopularMoviesThresholdReached: () -> Unit = {}
+    onPopularMoviesThresholdReached: () -> Unit = {},
+    onTrendingMoviesThresholdReached: () -> Unit = {}
 ){
     Box(Modifier.background(MaterialTheme.colorScheme.surface)) {
         Spacer(
@@ -96,11 +102,39 @@ private fun Content(
                 .background(Color.Transparent),
             contentPadding = PaddingValues(bottom = 16.dp, top = 40.dp)
         ) {
+            if(moviesWatchlist.isNotEmpty()) {
+                item {
+                    SectionTitle(
+                        stringResource(R.string.watchlist_title),
+                        Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                        loading = loading
+                    )
+                }
+
+                item {
+                    HighlightedSection(
+                        highlightedList = moviesWatchlist,
+                        onItemSelected = onMovieSelected,
+                        loading = loading,
+                        modifier = Modifier.padding(top = 8.dp),
+                    )
+                }
+            }
+
             item {
-                HighlightedSection(
-                    highlightedList = popularMovies,
+                SectionTitle(
+                    stringResource(R.string.trending_title),
+                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                    loading = loading
+                )
+            }
+
+            item {
+                ListSection(
+                    posterList = trendingMovies,
                     onItemSelected = onMovieSelected,
-                    onScrollThresholdReached = onPopularMoviesThresholdReached,
+                    onScrollThresholdReached = onTrendingMoviesThresholdReached,
+                    modifier = Modifier.padding(top = 8.dp),
                     loading = loading
                 )
             }
@@ -125,6 +159,24 @@ private fun Content(
 
             item {
                 SectionTitle(
+                    stringResource(R.string.popular_title),
+                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                    loading = loading
+                )
+            }
+
+            item {
+                ListSection(
+                    posterList = popularMovies,
+                    onItemSelected = onMovieSelected,
+                    onScrollThresholdReached = onPopularMoviesThresholdReached,
+                    modifier = Modifier.padding(top = 8.dp),
+                    loading = loading
+                )
+            }
+
+            item {
+                SectionTitle(
                     stringResource(R.string.upcoming_title),
                     Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
                     loading = loading
@@ -139,25 +191,6 @@ private fun Content(
                     modifier = Modifier.padding(top = 8.dp),
                     loading = loading
                 )
-            }
-
-            if(moviesWatchlist.isNotEmpty()) {
-                item {
-                    SectionTitle(
-                        stringResource(R.string.watchlist_title),
-                        Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                        loading = loading
-                    )
-                }
-
-                item {
-                    HighlightedSection(
-                        highlightedList = moviesWatchlist,
-                        onItemSelected = onMovieSelected,
-                        loading = loading,
-                        modifier = Modifier.padding(top = 8.dp),
-                    )
-                }
             }
         }
     }
