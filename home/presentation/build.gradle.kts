@@ -1,11 +1,12 @@
 plugins {
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.android.library)
+    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    kotlin("kapt")
 }
 
 android {
-    namespace = "com.movietime.core.views"
+    namespace = "com.movietime.home.presentation"
     compileSdk = libs.versions.compileSdkVersion.get().toInt()
 
     buildFeatures {
@@ -26,12 +27,9 @@ android {
     }
 }
 
-composeCompiler{
-    enableStrongSkippingMode = true
-}
-
 dependencies {
     //UI
+    implementation(libs.compose.ui)
     implementation(libs.compose.ui.util)
     // Tooling support (Previews, etc.)
     implementation(libs.compose.ui.tooling)
@@ -39,13 +37,16 @@ dependencies {
     implementation(libs.compose.foundation)
     // Material Design
     implementation(libs.material3)
-    //Coil
-    implementation(libs.coil)
+    // Material design icons
+    implementation(libs.material.icons)
+    implementation(libs.material.icons.extended)
+    //Navigation
+    implementation(libs.navigation)
     //Accompanist
-    implementation(libs.accompanist.placeholder)
-    implementation(libs.accompanist.pager)
-    // Youtube player
-    implementation(libs.youtube.player)
+    implementation(libs.accompanist.navigation.animation)
 
-    implementation(project(":core:presentation"))
+    implementation(project(":movie:presentation:home"))
+    implementation(project(":tvshow:presentation:home"))
+    implementation(project(":search:presentation:home"))
+    implementation(project(":auth:presentation"))
 }

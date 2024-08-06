@@ -98,6 +98,9 @@ retrofit-converter-jackson = { group = "com.squareup.retrofit2", name = "convert
 #Okhttp
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttpVersion" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttpVersion" }
+#Icons
+material-icons = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "composeMaterialVersion" }
+material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "composeMaterialVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -1,11 +1,12 @@
 plugins {
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.android.library)
+    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    kotlin("kapt")
 }
 
 android {
-    namespace = "com.movietime.core.views"
+    namespace = "com.movietime.tvshow.home"
     compileSdk = libs.versions.compileSdkVersion.get().toInt()
 
     buildFeatures {
@@ -26,26 +27,34 @@ android {
     }
 }
 
-composeCompiler{
-    enableStrongSkippingMode = true
-}
-
 dependencies {
+    // AndroidX
+    implementation(libs.androidx.core.ktx)
     //UI
-    implementation(libs.compose.ui.util)
+    implementation(libs.compose.ui)
     // Tooling support (Previews, etc.)
     implementation(libs.compose.ui.tooling)
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
     implementation(libs.compose.foundation)
     // Material Design
     implementation(libs.material3)
-    //Coil
-    implementation(libs.coil)
+    // Integration with ViewModels
+    implementation(libs.compose.viewmodel.lifecycle)
+    // Lifecycle
+    implementation(libs.lifecycle)
+    //Navigation
+    implementation(libs.navigation)
     //Accompanist
     implementation(libs.accompanist.placeholder)
-    implementation(libs.accompanist.pager)
-    // Youtube player
-    implementation(libs.youtube.player)
+    implementation(libs.accompanist.navigation.animation)
+    //DI
+    implementation(libs.hilt)
+    kapt(libs.dagger.hilt.compiler)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
 
     implementation(project(":core:presentation"))
+    implementation(project(":domain"))
+    implementation(project(":core:views"))
+    implementation(project(":tvshow:presentation:detail"))
 }

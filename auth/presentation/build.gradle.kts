@@ -11,6 +11,15 @@ android {
     namespace = "com.movietime.auth"
     compileSdk = libs.versions.compileSdkVersion.get().toInt()
 
+    buildFeatures {
+        compose = true
+        // Disable unused AGP features
+        aidl = false
+        renderScript = false
+        resValues = false
+        shaders = false
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
