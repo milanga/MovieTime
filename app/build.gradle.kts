@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.compose.compiler)
     kotlin("kapt")
 }
 
@@ -34,10 +35,6 @@ android {
         shaders = false
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.get()
-    }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -50,6 +47,10 @@ android {
 
 kapt {
     correctErrorTypes = true
+}
+
+composeCompiler {
+    enableStrongSkippingMode = true
 }
 
 dependencies {

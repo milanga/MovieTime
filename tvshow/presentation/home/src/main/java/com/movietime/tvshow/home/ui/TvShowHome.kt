@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.movietime.core.views.highlight.HighlightedSection
 import com.movietime.core.views.poster.ListSection
@@ -30,7 +30,7 @@ import com.movietime.main.views.SectionTitle
 import com.movietime.tvshow.home.R
 import com.movietime.tvshow.home.presentation.TvShowsViewModel
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
+
 @Composable
 fun TvShowHome(
     viewModel: TvShowsViewModel = hiltViewModel(),

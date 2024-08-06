@@ -1,8 +1,8 @@
 [versions]
 #sdk versions
 minSdkVersion = "24"
-targetSdkVersion = "33"
-compileSdkVersion = "33"
+targetSdkVersion = "34"
+compileSdkVersion = "34"
 
 #compose
 kotlinCompilerExtensionVersion = "1.2.0"
@@ -38,9 +38,9 @@ retrofitVersion = "2.9.0"
 okhttpVersion = "4.10.0"
 
 #DI
-daggerHiltVersion = "2.44"
-hiltVersion = "1.0.0"
-hiltNavigationCompose = "1.0.0"
+daggerHiltVersion = "2.51.1"
+hiltVersion = "1.2.0"
+hiltNavigationCompose = "1.2.0"
 
 #Youtube player
 youtubePlayerVersion = "11.1.0"
@@ -53,7 +53,7 @@ gsonVersion = "2.11.0"
 agp = "8.5.1"
 
 #Kotlin
-kotlin = "1.7.0"
+kotlin = "2.0.0"
 
 [libraries]
 # AndroidX
@@ -89,3 +89,4 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHiltVersion" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

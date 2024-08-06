@@ -35,7 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.movietime.core.views.WatchlistFab
 import com.movietime.core.views.collapsibleBackddropTitle.CollapsableConfig
@@ -58,7 +58,7 @@ import com.movietime.tvshow.detail.presentation.model.UiTvShowDetail
 import com.movietime.tvshow.detail.presentation.model.UiVideo
 
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
+
 @ExperimentalMaterial3Api
 @Composable
 fun TvShowDetailRoute(

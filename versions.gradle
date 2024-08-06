@@ -9,8 +9,8 @@ ext.kotlinJvmTarget = JavaVersion.VERSION_1_8.toString()
 
 /**sdk versions**/
 ext.minSdkVersion = 24
-ext.targetSdkVersion = 33
-ext.compileSdkVersion = 33
+ext.targetSdkVersion = 34
+ext.compileSdkVersion = 34
 
 /**compose**/
 ext.kotlinCompilerExtensionVersion = '1.2.0'
@@ -46,9 +46,9 @@ ext.retrofitVersion = '2.9.0'
 ext.okhttpVersion = '4.10.0'
 
 //DI
-ext.daggerHiltVersion = '2.44'
-ext.hiltVersion = '1.0.0'
-ext.hiltNavigationCompose = '1.0.0'
+ext.daggerHiltVersion = '2.51.1'
+ext.hiltVersion = '1.2.0'
+ext.hiltNavigationCompose = '1.2.0'
 
 //Youtube player
 ext.youtubePlayerVersion = '11.1.0'

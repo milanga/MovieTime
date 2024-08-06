@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.movietime.core.views.highlight.HighlightedSection
 import com.movietime.core.views.poster.ListSection
@@ -25,7 +25,7 @@ import com.movietime.movie.home.R
 import com.movietime.movie.home.presentation.MoviesViewModel
 
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
+
 @Composable
 fun MovieHome(
     viewModel: MoviesViewModel = hiltViewModel(),

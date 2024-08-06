@@ -35,14 +35,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.movietime.core.views.poster.PosterExtendedView
 import com.movietime.core.views.poster.model.MediaType
 import com.movietime.search.home.presentation.SearchViewModel
 import com.movietime.core.views.poster.PosterItemView
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
+
 @Composable
 fun SearchHome(
     viewModel: SearchViewModel = hiltViewModel(),
