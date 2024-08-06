@@ -21,7 +21,7 @@ androidxCoreVersion = "1.9.0"
 androidxActivityVersion = "1.6.0"
 
 #lifecycle
-androidxLifecycleVersion = "2.6.0-alpha02"
+androidxLifecycleVersion = "2.6.2"
 
 #navigation
 androidxNavigationVersion = "2.5.2"
@@ -71,18 +71,33 @@ compose-activity = { group = "androidx.activity", name = "activity-compose", ver
 # Integration with ViewModels
 compose-viewmodel-lifecycle = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycleVersion" }
 # Lifecycle
-lifecycle = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidxLifecycleVersion" }
+lifecycle = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycleVersion" }
 #Navigation
 navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigationVersion" }
 #Accompanist
 accompanist-navigation-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanistVersion" }
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanistVersion" }
+accompanist-placeholder = { group = "com.google.accompanist", name = "accompanist-placeholder-material", version.ref = "accompanistVersion" }
+accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanistVersion" }
 #DI
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "daggerHiltVersion" }
 dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "daggerHiltVersion" }
-
 hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltVersion" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+#Coil
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilVersion" }
+#Youtube player
+youtube-player = { group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "core", version.ref = "youtubePlayerVersion" }
+#DataStore
+datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStoreVersion" }
+#Gson
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gsonVersion" }
+#Retrofit
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVersion" }
+retrofit-converter-jackson = { group = "com.squareup.retrofit2", name = "converter-jackson", version.ref = "retrofitVersion" }
+#Okhttp
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttpVersion" }
+okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttpVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

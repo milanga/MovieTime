@@ -29,7 +29,7 @@ ext.androidxCoreVersion = '1.9.0'
 ext.androidxActivityVersion = '1.6.0'
 
 //lifecycle
-ext.androidxLifecycleVersion = '2.6.0-alpha02'
+ext.androidxLifecycleVersion = '2.6.2'
 
 //navigation
 ext.androidxNavigationVersion = '2.5.2'

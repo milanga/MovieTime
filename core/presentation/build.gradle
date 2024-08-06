@@ -1,9 +1,0 @@
-apply from: "../../android-library-config.gradle"
-apply plugin: 'kotlin-android'
-
-android {
-    namespace 'com.movietime.core.presentation'
-}
-dependencies {
-    implementation "androidx.core:core-ktx:$androidxCoreVersion"
-}
