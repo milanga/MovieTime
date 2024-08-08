@@ -46,7 +46,6 @@ dependencies {
     implementation(libs.navigation)
     //Accompanist
     implementation(libs.accompanist.placeholder)
-    implementation(libs.accompanist.navigation.animation)
     //DI
     implementation(libs.hilt)
     kapt(libs.dagger.hilt.compiler)

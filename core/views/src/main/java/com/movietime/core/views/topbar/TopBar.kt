@@ -53,7 +53,9 @@ fun TopBar(
         TopAppBar(
             title = {
                 if (showTopAppBar) {
-                    Text(title)
+                    Text(
+                        text = title
+                    )
                 }
             },
             colors = TopAppBarDefaults.smallTopAppBarColors(Color.Transparent),

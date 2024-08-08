@@ -35,7 +35,7 @@ fun CollapsibleBackdropTitle(
     title: String = "",
     titleStyle: TextStyle = MaterialTheme.typography.displaySmall,
     loading: Boolean = false,
-    collapsableConfig: CollapsableConfig = CollapsableConfig(0,0f, MaterialTheme.typography.displaySmall.fontSize),
+    collapsableConfig: CollapsableConfig = CollapsableConfig(0,0f, MaterialTheme.typography.titleLarge.fontSize),
     listState: LazyListState = LazyListState()
 ) {
     val showTitle by rememberShowTitle(listState, collapsableConfig.finalTransitionOffset)

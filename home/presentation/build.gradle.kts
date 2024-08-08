@@ -42,8 +42,6 @@ dependencies {
     implementation(libs.material.icons.extended)
     //Navigation
     implementation(libs.navigation)
-    //Accompanist
-    implementation(libs.accompanist.navigation.animation)
 
     implementation(project(":movie:presentation:home"))
     implementation(project(":tvshow:presentation:home"))

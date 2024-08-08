@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.consumedWindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,7 +35,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.movietime.core.views.WatchlistFab
 import com.movietime.core.views.collapsibleBackddropTitle.CollapsableConfig
@@ -56,7 +55,6 @@ import com.movietime.tvshow.detail.presentation.TvShowDetailViewModel
 import com.movietime.tvshow.detail.presentation.model.TvShowDetailUiState
 import com.movietime.tvshow.detail.presentation.model.UiTvShowDetail
 import com.movietime.tvshow.detail.presentation.model.UiVideo
-
 
 
 @ExperimentalMaterial3Api
@@ -122,7 +120,7 @@ private fun TvShowDetailView(
     ) { padding ->
         when (uiState) {
             is TvShowDetailUiState.Error -> DetailErrorScreen(
-                Modifier.consumedWindowInsets(padding)
+                Modifier.consumeWindowInsets(padding)
             )
             is TvShowDetailUiState.Content -> DetailContent(
                 tvShowDetail = uiState.tvShowDetail,
@@ -131,12 +129,12 @@ private fun TvShowDetailView(
                 listState = listState,
                 onTvShowSelected = onTvShowSelected,
                 collapsableTitleConfig = CollapsableConfig(appBarHeight, iconWidth - appBarHorizontalPadding, MaterialTheme.typography.titleLarge.fontSize),
-                modifier = Modifier.consumedWindowInsets(padding),
+                modifier = Modifier.consumeWindowInsets(padding),
             ) {
                 onRecommendationsThresholdReached()
             }
             is TvShowDetailUiState.Loading -> DetailContent(
-                modifier=Modifier.consumedWindowInsets(padding),
+                modifier=Modifier.consumeWindowInsets(padding),
                 collapsableTitleConfig = CollapsableConfig(appBarHeight, iconWidth - appBarHorizontalPadding, MaterialTheme.typography.titleLarge.fontSize),
                 listState = listState,
                 loading = true

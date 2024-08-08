@@ -4,24 +4,21 @@ minSdkVersion = "24"
 targetSdkVersion = "34"
 compileSdkVersion = "34"
 
-#compose
-kotlinCompilerExtensionVersion = "1.2.0"
-
 #Dependencies versions
 #compose
-composeUiVersion = "1.3.0-beta03"
-composeFoundationVersion = "1.3.0-alpha01"
-composeMaterial3Version = "1.0.0-beta03"
-composeMaterialVersion = "1.2.1"
+composeUiVersion = "1.6.8"
+composeFoundationVersion = "1.6.8"
+composeMaterial3Version = "1.2.1"
+composeMaterialVersion = "1.6.8"
 
 #core
-androidxCoreVersion = "1.9.0"
+androidxCoreVersion = "1.13.1"
 
 #activity
-androidxActivityVersion = "1.6.0"
+androidxActivityVersion = "1.9.1"
 
 #lifecycle
-androidxLifecycleVersion = "2.6.2"
+androidxLifecycleVersion = "2.8.4"
 
 #navigation
 androidxNavigationVersion = "2.5.2"
@@ -34,8 +31,8 @@ accompanistAnimatedNavVersion = "0.26.4-beta"
 coilVersion = "2.2.1"
 
 #retrofit
-retrofitVersion = "2.9.0"
-okhttpVersion = "4.10.0"
+retrofitVersion = "2.11.0"
+okhttpVersion = "4.12.0"
 
 #DI
 daggerHiltVersion = "2.51.1"
@@ -46,7 +43,7 @@ hiltNavigationCompose = "1.2.0"
 youtubePlayerVersion = "11.1.0"
 
 #Data store
-dataStoreVersion = "1.0.0"
+dataStoreVersion = "1.1.1"
 gsonVersion = "2.11.0"
 
 #Gradle Plugin
@@ -75,7 +72,6 @@ lifecycle = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", 
 #Navigation
 navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigationVersion" }
 #Accompanist
-accompanist-navigation-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanistVersion" }
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanistVersion" }
 accompanist-placeholder = { group = "com.google.accompanist", name = "accompanist-placeholder-material", version.ref = "accompanistVersion" }
 accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanistVersion" }

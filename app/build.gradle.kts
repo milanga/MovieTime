@@ -76,7 +76,6 @@ dependencies {
     //Navigation
     implementation(libs.navigation)
     //Accompanist
-    implementation(libs.accompanist.navigation.animation)
     implementation(libs.accompanist.systemuicontroller)
     //DI
     implementation(libs.hilt)
