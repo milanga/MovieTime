@@ -1,8 +1,11 @@
 package com.movietime.movie.home.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
@@ -96,102 +99,83 @@ private fun Content(
             .background(Brush.verticalGradient(listOf(MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp), MaterialTheme.colorScheme.surface ), startY = 200f))
         )
 
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Transparent),
-            contentPadding = PaddingValues(bottom = 16.dp, top = 40.dp)
+                .background(Color.Transparent)
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 16.dp, top = 40.dp)
         ) {
             if(moviesWatchlist.isNotEmpty()) {
-                item {
-                    SectionTitle(
-                        stringResource(R.string.watchlist_title),
-                        Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                        loading = loading
-                    )
-                }
-
-                item {
-                    HighlightedSection(
-                        highlightedList = moviesWatchlist,
-                        onItemSelected = onMovieSelected,
-                        loading = loading,
-                        modifier = Modifier.padding(top = 8.dp),
-                    )
-                }
-            }
-
-            item {
                 SectionTitle(
-                    stringResource(R.string.trending_title),
+                    stringResource(R.string.watchlist_title),
                     Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
                     loading = loading
                 )
-            }
 
-            item {
-                ListSection(
-                    posterList = trendingMovies,
+                HighlightedSection(
+                    highlightedList = moviesWatchlist,
                     onItemSelected = onMovieSelected,
-                    onScrollThresholdReached = onTrendingMoviesThresholdReached,
+                    loading = loading,
                     modifier = Modifier.padding(top = 8.dp),
-                    loading = loading
                 )
             }
 
-            item {
-                SectionTitle(
-                    stringResource(R.string.top_rated_title),
-                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                    loading = loading
-                )
-            }
+            SectionTitle(
+                stringResource(R.string.trending_title),
+                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                loading = loading
+            )
 
-            item {
-                ListSection(
-                    posterList = topRatedMovies,
-                    onItemSelected = onMovieSelected,
-                    onScrollThresholdReached = onTopRatedMoviesThresholdReached,
-                    modifier = Modifier.padding(top = 8.dp),
-                    loading = loading
-                )
-            }
+            ListSection(
+                posterList = trendingMovies,
+                onItemSelected = onMovieSelected,
+                onScrollThresholdReached = onTrendingMoviesThresholdReached,
+                modifier = Modifier.padding(top = 8.dp),
+                loading = loading
+            )
 
-            item {
-                SectionTitle(
-                    stringResource(R.string.popular_title),
-                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                    loading = loading
-                )
-            }
+            SectionTitle(
+                stringResource(R.string.top_rated_title),
+                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                loading = loading
+            )
 
-            item {
-                ListSection(
-                    posterList = popularMovies,
-                    onItemSelected = onMovieSelected,
-                    onScrollThresholdReached = onPopularMoviesThresholdReached,
-                    modifier = Modifier.padding(top = 8.dp),
-                    loading = loading
-                )
-            }
+            ListSection(
+                posterList = topRatedMovies,
+                onItemSelected = onMovieSelected,
+                onScrollThresholdReached = onTopRatedMoviesThresholdReached,
+                modifier = Modifier.padding(top = 8.dp),
+                loading = loading
+            )
 
-            item {
-                SectionTitle(
-                    stringResource(R.string.upcoming_title),
-                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                    loading = loading
-                )
-            }
+            SectionTitle(
+                stringResource(R.string.popular_title),
+                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                loading = loading
+            )
 
-            item {
-                ListSection(
-                    posterList = upcomingMovies,
-                    onItemSelected = onMovieSelected,
-                    onScrollThresholdReached = onUpcomingMoviesThresholdReached,
-                    modifier = Modifier.padding(top = 8.dp),
-                    loading = loading
-                )
-            }
+            ListSection(
+                posterList = popularMovies,
+                onItemSelected = onMovieSelected,
+                onScrollThresholdReached = onPopularMoviesThresholdReached,
+                modifier = Modifier.padding(top = 8.dp),
+                loading = loading
+            )
+
+            SectionTitle(
+                stringResource(R.string.upcoming_title),
+                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                loading = loading
+            )
+
+            ListSection(
+                posterList = upcomingMovies,
+                onItemSelected = onMovieSelected,
+                onScrollThresholdReached = onUpcomingMoviesThresholdReached,
+                modifier = Modifier.padding(top = 8.dp),
+                loading = loading
+            )
         }
     }
 

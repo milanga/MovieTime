@@ -2,13 +2,14 @@ package com.movietime.tvshow.home.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
@@ -61,7 +62,7 @@ private fun TvShowHome(
         is TvShowsViewModel.TvShowsUiState.Content -> Content(
             popularTvShows = uiState.popularTvShows,
             topRatedTvShows = uiState.topRatedTvShows,
-            upcomingTvShows = uiState.onTheAirTvShows,
+            onTheAirTvShows = uiState.onTheAirTvShows,
             watchListTvShows = uiState.watchlistTvShows,
             trendingTvShows = uiState.trendingTvShows,
             onTvShowSelected = onTvShowSelected,
@@ -83,7 +84,7 @@ private fun ErrorScreen() {
 private fun Content(
     popularTvShows: List<PosterItem> = emptyList(),
     topRatedTvShows: List<PosterItem> = emptyList(),
-    upcomingTvShows: List<PosterItem> = emptyList(),
+    onTheAirTvShows: List<PosterItem> = emptyList(),
     watchListTvShows: List<HighlightedItem> = emptyList(),
     trendingTvShows: List<PosterItem> = emptyList(),
     onTvShowSelected: (id: Int) -> Unit = {},
@@ -96,107 +97,96 @@ private fun Content(
     Box(Modifier.background(MaterialTheme.colorScheme.surface)) {
         Spacer(
             Modifier
-            .fillMaxWidth()
-            .aspectRatio(1.6f)
-            .background(Brush.verticalGradient(listOf(MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp), MaterialTheme.colorScheme.surface ), startY = 200f))
+                .fillMaxWidth()
+                .aspectRatio(1.6f)
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            MaterialTheme.colorScheme.surfaceColorAtElevation(
+                                3.dp
+                            ), MaterialTheme.colorScheme.surface
+                        ), startY = 200f
+                    )
+                )
         )
 
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Transparent),
-            contentPadding = PaddingValues(bottom = 16.dp, top = 40.dp)
+                .background(Color.Transparent)
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 16.dp, top = 40.dp)
         ) {
             if (watchListTvShows.isNotEmpty()) {
-                item {
-                    SectionTitle(
-                        stringResource(R.string.watachlist_title),
-                        Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                        loading = loading
-                    )
-                }
-
-                item {
-                    HighlightedSection(
-                        highlightedList = watchListTvShows,
-                        onItemSelected = onTvShowSelected,
-                        loading = loading,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                }
-            }
-
-            item {
                 SectionTitle(
-                    stringResource(R.string.trending_title),
+                    stringResource(R.string.watachlist_title),
                     Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
                     loading = loading
                 )
-            }
 
-            item {
-                ListSection(
-                    posterList = trendingTvShows,
+                HighlightedSection(
+                    highlightedList = watchListTvShows,
                     onItemSelected = onTvShowSelected,
-                    onScrollThresholdReached = onTrendingTvShowsThresholdReached,
-                    modifier = Modifier.padding(top = 8.dp),
-                    loading = loading
+                    loading = loading,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
 
-            item {
-                SectionTitle(
-                    stringResource(R.string.top_rated_title),
-                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                    loading = loading
-                )
-            }
+            SectionTitle(
+                stringResource(R.string.trending_title),
+                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                loading = loading
+            )
 
-            item {
-                ListSection(
-                    posterList = topRatedTvShows,
-                    onItemSelected = onTvShowSelected,
-                    onScrollThresholdReached = onTopRatedTvShowsThresholdReached,
-                    modifier = Modifier.padding(top = 8.dp),
-                    loading = loading
-                )
-            }
+            ListSection(
+                posterList = trendingTvShows,
+                onItemSelected = onTvShowSelected,
+                onScrollThresholdReached = onTrendingTvShowsThresholdReached,
+                modifier = Modifier.padding(top = 8.dp),
+                loading = loading
+            )
 
-            item {
-                SectionTitle(
-                    stringResource(R.string.popular_title),
-                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                    loading = loading
-                )
-            }
+            SectionTitle(
+                stringResource(R.string.top_rated_title),
+                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                loading = loading
+            )
 
-            item {
-                ListSection(
-                    posterList = popularTvShows,
-                    onItemSelected = onTvShowSelected,
-                    onScrollThresholdReached = onPopularTvShowsThresholdReached,
-                    modifier = Modifier.padding(top = 8.dp),
-                    loading = loading
-                )
-            }
+            ListSection(
+                posterList = topRatedTvShows,
+                onItemSelected = onTvShowSelected,
+                onScrollThresholdReached = onTopRatedTvShowsThresholdReached,
+                modifier = Modifier.padding(top = 8.dp),
+                loading = loading
+            )
 
-            item {
-                SectionTitle(
-                    stringResource(R.string.on_the_air_title),
-                    Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                    loading = loading
-                )
-            }
+            SectionTitle(
+                stringResource(R.string.popular_title),
+                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                loading = loading
+            )
 
-            item {
-                ListSection(
-                    posterList = upcomingTvShows,
-                    onItemSelected = onTvShowSelected,
-                    onScrollThresholdReached = onUpcomingTvShowsThresholdReached,
-                    modifier = Modifier.padding(top = 8.dp),
-                    loading = loading
-                )
-            }
+            ListSection(
+                posterList = popularTvShows,
+                onItemSelected = onTvShowSelected,
+                onScrollThresholdReached = onPopularTvShowsThresholdReached,
+                modifier = Modifier.padding(top = 8.dp),
+                loading = loading
+            )
+
+            SectionTitle(
+                stringResource(R.string.on_the_air_title),
+                Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                loading = loading
+            )
+
+            ListSection(
+                posterList = onTheAirTvShows,
+                onItemSelected = onTvShowSelected,
+                onScrollThresholdReached = onUpcomingTvShowsThresholdReached,
+                modifier = Modifier.padding(top = 8.dp),
+                loading = loading
+            )
         }
     }
 
