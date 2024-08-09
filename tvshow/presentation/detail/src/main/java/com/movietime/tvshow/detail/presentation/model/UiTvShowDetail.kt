@@ -5,13 +5,13 @@ import com.movietime.domain.model.TvShowDetail
 data class UiTvShowDetail(
     val backdropUrl: String = "",
     val posterUrl: String = "",
-    val overview: String = "Overview",
-    val tagline: String = "Tagline",
-    val title: String = "Title",
-    val rating: String = "8.9",
-    val releaseDate: String = "2021-01-01",
-    val duration: String? = "115",
-    val genres: List<String> = listOf("Action", "Adventure"),
+    val overview: String = "",
+    val tagline: String = "",
+    val title: String = "",
+    val rating: String = "",
+    val releaseDate: String = "",
+    val duration: String? = "",
+    val genres: List<String> = listOf(),
 )
 
 fun TvShowDetail.toUiTvShowDetail(): UiTvShowDetail =

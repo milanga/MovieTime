@@ -13,7 +13,8 @@ import com.movietime.core.views.poster.PosterItemView
 fun DetailSection(
     posterUrl: String,
     detailRows: List<DetailRowData>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    loading: Boolean = false
 ) {
     Row(modifier = modifier) {
         PosterItemView(
@@ -21,7 +22,8 @@ fun DetailSection(
             modifier = Modifier
                 .weight(1f)
                 .padding(end = 8.dp)
-                .aspectRatio(0.67f)
+                .aspectRatio(0.67f),
+            loading = loading
         )
         Column(
             modifier = Modifier

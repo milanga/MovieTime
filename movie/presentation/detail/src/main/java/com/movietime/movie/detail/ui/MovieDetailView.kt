@@ -182,7 +182,8 @@ private fun DetailContent(
             DetailSection(
                 movieDetail.posterUrl,
                 detailRowData(movieDetail),
-                Modifier.padding(horizontal = 16.dp)
+                Modifier.padding(horizontal = 16.dp),
+                loading = loading
             )
         }
 

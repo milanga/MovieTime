@@ -8,6 +8,10 @@ android {
     namespace = "com.movietime.core.views"
     compileSdk = libs.versions.compileSdkVersion.get().toInt()
 
+    defaultConfig {
+        minSdk = libs.versions.minSdkVersion.get().toInt()
+    }
+
     buildFeatures {
         compose = true
         // Disable unused AGP features
