@@ -50,8 +50,8 @@ fun NavGraphBuilder.moviesGraph(
             MovieDetailRoute(
                 transitionScope = transitionScope,
                 animatedContentScope = this@composable,
-                onMovieSelected = { movieId ->
-                    navigateToRoute("${MovieDestinations.DETAIL.route}/$movieId")
+                onMovieSelected = { movieId, origin ->
+                    navigateToRoute("${MovieDestinations.DETAIL.route}/$movieId/$origin")
                 },
                 onBackNavigation = backNavigation
             )

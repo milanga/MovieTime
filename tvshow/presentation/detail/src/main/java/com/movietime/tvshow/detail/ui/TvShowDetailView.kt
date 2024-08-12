@@ -78,7 +78,7 @@ fun TvShowDetailRoute(
     transitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
     viewModel: TvShowDetailViewModel = hiltViewModel(),
-    onTvShowSelected: (id: Int) -> Unit,
+    onTvShowSelected: (id: Int, origin: String) -> Unit,
     onBackNavigation: () -> Unit
 ) {
 
@@ -101,7 +101,7 @@ private fun TvShowDetailView(
     transitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
     uiState: TvShowDetailUiState,
-    onTvShowSelected: (id: Int) -> Unit,
+    onTvShowSelected: (id: Int, origin: String) -> Unit,
     onBackNavigation: () -> Unit,
     onRecommendationsThresholdReached: () -> Unit,
     onToggleWatchlist: () -> Unit
@@ -181,7 +181,7 @@ private fun DetailContent(
     tvShowVideos: List<UiVideo> = emptyList(),
     tvShowRecommendations: List<PosterItem> = emptyList(),
     listState: LazyListState,
-    onTvShowSelected: (id: Int) -> Unit = {},
+    onTvShowSelected: (id: Int, origin: String) -> Unit = {_,_->},
     collapsableTitleConfig: CollapsableConfig,
     loading: Boolean = false,
     onRecommendationsThresholdReached: () -> Unit = {}
@@ -303,6 +303,7 @@ private fun DetailContent(
             }
 
             item {
+                val origin = stringResource(R.string.recommendations)
                 ListSection(
                     posterList = tvShowRecommendations,
                     modifier = Modifier
@@ -321,14 +322,26 @@ private fun DetailContent(
                             .width(130.dp)
                             .aspectRatio(0.67f),
                         posterItem.rating,
-                        { onTvShowSelected(posterItem.id) }
+                        { onTvShowSelected(posterItem.id, origin) }
                     ) { posterShape ->
-                        PosterImage(
-                            posterUrl = posterItem.posterUrl,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(posterShape)
-                        )
+                        with(transitionScope) {
+                            PosterImage(
+                                posterUrl = posterItem.posterUrl,
+                                modifier = Modifier
+                                    .sharedElement(
+                                        rememberSharedContentState(
+                                            key = SharedKeys(
+                                                id = posterItem.id,
+                                                origin = origin,
+                                                type = SharedElementType.Image
+                                            )
+                                        ),
+                                        animatedContentScope
+                                    )
+                                    .fillMaxSize()
+                                    .clip(posterShape)
+                            )
+                        }
                     }
                 }
             }
@@ -412,7 +425,7 @@ private fun PreviewTvShowDetail(){
                     isTvShowInWatchlist = false,
                     origin = "Recommended"
                 ),
-                onTvShowSelected = {},
+                onTvShowSelected = {_,_->},
                 onBackNavigation = {},
                 onRecommendationsThresholdReached = {},
                 onToggleWatchlist = {}

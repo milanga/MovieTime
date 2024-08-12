@@ -52,8 +52,8 @@ fun NavGraphBuilder.tvShowsGraph(
             TvShowDetailRoute(
                 transitionScope = transitionScope,
                 animatedContentScope = this@composable,
-                onTvShowSelected = { tvShowId ->
-                    navigateToRoute("${TvShowDestinations.DETAIL.route}/$tvShowId")
+                onTvShowSelected = { tvShowId, origin ->
+                    navigateToRoute("${TvShowDestinations.DETAIL.route}/$tvShowId/$origin")
                 },
                 onBackNavigation = backNavigation
             )

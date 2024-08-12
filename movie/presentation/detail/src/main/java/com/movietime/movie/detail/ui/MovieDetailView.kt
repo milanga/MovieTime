@@ -9,7 +9,6 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -77,7 +76,7 @@ fun MovieDetailRoute(
     transitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
     viewModel: MovieDetailViewModel = hiltViewModel(),
-    onMovieSelected: (id: Int) -> Unit,
+    onMovieSelected: (id: Int, origin: String) -> Unit,
     onBackNavigation: () -> Unit
 ) {
 
@@ -100,7 +99,7 @@ private fun MovieDetailView(
     transitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
     uiState: MovieDetailUiState,
-    onMovieSelected: (id: Int) -> Unit,
+    onMovieSelected: (id: Int, origin: String) -> Unit,
     onBackNavigation: () -> Unit,
     onRecommendationsThresholdReached: () -> Unit,
     onToggleWatchlist: () -> Unit
@@ -181,7 +180,7 @@ private fun DetailContent(
     movieVideos: List<UiVideo> = emptyList(),
     movieRecommendations: List<PosterItem> = emptyList(),
     listState: LazyListState,
-    onMovieSelected: (id: Int) -> Unit = {},
+    onMovieSelected: (id: Int, origin: String) -> Unit = {_,_->},
     collapsableTitleConfig: CollapsableConfig,
     loading: Boolean = false,
     onRecommendationsThresholdReached: () -> Unit = {}
@@ -306,6 +305,7 @@ private fun DetailContent(
             }
 
             item {
+                val recommendedOrigin = stringResource(R.string.recommendations)
                 ListSection(
                     posterList = movieRecommendations,
                     modifier = Modifier
@@ -324,14 +324,26 @@ private fun DetailContent(
                             .width(130.dp)
                             .aspectRatio(0.67f),
                         posterItem.rating,
-                        { onMovieSelected(posterItem.id) }
+                        { onMovieSelected(posterItem.id, recommendedOrigin) }
                     ) { posterShape ->
-                        PosterImage(
-                            posterUrl = posterItem.posterUrl,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(posterShape)
-                        )
+                        with(transitionScope) {
+                            PosterImage(
+                                posterUrl = posterItem.posterUrl,
+                                modifier = Modifier
+                                    .sharedElement(
+                                        rememberSharedContentState(
+                                            key = SharedKeys(
+                                                id = posterItem.id,
+                                                origin = recommendedOrigin,
+                                                type = SharedElementType.Image
+                                            )
+                                        ),
+                                        animatedContentScope
+                                    )
+                                    .fillMaxSize()
+                                    .clip(posterShape)
+                            )
+                        }
                     }
                 }
             }
@@ -405,7 +417,7 @@ private fun PreviewMovieDetail(){
                     isMovieInWatchlist = false,
                     origin = "Recommended"
                 ),
-                onMovieSelected = {},
+                onMovieSelected = {_,_->},
                 onBackNavigation = {},
                 onRecommendationsThresholdReached = {},
                 onToggleWatchlist = {}
