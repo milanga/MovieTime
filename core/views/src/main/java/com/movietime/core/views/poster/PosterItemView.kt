@@ -25,20 +25,15 @@ import com.google.accompanist.placeholder.placeholder
 @Composable
 fun PosterItemView(
     modifier: Modifier = Modifier,
-    posterUrl: String = "",
     rating: String = "",
     onClick: (() -> Unit)? = null,
-    loading: Boolean = false
+    loading: Boolean = false,
+    posterImage: @Composable (RoundedCornerShape)->Unit = {}
 ) {
     val posterShape = RoundedCornerShape(18.dp)
 
     Box(modifier = getCompleteModifier(posterShape, modifier, onClick, loading)) {
-        PosterImage(
-            posterUrl,
-            Modifier
-                .fillMaxSize()
-                .clip(posterShape)
-        )
+        posterImage(posterShape)
 
         if(rating.isNotEmpty()) {
             Rate(
@@ -101,7 +96,7 @@ internal fun Rate(
 }
 
 @Composable
-internal fun PosterImage(
+fun PosterImage(
     posterUrl: String,
     modifier: Modifier
 ){
@@ -128,7 +123,6 @@ private fun PosterItemPreview() {
             .padding(16.dp)
             .width(120.dp)
             .height(180.dp),
-        posterUrl = "",
         rating = "5.7",
         onClick = {}
     )

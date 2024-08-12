@@ -3,6 +3,7 @@ package com.movietime.tvshow.detail.presentation.model
 import com.movietime.domain.model.TvShowDetail
 
 data class UiTvShowDetail(
+    val id: Int = 1,
     val backdropUrl: String = "",
     val posterUrl: String = "",
     val overview: String = "",
@@ -16,6 +17,7 @@ data class UiTvShowDetail(
 
 fun TvShowDetail.toUiTvShowDetail(): UiTvShowDetail =
     UiTvShowDetail(
+        id = id,
         backdropUrl = backdropUrl,
         posterUrl = posterUrl,
         overview = overview,

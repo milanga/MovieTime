@@ -35,6 +35,8 @@ dependencies {
     implementation(libs.compose.ui.tooling)
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
     implementation(libs.compose.foundation)
+    // Animation
+    implementation(libs.compose.animation)
     // Material Design
     implementation(libs.material3)
     // Material design icons

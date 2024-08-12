@@ -36,6 +36,7 @@ class MovieDetailViewModel @Inject constructor(
     private val isMovieInWatchlistUseCase: IsMovieInWatchlistUseCase
 ) : ViewModel() {
     private val movieId: Int = savedStateHandle["paramMovieId"]!!
+    private val origin: String = savedStateHandle["paramOrigin"]?:""
 
     private val recommendationsListState = ListState({
         fetchRecommendations { getMovieRecommendationsUseCase.refresh(movieId) }
@@ -68,7 +69,8 @@ class MovieDetailViewModel @Inject constructor(
                 movieDetail,
                 videos,
                 recommendations,
-                isMovieInWatchlist
+                isMovieInWatchlist,
+                origin
             )
             movieDetailUiState
         }.catch { throwable ->

@@ -10,6 +10,7 @@ composeUiVersion = "1.6.8"
 composeFoundationVersion = "1.6.8"
 composeMaterial3Version = "1.2.1"
 composeMaterialVersion = "1.6.8"
+animation-version = "1.7.0-beta07"
 
 #core
 androidxCoreVersion = "1.13.1"
@@ -58,6 +59,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "composeUiVersion" }
 compose-ui-util = { group = "androidx.compose.ui", name = "ui-util", version.ref = "composeUiVersion" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "composeUiVersion" }
+compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "animation-version" }
 # Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
 compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "composeFoundationVersion" }
 # Material Design
@@ -96,6 +98,7 @@ okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-i
 #Icons
 material-icons = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "composeMaterialVersion" }
 material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "composeMaterialVersion" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

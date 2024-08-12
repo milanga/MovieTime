@@ -1,5 +1,12 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.movietime.movie.detail.ui
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -8,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +23,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -30,12 +39,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.movietime.core.views.SharedElementType
+import com.movietime.core.views.SharedKeys
 import com.movietime.core.views.WatchlistFab
 import com.movietime.core.views.collapsibleBackddropTitle.CollapsableConfig
 import com.movietime.core.views.collapsibleBackddropTitle.CollapsibleBackdropTitle
@@ -43,6 +55,8 @@ import com.movietime.core.views.detail.DetailRowData
 import com.movietime.core.views.detail.DetailSection
 import com.movietime.core.views.overview.Overview
 import com.movietime.core.views.poster.ListSection
+import com.movietime.core.views.poster.PosterImage
+import com.movietime.core.views.poster.PosterItemView
 import com.movietime.core.views.poster.model.MediaType
 import com.movietime.core.views.poster.model.PosterItem
 import com.movietime.core.views.tag.TagSection
@@ -60,6 +74,8 @@ import com.movietime.movie.detail.presentation.model.UiVideo
 @ExperimentalMaterial3Api
 @Composable
 fun MovieDetailRoute(
+    transitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope,
     viewModel: MovieDetailViewModel = hiltViewModel(),
     onMovieSelected: (id: Int) -> Unit,
     onBackNavigation: () -> Unit
@@ -68,6 +84,8 @@ fun MovieDetailRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     MovieDetailView(
+        transitionScope = transitionScope,
+        animatedContentScope = animatedContentScope,
         uiState = uiState,
         onMovieSelected = onMovieSelected,
         onBackNavigation = {onBackNavigation()},
@@ -76,9 +94,11 @@ fun MovieDetailRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MovieDetailView(
+    transitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope,
     uiState: MovieDetailUiState,
     onMovieSelected: (id: Int) -> Unit,
     onBackNavigation: () -> Unit,
@@ -124,6 +144,9 @@ private fun MovieDetailView(
                 Modifier.consumeWindowInsets(padding)
             )
             is MovieDetailUiState.Content -> DetailContent(
+                transitionScope = transitionScope,
+                animatedContentScope = animatedContentScope,
+                origin = uiState.origin,
                 movieDetail = uiState.movieDetail,
                 movieVideos = uiState.movieVideos,
                 movieRecommendations = uiState.movieRecommendations,
@@ -135,7 +158,10 @@ private fun MovieDetailView(
                 onRecommendationsThresholdReached()
             }
             is MovieDetailUiState.Loading -> DetailContent(
-                modifier=Modifier.consumeWindowInsets(padding),
+                transitionScope = transitionScope,
+                animatedContentScope = animatedContentScope,
+                origin = "",
+                modifier = Modifier.consumeWindowInsets(padding),
                 collapsableTitleConfig = CollapsableConfig(appBarHeight, iconWidth - appBarHorizontalPadding, MaterialTheme.typography.titleLarge.fontSize),
                 listState = listState,
                 loading = true
@@ -147,6 +173,9 @@ private fun MovieDetailView(
 @ExperimentalMaterial3Api
 @Composable
 private fun DetailContent(
+    transitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope,
+    origin: String,
     modifier: Modifier = Modifier,
     movieDetail: UiMovieDetail = UiMovieDetail(),
     movieVideos: List<UiVideo> = emptyList(),
@@ -184,7 +213,34 @@ private fun DetailContent(
                 detailRowData(movieDetail),
                 Modifier.padding(horizontal = 16.dp),
                 loading = loading
-            )
+            ) {
+                PosterItemView(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp)
+                        .aspectRatio(0.67f),
+                    loading = loading
+                ) { posterShape ->
+                    with(transitionScope) {
+                        PosterImage(
+                            posterUrl = movieDetail.posterUrl,
+                            modifier = Modifier
+                                .sharedElement(
+                                    rememberSharedContentState(
+                                        key = SharedKeys(
+                                            id = movieDetail.id,
+                                            origin = origin,
+                                            type = SharedElementType.Image
+                                        )
+                                    ),
+                                    animatedContentScope
+                                )
+                                .fillMaxSize()
+                                .clip(posterShape)
+                        )
+                    }
+                }
+            }
         }
 
         item{
@@ -252,7 +308,6 @@ private fun DetailContent(
             item {
                 ListSection(
                     posterList = movieRecommendations,
-                    onItemSelected = onMovieSelected,
                     modifier = Modifier
                         .padding(
                             WindowInsets.navigationBars
@@ -262,7 +317,23 @@ private fun DetailContent(
                         .padding(top = 8.dp, bottom = 16.dp),
                     onScrollThresholdReached = onRecommendationsThresholdReached,
                     loading = loading
-                )
+                ) { posterItem ->
+                    PosterItemView(
+                        Modifier
+                            .padding(horizontal = 8.dp)
+                            .width(130.dp)
+                            .aspectRatio(0.67f),
+                        posterItem.rating,
+                        { onMovieSelected(posterItem.id) }
+                    ) { posterShape ->
+                        PosterImage(
+                            posterUrl = posterItem.posterUrl,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(posterShape)
+                        )
+                    }
+                }
             }
         }
     }
@@ -304,28 +375,43 @@ private fun DetailErrorScreen(
 @Preview
 @Composable
 private fun PreviewMovieDetail(){
-    MovieDetailView(
-        uiState = MovieDetailUiState.Content(
-            UiMovieDetail(
-                title = "The Shawshank Redemption",
-                backdropUrl = "http://image.tmdb.org/t/p/original/avedvodAZUcwqevBfm8p4G2NziQ.jpg",
-                overview = "Imprisoned in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
-                tagline = "Fear can hold you prisoner. Hope can set you free.",
-                posterUrl = "url",
-                rating = "8.6",
-                releaseDate = "28-02-2024",
-                duration = "115",
-                genres = listOf("Action", "Comedy")
-            ),
-            movieVideos = listOf(UiVideo("pYmAy3H0s3Q")),
-            movieRecommendations = listOf(PosterItem(1, "http://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg", "9.8", MediaType.Movie)),
-            isMovieInWatchlist = false
-        ),
-        onMovieSelected = {},
-        onBackNavigation = {},
-        onRecommendationsThresholdReached = {},
-        onToggleWatchlist = {}
+    val movieDetail = UiMovieDetail(
+        title = "The Shawshank Redemption",
+        backdropUrl = "http://image.tmdb.org/t/p/original/avedvodAZUcwqevBfm8p4G2NziQ.jpg",
+        overview = "Imprisoned in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
+        tagline = "Fear can hold you prisoner. Hope can set you free.",
+        posterUrl = "url",
+        rating = "8.6",
+        releaseDate = "28-02-2024",
+        duration = "115",
+        genres = listOf("Action", "Comedy")
     )
+    SharedTransitionLayout {
+        AnimatedContent(movieDetail) { _ ->
+            MovieDetailView(
+                transitionScope = this@SharedTransitionLayout,
+                animatedContentScope = this@AnimatedContent,
+                uiState = MovieDetailUiState.Content(
+                    movieDetail,
+                    movieVideos = listOf(UiVideo("pYmAy3H0s3Q")),
+                    movieRecommendations = listOf(
+                        PosterItem(
+                            1,
+                            "http://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+                            "9.8",
+                            MediaType.Movie
+                        )
+                    ),
+                    isMovieInWatchlist = false,
+                    origin = "Recommended"
+                ),
+                onMovieSelected = {},
+                onBackNavigation = {},
+                onRecommendationsThresholdReached = {},
+                onToggleWatchlist = {}
+            )
+        }
+    }
 }
 
 fun createDetailRow(

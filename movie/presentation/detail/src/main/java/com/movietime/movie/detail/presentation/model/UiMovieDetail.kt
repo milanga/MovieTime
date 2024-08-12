@@ -3,6 +3,7 @@ package com.movietime.movie.detail.presentation.model
 import com.movietime.domain.model.MovieDetail
 
 data class UiMovieDetail(
+    val id: Int = 1,
     val backdropUrl: String = "",
     val posterUrl: String = "",
     val overview: String = "",
@@ -16,6 +17,7 @@ data class UiMovieDetail(
 
 fun MovieDetail.toUiMovieDetail(): UiMovieDetail =
     UiMovieDetail(
+        id = id,
         backdropUrl = backdropUrl,
         posterUrl = posterUrl,
         overview = overview,

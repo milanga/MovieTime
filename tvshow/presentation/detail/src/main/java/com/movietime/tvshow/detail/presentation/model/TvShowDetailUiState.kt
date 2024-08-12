@@ -9,6 +9,7 @@ sealed interface TvShowDetailUiState {
         val tvShowDetail: UiTvShowDetail,
         val tvShowVideos: List<UiVideo>,
         val tvShowRecommendations: List<PosterItem>,
-        val isTvShowInWatchlist: Boolean
+        val isTvShowInWatchlist: Boolean,
+        val origin: String
     ) : TvShowDetailUiState
 }

@@ -1,21 +1,17 @@
 package com.movietime.core.views.poster
 
-import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.movietime.core.views.poster.model.PosterItem
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.launch
 import kotlin.math.ceil
 
 
@@ -23,46 +19,42 @@ import kotlin.math.ceil
 fun ListSection(
     modifier: Modifier = Modifier,
     posterList: List<PosterItem> = emptyList(),
-    onItemSelected: (id: Int) -> Unit = {},
     onScrollThresholdReached: () -> Unit = {},
-    loading: Boolean = false
+    loading: Boolean = false,
+    posterItemView: @Composable (PosterItem) -> Unit = { }
 ) {
     if (loading) {
-        LoadingList(modifier)
+        LoadingPosterList(modifier)
     } else {
-        PosterList(posterList, onItemSelected, modifier, onScrollThresholdReached)
+        PosterList(
+            posterList = posterList,
+            modifier = modifier,
+            onScrollThresholdReached = onScrollThresholdReached,
+            threshold = 5,
+            posterItemView = posterItemView
+        )
     }
 }
 
 @Composable
-fun LoadingList(modifier: Modifier) {
+fun LoadingPosterList(
+    modifier: Modifier
+) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
-    val posterWidth = 130.0
-
-    //make list not scrollable
-    val state = rememberLazyListState()
-    LaunchedEffect(key1 = state) {
-        launch {
-            state.scroll(scrollPriority = MutatePriority.PreventUserInput) { awaitCancellation() }
-        }
-    }
-
-    LazyRow(
-        modifier = modifier,
-        state = state,
-        contentPadding = PaddingValues(horizontal = 8.dp)
+    val posterWidth = 130
+    Row(
+        modifier = modifier
+            .padding(horizontal = 8.dp),
     ) {
-        for (i in 0..ceil(screenWidth / posterWidth).toInt()) {
-            item {
-                PosterItemView(
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .width(130.dp)
-                        .aspectRatio(0.67f),
-                    loading = true
-                )
-            }
+        for (i in 0..ceil((screenWidth / posterWidth).toDouble()).toInt()) {
+            PosterItemView(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .width(posterWidth.dp)
+                    .aspectRatio(0.67f),
+                loading = true
+            )
         }
     }
 }
@@ -70,10 +62,10 @@ fun LoadingList(modifier: Modifier) {
 @Composable
 fun PosterList(
     posterList: List<PosterItem>,
-    onMovieSelected: (id: Int) -> Unit,
     modifier: Modifier = Modifier,
     onScrollThresholdReached: () -> Unit = {},
-    threshold: Int = 5
+    threshold: Int = 5,
+    posterItemView: @Composable (PosterItem) -> Unit = { }
 ) {
     LazyRow(
         contentPadding = PaddingValues(horizontal = 8.dp),
@@ -83,15 +75,7 @@ fun PosterList(
             if (posterList.size - index < threshold) {
                 onScrollThresholdReached.invoke()
             }
-            PosterItemView(
-                Modifier
-                    .padding(horizontal = 8.dp)
-                    .width(130.dp)
-                    .aspectRatio(0.67f),
-                posterItem.posterUrl,
-                posterItem.rating,
-                { onMovieSelected(posterItem.id) }
-            )
+            posterItemView(posterItem)
         }
     }
 }

@@ -13,14 +13,16 @@ sealed class MovieDestinations(val route: String) {
     object HOME : MovieDestinations("movies/home")
     object DETAIL : MovieDestinations("movies/detail") {
         const val PARAM_MOVIE_ID = "paramMovieId"
+        const val PARAM_ORIGIN = "paramOrigin"
     }
     companion object {
         fun contains(route: String?): Boolean = route == HOME.route || route == "${DETAIL.route}/{${DETAIL.PARAM_MOVIE_ID}}"
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 fun NavGraphBuilder.moviesGraph(
+    transitionScope: SharedTransitionScope,
     route: String,
     backNavigation: () -> Unit,
     navigateToRoute: (route: String) -> Unit
@@ -30,18 +32,24 @@ fun NavGraphBuilder.moviesGraph(
         route = route
     ) {
         composable(MovieDestinations.HOME.route) {
-            MovieHome{ movieId ->
-                navigateToRoute("${MovieDestinations.DETAIL.route}/$movieId")
+            MovieHome(
+                transitionScope = transitionScope,
+                animatedContentScope = this@composable
+            ) { movieId, origin ->
+                navigateToRoute("${MovieDestinations.DETAIL.route}/$movieId/$origin")
             }
         }
 
         composable(
-            route = "${MovieDestinations.DETAIL.route}/{${MovieDestinations.DETAIL.PARAM_MOVIE_ID}}",
+            route = "${MovieDestinations.DETAIL.route}/{${MovieDestinations.DETAIL.PARAM_MOVIE_ID}}/{${MovieDestinations.DETAIL.PARAM_ORIGIN}}",
             arguments = listOf(
-                navArgument(MovieDestinations.DETAIL.PARAM_MOVIE_ID) { type = NavType.IntType }
+                navArgument(MovieDestinations.DETAIL.PARAM_MOVIE_ID) { type = NavType.IntType },
+                navArgument(MovieDestinations.DETAIL.PARAM_ORIGIN) { type = NavType.StringType }
             )
-        ) {
+        ) { backStackEntry ->
             MovieDetailRoute(
+                transitionScope = transitionScope,
+                animatedContentScope = this@composable,
                 onMovieSelected = { movieId ->
                     navigateToRoute("${MovieDestinations.DETAIL.route}/$movieId")
                 },

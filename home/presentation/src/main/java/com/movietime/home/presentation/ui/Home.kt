@@ -2,6 +2,8 @@ package com.movietime.home.presentation.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -49,8 +51,7 @@ sealed class NavSection(val route: String, @StringRes val title: Int, val icon: 
 val homeSections = listOf(NavSection.Movies, NavSection.TvShows, NavSection.Search)
 
 @OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalAnimationApi::class, ExperimentalLayoutApi::class
+    ExperimentalSharedTransitionApi::class
 )
 @Composable
 fun Home(){
@@ -61,18 +62,28 @@ fun Home(){
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { contentPadding ->
-        NavHost(
-            navController,
-            startDestination = NavSection.Movies.route,
-            modifier = Modifier
-                .padding(contentPadding)
-                .consumeWindowInsets(contentPadding)
-        ) {
-            moviesGraph(NavSection.Movies.route, {navController.popBackStack()}){route ->  navController.navigate(route)}
+        SharedTransitionLayout {
+            NavHost(
+                navController,
+                startDestination = NavSection.Movies.route,
+                modifier = Modifier
+                    .padding(contentPadding)
+                    .consumeWindowInsets(contentPadding)
+            ) {
+                moviesGraph(
+                    this@SharedTransitionLayout,
+                    NavSection.Movies.route,
+                    { navController.popBackStack() }) { route -> navController.navigate(route) }
 
-            tvShowsGraph(NavSection.TvShows.route, {navController.popBackStack()}){ route ->  navController.navigate(route)}
+                tvShowsGraph(
+                    this@SharedTransitionLayout,
+                    NavSection.TvShows.route,
+                    { navController.popBackStack() }) { route -> navController.navigate(route) }
 
-            searchGraph(NavSection.Search.route, {navController.popBackStack()}){ route ->  navController.navigate(route)}
+                searchGraph(
+                    NavSection.Search.route,
+                    { navController.popBackStack() }) { route -> navController.navigate(route) }
+            }
         }
     }
 }

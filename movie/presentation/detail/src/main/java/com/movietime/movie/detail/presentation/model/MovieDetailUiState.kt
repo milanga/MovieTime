@@ -9,6 +9,7 @@ sealed interface MovieDetailUiState {
         val movieDetail: UiMovieDetail,
         val movieVideos: List<UiVideo>,
         val movieRecommendations: List<PosterItem>,
-        val isMovieInWatchlist: Boolean
+        val isMovieInWatchlist: Boolean,
+        val origin: String
     ) : MovieDetailUiState
 }

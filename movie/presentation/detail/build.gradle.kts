@@ -33,6 +33,7 @@ dependencies {
     //UI
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.util)
+    implementation(libs.compose.animation)
     // Tooling support (Previews, etc.)
     implementation(libs.compose.ui.tooling)
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
